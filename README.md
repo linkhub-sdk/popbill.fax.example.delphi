@@ -1,4 +1,4 @@
-popbill.fax.delphi
+popbill.fax.example.delphi
 ==================
 
-팝빌 팩스 SDK for delphi
+팝빌 팩스 SDK Example for delphi
