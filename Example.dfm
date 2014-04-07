@@ -1,9 +1,9 @@
 object frmExample: TfrmExample
-  Left = 578
-  Top = 179
+  Left = 673
+  Top = 182
   Width = 768
-  Height = 539
-  Caption = '팝빌 메시징 SDK Examples'
+  Height = 617
+  Caption = '팝빌 팩스 SDK Examples'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -64,26 +64,18 @@ object frmExample: TfrmExample
     object GroupBox11: TGroupBox
       Left = 152
       Top = 24
-      Width = 289
+      Width = 145
       Height = 89
       Caption = '포인트 관련'
       TabOrder = 1
-      object btnGetUnitCost_SMS: TButton
+      object btnGetUnitCost: TButton
         Left = 8
         Top = 24
         Width = 129
         Height = 25
-        Caption = 'SMS 단가 확인'
+        Caption = '단가 확인'
         TabOrder = 0
-        OnClick = btnGetUnitCost_SMSClick
-      end
-      object btnGetUnitCost_LMS: TButton
-        Left = 144
-        Top = 24
-        Width = 129
-        Height = 25
-        Caption = 'LMS 단가 확인'
-        TabOrder = 1
+        OnClick = btnGetUnitCostClick
       end
     end
     object GroupBox12: TGroupBox
@@ -160,98 +152,91 @@ object frmExample: TfrmExample
     Left = 8
     Top = 168
     Width = 745
-    Height = 329
-    Caption = '팝빌 메시징 관련 기능'
+    Height = 404
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Caption = '팝빌 FAX 관련 기능'
     TabOrder = 3
     object Label1: TLabel
-      Left = 392
-      Top = 60
+      Left = 200
+      Top = 164
       Width = 60
       Height = 13
       Caption = '접수 번호 : '
     end
     object Label2: TLabel
-      Left = 24
+      Left = 8
       Top = 24
       Width = 155
       Height = 13
       Caption = '예약시간(yyyyMMddHHmmss) : '
     end
-    object GroupBox1: TGroupBox
-      Left = 8
-      Top = 48
-      Width = 361
-      Height = 65
-      Caption = 'SMS 관련기능'
-      TabOrder = 0
-      object btnSendSMS_Single: TButton
-        Left = 8
-        Top = 24
-        Width = 81
-        Height = 33
-        Caption = '1건 전송'
-        TabOrder = 0
-      end
-      object btnSendThousand: TButton
-        Left = 224
-        Top = 24
-        Width = 129
-        Height = 33
-        Caption = '개별 1000건 전송'
-        TabOrder = 1
-      end
-      object btnSendThousandSame: TButton
-        Left = 96
-        Top = 24
-        Width = 121
-        Height = 33
-        Caption = '동보 1000건 전송'
-        TabOrder = 2
-      end
-    end
     object txtReceiptNum: TEdit
-      Left = 456
-      Top = 56
+      Left = 272
+      Top = 160
       Width = 233
       Height = 21
       ImeName = 'Microsoft IME 2010'
-      TabOrder = 1
+      TabOrder = 0
     end
     object btnGetMessage: TButton
-      Left = 464
-      Top = 86
+      Left = 520
+      Top = 158
       Width = 97
       Height = 25
       Caption = '전송상태확인'
-      TabOrder = 2
+      TabOrder = 1
+      OnClick = btnGetMessageClick
     end
     object StringGrid1: TStringGrid
       Left = 8
-      Top = 120
+      Top = 192
       Width = 729
       Height = 201
-      ColCount = 11
+      ColCount = 14
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
-      TabOrder = 3
+      TabOrder = 2
     end
     object btnCancelReserve: TButton
-      Left = 576
-      Top = 86
+      Left = 632
+      Top = 158
       Width = 97
       Height = 25
       Caption = '예약전송취소'
-      TabOrder = 4
+      TabOrder = 3
+      OnClick = btnCancelReserveClick
     end
     object txtReserveDT: TEdit
-      Left = 184
+      Left = 168
       Top = 22
       Width = 233
       Height = 21
       ImeName = 'Microsoft IME 2010'
-      TabOrder = 5
+      TabOrder = 4
     end
+    object btnSendFax_single: TButton
+      Left = 248
+      Top = 64
+      Width = 81
+      Height = 33
+      Caption = '전송'
+      TabOrder = 5
+      OnClick = btnSendFax_singleClick
+    end
+    object btnSendThousandSame: TButton
+      Left = 344
+      Top = 64
+      Width = 121
+      Height = 33
+      Caption = '동보 전송'
+      TabOrder = 6
+      OnClick = btnSendThousandSameClick
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 720
+    Top = 8
   end
 end
