@@ -41,6 +41,8 @@ type
     btnSendFax_single: TButton;
     btnSendThousandSame: TButton;
     OpenDialog1: TOpenDialog;
+    btnMultiFile: TButton;
+    btnMultiFileSingle: TButton;
     procedure btnGetPopBillURLClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
@@ -51,6 +53,8 @@ type
     procedure btnCancelReserveClick(Sender: TObject);
     procedure btnSendThousandSameClick(Sender: TObject);
     procedure btnGetMessageClick(Sender: TObject);
+    procedure btnMultiFileClick(Sender: TObject);
+    procedure btnMultiFileSingleClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -226,7 +230,7 @@ begin
         end;
         txtReceiptNum.Text := receiptNum;
 
-        
+
         ShowMessage('접수번호 :' + receiptNum);
 
 
@@ -282,11 +286,7 @@ begin
         end;
         txtReceiptNum.Text := receiptNum;
 
-        
         ShowMessage('접수번호 :' + receiptNum);
-
-
-
 end;
 
 procedure TfrmExample.btnGetMessageClick(Sender: TObject);
@@ -302,7 +302,7 @@ begin
                         Exit;
                 end;
         end;
-        
+
         stringgrid1.RowCount := Length(FaxDetails) + 1;                                          
 
         for i:= 0 to Length(FaxDetails) -1 do begin
@@ -324,6 +324,85 @@ begin
                stringgrid1.Cells[13,i+1] := IntToStr(FaxDetails[i].sendResult);
 
         end;
+end;
+
+procedure TfrmExample.btnMultiFileClick(Sender: TObject);
+var
+        receiptNum :String;
+        filePaths : Array Of string;
+        receivers : TReceiverList;
+        i :Integer;
+begin
+        setLength(filePaths, 2);
+
+        if OpenDialog1.Execute then begin
+              filePaths[0] := OpenDialog1.FileName;
+        end else begin
+                Exit;
+        end;
+
+        if OpenDialog1.Execute then begin
+              filePaths[1] := OpenDialog1.FileName;
+        end else begin
+                Exit;
+        end;
+
+        SetLength(receivers,500);
+
+        for i :=0 to Length(receivers) -1 do begin
+                receivers[i] := TReceiver.create;
+
+                receivers[i].receiveNum := '07075106767';
+                receivers[i].receiveName := IntToStr(i) + '번째 수신자';
+        end;
+
+        try
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,'07075106766',receivers,filePaths,txtReserveDT.Text,txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+        txtReceiptNum.Text := receiptNum;
+
+        ShowMessage('접수번호 :' + receiptNum);
+end;
+
+procedure TfrmExample.btnMultiFileSingleClick(Sender: TObject);
+var
+        filePaths : Array Of string;
+        receiptNum : String;
+begin
+         setLength(filePaths, 2);
+
+        if OpenDialog1.Execute then begin
+              filePaths[0] := OpenDialog1.FileName;
+        end else begin
+                Exit;
+        end;
+
+        if OpenDialog1.Execute then begin
+              filePaths[1] := OpenDialog1.FileName;
+        end else begin
+                Exit;
+        end;
+
+        try
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,'07075106766','07075106766','수신자',filePaths,txtReserveDT.Text,txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+        txtReceiptNum.Text := receiptNum;
+
+
+        ShowMessage('접수번호 :' + receiptNum);
+
+
+
 end;
 
 end.

@@ -2,7 +2,7 @@ object frmExample: TfrmExample
   Left = 673
   Top = 182
   Width = 768
-  Height = 617
+  Height = 554
   Caption = '팝빌 팩스 SDK Examples'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -152,13 +152,13 @@ object frmExample: TfrmExample
     Left = 8
     Top = 168
     Width = 745
-    Height = 404
+    Height = 341
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = '팝빌 FAX 관련 기능'
     TabOrder = 3
     object Label1: TLabel
-      Left = 200
-      Top = 164
+      Left = 112
+      Top = 100
       Width = 60
       Height = 13
       Caption = '접수 번호 : '
@@ -171,16 +171,16 @@ object frmExample: TfrmExample
       Caption = '예약시간(yyyyMMddHHmmss) : '
     end
     object txtReceiptNum: TEdit
-      Left = 272
-      Top = 160
+      Left = 184
+      Top = 96
       Width = 233
       Height = 21
       ImeName = 'Microsoft IME 2010'
       TabOrder = 0
     end
     object btnGetMessage: TButton
-      Left = 520
-      Top = 158
+      Left = 432
+      Top = 94
       Width = 97
       Height = 25
       Caption = '전송상태확인'
@@ -189,7 +189,7 @@ object frmExample: TfrmExample
     end
     object StringGrid1: TStringGrid
       Left = 8
-      Top = 192
+      Top = 128
       Width = 729
       Height = 201
       ColCount = 14
@@ -200,8 +200,8 @@ object frmExample: TfrmExample
       TabOrder = 2
     end
     object btnCancelReserve: TButton
-      Left = 632
-      Top = 158
+      Left = 544
+      Top = 94
       Width = 97
       Height = 25
       Caption = '예약전송취소'
@@ -217,22 +217,40 @@ object frmExample: TfrmExample
       TabOrder = 4
     end
     object btnSendFax_single: TButton
-      Left = 248
-      Top = 64
-      Width = 81
+      Left = 16
+      Top = 48
+      Width = 97
       Height = 33
       Caption = '전송'
       TabOrder = 5
       OnClick = btnSendFax_singleClick
     end
     object btnSendThousandSame: TButton
-      Left = 344
-      Top = 64
+      Left = 128
+      Top = 48
       Width = 121
       Height = 33
       Caption = '동보 전송'
       TabOrder = 6
       OnClick = btnSendThousandSameClick
+    end
+    object btnMultiFile: TButton
+      Left = 376
+      Top = 48
+      Width = 121
+      Height = 33
+      Caption = '다중파일 동보 전송'
+      TabOrder = 7
+      OnClick = btnMultiFileClick
+    end
+    object btnMultiFileSingle: TButton
+      Left = 264
+      Top = 48
+      Width = 97
+      Height = 33
+      Caption = '다중파일 전송'
+      TabOrder = 8
+      OnClick = btnMultiFileSingleClick
     end
   end
   object OpenDialog1: TOpenDialog
