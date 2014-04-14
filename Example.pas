@@ -9,7 +9,7 @@ uses
 
 const
         //파트너 ID.
-        PartnerID = 'INNOPOST';
+        PartnerID = 'PARTNERID';
         // 파트너 통신용 비밀키. 유출 주의.
         SecretKey = 'VGBaxxHL7T4o4LrwDRcALHo0j8LgAxsLGhKqjuCwlX8=';
 
