@@ -43,6 +43,7 @@ type
     OpenDialog1: TOpenDialog;
     btnMultiFile: TButton;
     btnMultiFileSingle: TButton;
+    btnGetUrl: TButton;
     procedure btnGetPopBillURLClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
@@ -55,6 +56,7 @@ type
     procedure btnGetMessageClick(Sender: TObject);
     procedure btnMultiFileClick(Sender: TObject);
     procedure btnMultiFileSingleClick(Sender: TObject);
+    procedure btnGetUrlClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -107,7 +109,7 @@ begin
                 ShowMessage('URL 코드를 선택하세요.');
                 Exit;
         end;
-        
+
         Delete(TOGO, Pos(' : ',TOGO), Length(TOGO) - Pos(' : ',TOGO) + 1);
 
         try
@@ -404,5 +406,23 @@ begin
 
 
 end;
+
+procedure TfrmExample.btnGetUrlClick(Sender: TObject);
+var
+  resultURL : String;
+begin
+
+        try
+                resultURL := faxService.getURL(txtCorpNum.Text,txtUserID.Text,'BOX');
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage('ResultURL is ' + #13 + resultURL);
+end;
+
 
 end.

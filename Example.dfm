@@ -252,6 +252,15 @@ object frmExample: TfrmExample
       TabOrder = 8
       OnClick = btnMultiFileSingleClick
     end
+    object btnGetUrl: TButton
+      Left = 592
+      Top = 16
+      Width = 145
+      Height = 33
+      Caption = '전송내역 조회 팝업'
+      TabOrder = 9
+      OnClick = btnGetUrlClick
+    end
   end
   object OpenDialog1: TOpenDialog
     Left = 720
