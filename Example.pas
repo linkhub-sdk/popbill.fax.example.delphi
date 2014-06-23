@@ -8,8 +8,8 @@ uses
   Popbill, PopbillFax, ExtCtrls, Grids;
 
 const
-        //파트너 ID.
-        PartnerID = 'PARTNERID';
+        // 연동아이디.
+        LinkID = 'LinkID';
         // 파트너 통신용 비밀키. 유출 주의.
         SecretKey = 'VGBaxxHL7T4o4LrwDRcALHo0j8LgAxsLGhKqjuCwlX8=';
 
@@ -71,7 +71,7 @@ implementation
 
 procedure TfrmExample.FormCreate(Sender: TObject);
 begin
-        faxService := TFaxService.Create(PartnerID,SecretKey);
+        faxService := TFaxService.Create(LinkID,SecretKey);
         faxService.IsTest := true;
         
         //그리드 초기화
@@ -131,7 +131,7 @@ var
         response : TResponse;
         joinInfo : TJoinForm;
 begin
-        joinInfo.PartnerID := PartnerID; //파트너 아이디
+        joinInfo.LinkID := LinkID; //연동아이디
         joinInfo.CorpNum := '1231212312'; //사업자번호 '-' 제외.
         joinInfo.CEOName := '대표자성명';
         joinInfo.CorpName := '상호';
