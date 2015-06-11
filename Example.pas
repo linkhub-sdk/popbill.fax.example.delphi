@@ -9,9 +9,9 @@ uses
 
 const
         // 연동아이디.
-        LinkID = 'LinkID';
+        LinkID = 'TESTER';
         // 파트너 통신용 비밀키. 유출 주의.
-        SecretKey = 'VGBaxxHL7T4o4LrwDRcALHo0j8LgAxsLGhKqjuCwlX8=';
+        SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=';
 
 type
   TfrmExample = class(TForm)
@@ -215,15 +215,22 @@ procedure TfrmExample.btnSendFax_singleClick(Sender: TObject);
 var
         filePath : string;
         receiptNum : String;
+        senderNum : String;
+        receiverNum : String;
+        receiverName : string;
 begin
         if OpenDialog1.Execute then begin
               filePath := OpenDialog1.FileName;
         end else begin
                 Exit;
         end;
+        
+        senderNum := '07075103710';     //발신번호
+        receiverNum := '070111222';     //수신번호
+        receiverName := '수신자명';     //수신자명
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,'07075106766','07075106766','수신자',filePath,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, receiverNum, receiverName, filePath,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -260,6 +267,7 @@ procedure TfrmExample.btnSendThousandSameClick(Sender: TObject);
 var
         receiptNum :String;
         filePath : string;
+        senderNum : string;
         receivers : TReceiverList;
         i :Integer;
 begin
@@ -274,12 +282,13 @@ begin
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
 
-                receivers[i].receiveNum := '07075106767';
-                receivers[i].receiveName := IntToStr(i) + '번째 수신자';
+                receivers[i].receiveNum := '070111222';         //수신번호
+                receivers[i].receiveName := IntToStr(i) + '번째 수신자';        //수신자명
         end;
 
+        senderNum := '07075103710';     // 발신번호
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,'07075106766',receivers,filePath,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,senderNum,receivers,filePath,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -354,8 +363,8 @@ begin
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
 
-                receivers[i].receiveNum := '07075106767';
-                receivers[i].receiveName := IntToStr(i) + '번째 수신자';
+                receivers[i].receiveNum := '070111222';    //수신번호
+                receivers[i].receiveName := IntToStr(i) + '번째 수신자';    //수신자명
         end;
 
         try
@@ -375,6 +384,9 @@ procedure TfrmExample.btnMultiFileSingleClick(Sender: TObject);
 var
         filePaths : Array Of string;
         receiptNum : String;
+        senderNum : string;
+        receiverNum : string;
+        receiverName : string;
 begin
          setLength(filePaths, 2);
 
@@ -390,8 +402,12 @@ begin
                 Exit;
         end;
 
+        senderNum := '07075103710';     //발신번호
+        receiverNum := '070111222';     //수신번호
+        receiverName := '수신자명';     //수신자명
+
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,'07075106766','07075106766','수신자',filePaths,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,senderNum,receiverNum,receiverName,filePaths,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
