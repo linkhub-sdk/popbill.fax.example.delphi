@@ -21,15 +21,12 @@ type
     GroupBox11: TGroupBox;
     btnGetUnitCost: TButton;
     GroupBox12: TGroupBox;
-    btnGetPopBillURL: TButton;
-    cbTOGO: TComboBox;
+    btnGetPopBillURL_LOGIN: TButton;
     txtCorpNum: TEdit;
     Label3: TLabel;
     GroupBox4: TGroupBox;
-    btnGetPartnerBalance: TButton;
     Label4: TLabel;
     txtUserID: TEdit;
-    btnGetBalance: TButton;
     GroupBox5: TGroupBox;
     Label1: TLabel;
     txtReceiptNum: TEdit;
@@ -44,7 +41,18 @@ type
     btnMultiFile: TButton;
     btnMultiFileSingle: TButton;
     btnGetUrl: TButton;
-    procedure btnGetPopBillURLClick(Sender: TObject);
+    btnGetPopbillURL_CHRG: TButton;
+    btnGetPartnerBalance: TButton;
+    btnGetBalance: TButton;
+    btnCheckID: TButton;
+    btnCheckIsMember: TButton;
+    btnLitContact: TButton;
+    btnUpdateContact: TButton;
+    GroupBox1: TGroupBox;
+    btnRegistContact: TButton;
+    btnGetCorpInfo: TButton;
+    btnUpdateCorpInfo: TButton;
+    procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
     procedure btnGetUnitCostClick(Sender: TObject);
@@ -57,6 +65,12 @@ type
     procedure btnMultiFileClick(Sender: TObject);
     procedure btnMultiFileSingleClick(Sender: TObject);
     procedure btnGetUrlClick(Sender: TObject);
+    procedure btnCheckIDClick(Sender: TObject);
+    procedure btnRegistContactClick(Sender: TObject);
+    procedure btnLitContactClick(Sender: TObject);
+    procedure btnUpdateContactClick(Sender: TObject);
+    procedure btnGetCorpInfoClick(Sender: TObject);
+    procedure btnUpdateCorpInfoClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -98,22 +112,18 @@ begin
     if condition then result := trueVal else result := falseVal;
 end;
 
-procedure TfrmExample.btnGetPopBillURLClick(Sender: TObject);
-var
-  resultURL : String;
-  TOGO : String;
+function BoolToStr(b:Boolean):String;
 begin
-        TOGO := cbTOGO.Text;
+    if b = true then BoolToStr:='True';
+    if b = false then BoolToStr:='False';
+end;
 
-        if Pos(' : ',TOGO) = 0 then begin
-                ShowMessage('URL 코드를 선택하세요.');
-                Exit;
-        end;
-
-        Delete(TOGO, Pos(' : ',TOGO), Length(TOGO) - Pos(' : ',TOGO) + 1);
-
+procedure TfrmExample.btnGetPopBillURL_LOGINClick(Sender: TObject);
+var
+        resultURL : String;
+begin
         try
-                resultURL := faxService.getPopbillURL(txtCorpNum.Text,txtUserID.Text,TOGO);
+                resultURL := faxService.getPopbillURL(txtCorpNum.Text,txtUserID.Text,'CHRG');
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -440,5 +450,159 @@ begin
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
+
+procedure TfrmExample.btnCheckIDClick(Sender: TObject);
+var
+        response : TResponse;
+begin
+        try
+                response := faxService.CheckID(txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
+end;
+
+procedure TfrmExample.btnRegistContactClick(Sender: TObject);
+var
+        response : TResponse;
+        joinInfo : TJoinContact;
+begin
+        joinInfo.id := 'test_201509173';
+        joinInfo.pwd := 'thisispassword';
+        joinInfo.personName := '담당자성명';
+        joinInfo.tel := '070-7510-3710';
+        joinInfo.hp := '010-1111-2222';
+        joinInfo.fax := '02-6442-9700';
+        joinInfo.email := 'test@test.com';
+        joinInfo.searchAllAllowYN := false;
+        joinInfo.mgrYN     := false;
+
+        try
+                response := faxService.RegistContact(txtCorpNum.text,joinInfo,txtUserID.text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
+
+end;
+
+procedure TfrmExample.btnLitContactClick(Sender: TObject);
+var
+        InfoList : TContactInfoList;
+        tmp : string;
+        i : Integer;
+begin
+
+        try
+                InfoList := faxService.ListContact(txtCorpNum.text,txtUserID.text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+        tmp := 'id | email | hp | personName | searchAllAlloyYN | tel | fax | mgrYN | regDT' + #13;
+        for i := 0 to Length(InfoList) -1 do
+        begin
+            tmp := tmp + InfoList[i].id + ' | ';
+            tmp := tmp + InfoList[i].email + ' | ';
+            tmp := tmp + InfoList[i].hp + ' | ';
+            tmp := tmp + InfoList[i].personName + ' | ';
+            tmp := tmp + BoolToStr(InfoList[i].searchAllAllowYN) + ' | ';
+            tmp := tmp + InfoList[i].tel + ' | ';
+            tmp := tmp + InfoList[i].fax + ' | ';
+            tmp := tmp + BoolToStr(InfoList[i].mgrYN) + ' | ';
+            tmp := tmp + InfoList[i].regDT + #13;
+        end;
+
+        ShowMessage(tmp);
+end;
+
+
+
+procedure TfrmExample.btnUpdateContactClick(Sender: TObject);
+var
+        contactInfo : TContactInfo;
+        response : TResponse;
+begin
+        contactInfo := TContactInfo.Create;
+
+        contactInfo.personName := '테스트 담당자';
+        contactInfo.tel := '070-7510-3710';
+        contactInfo.hp := '010-4324-1111';
+        contactInfo.email := 'test@test.com';
+        contactInfo.fax := '02-6442-9799';
+        contactInfo.searchAllAllowYN := true;
+        contactInfo.mgrYN := false;
+
+        try
+                response := faxService.UpdateContact(txtCorpNum.text,contactInfo,txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
+end;
+
+procedure TfrmExample.btnGetCorpInfoClick(Sender: TObject);
+var
+        corpInfo : TCorpInfo;
+        tmp : string;
+begin
+        try
+                corpInfo := faxService.GetCorpInfo(txtCorpNum.text, txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        tmp := 'CorpName : ' + corpInfo.CorpName + #13;
+        tmp := tmp + 'CeoName : ' + corpInfo.CeoName + #13;
+        tmp := tmp + 'BizType : ' + corpInfo.BizType + #13;
+        tmp := tmp + 'BizClass : ' + corpInfo.BizClass + #13;
+        tmp := tmp + 'Addr : ' + corpInfo.Addr + #13;
+
+        ShowMessage(tmp);
+end;
+
+procedure TfrmExample.btnUpdateCorpInfoClick(Sender: TObject);
+var
+        corpInfo : TCorpInfo;
+        response : TResponse;
+begin
+        corpInfo := TCorpInfo.Create;
+
+        corpInfo.ceoname := '대표자명';
+        corpInfo.corpName := '링크허브_fax';
+        corpInfo.addr := '서울특별시 강남구 영동대로 517';
+        corpInfo.bizType := '업태';
+        corpInfo.bizClass := '업종';
+
+        try
+                response := faxService.UpdateCorpInfo(txtCorpNum.text,corpInfo,txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
+
+end;
 
 end.
