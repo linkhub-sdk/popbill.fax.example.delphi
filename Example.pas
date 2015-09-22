@@ -41,7 +41,6 @@ type
     btnMultiFile: TButton;
     btnMultiFileSingle: TButton;
     btnGetUrl: TButton;
-    btnGetPopbillURL_CHRG: TButton;
     btnGetPartnerBalance: TButton;
     btnGetBalance: TButton;
     btnCheckID: TButton;
@@ -52,6 +51,7 @@ type
     btnRegistContact: TButton;
     btnGetCorpInfo: TButton;
     btnUpdateCorpInfo: TButton;
+    btnGetPopbillURL_CHRG: TButton;
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
@@ -71,6 +71,8 @@ type
     procedure btnUpdateContactClick(Sender: TObject);
     procedure btnGetCorpInfoClick(Sender: TObject);
     procedure btnUpdateCorpInfoClick(Sender: TObject);
+    procedure btnCheckIsMemberClick(Sender: TObject);
+    procedure btnGetPopbillURL_CHRGClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -125,7 +127,7 @@ var
         resultURL : String;
 begin
         try
-                resultURL := faxService.getPopbillURL(txtCorpNum.Text,txtUserID.Text,'CHRG');
+                resultURL := faxService.getPopbillURL(txtCorpNum.Text,txtUserID.Text,'LOGIN');
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -289,8 +291,10 @@ begin
                 Exit;
         end;
 
-        SetLength(receivers,500);
+        senderNum := '07075103710';     // 발신번호
 
+        // 수신자 정보배열, 최대 1000건 
+        SetLength(receivers,500);
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
 
@@ -298,7 +302,6 @@ begin
                 receivers[i].receiveName := IntToStr(i) + '번째 수신자';        //수신자명
         end;
 
-        senderNum := '07075103710';     // 발신번호
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text,senderNum,receivers,filePath,txtReserveDT.Text,txtUserID.Text);
         except
@@ -352,10 +355,12 @@ end;
 procedure TfrmExample.btnMultiFileClick(Sender: TObject);
 var
         receiptNum :String;
+        sendNum : String;
         filePaths : Array Of string;
         receivers : TReceiverList;
         i :Integer;
 begin
+        //팩스전송 파일경로 배열, 최대 5개
         setLength(filePaths, 2);
 
         if OpenDialog1.Execute then begin
@@ -370,6 +375,9 @@ begin
                 Exit;
         end;
 
+        sendNum := '07075103710';  //팩스 발신번호
+
+        // 수신정보배열 최대 1000건
         SetLength(receivers,500);
 
         for i :=0 to Length(receivers) -1 do begin
@@ -380,7 +388,7 @@ begin
         end;
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,'07075106766',receivers,filePaths,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,sendNum,receivers,filePaths,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -400,7 +408,8 @@ var
         receiverNum : string;
         receiverName : string;
 begin
-         setLength(filePaths, 2);
+        // 팩스전송파일 경로 배열, 최대 5건
+        setLength(filePaths, 2);
 
         if OpenDialog1.Execute then begin
               filePaths[0] := OpenDialog1.FileName;
@@ -588,8 +597,8 @@ var
 begin
         corpInfo := TCorpInfo.Create;
 
-        corpInfo.ceoname := '대표자명';         //대표자명
-        corpInfo.corpName := '링크허브_SMS';    // 회사명
+        corpInfo.ceoname := '대표자명_수정';         //대표자명
+        corpInfo.corpName := '팝빌_수정';    // 회사명
         corpInfo.bizType := '업태';             // 업태
         corpInfo.bizClass := '업종';            // 업종
         corpInfo.addr := '서울특별시 강남구 영동대로 517';  // 주소
@@ -605,6 +614,38 @@ begin
 
         ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
 
+end;
+
+procedure TfrmExample.btnCheckIsMemberClick(Sender: TObject);
+var
+        response : TResponse;
+begin
+        try
+                response := faxService.CheckIsMember(txtCorpNum.text,LinkID);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
+end;
+
+procedure TfrmExample.btnGetPopbillURL_CHRGClick(Sender: TObject);
+var
+        resultURL : String;
+begin
+        try
+                resultURL := faxService.getPopbillURL(txtCorpNum.Text,txtUserID.Text,'CHRG');
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
 end.

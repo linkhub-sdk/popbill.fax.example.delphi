@@ -44,7 +44,7 @@ object frmExample: TfrmExample
       TabOrder = 0
       object btnJoin: TButton
         Left = 8
-        Top = 24
+        Top = 88
         Width = 120
         Height = 25
         Caption = '회원 가입'
@@ -62,11 +62,12 @@ object frmExample: TfrmExample
       end
       object btnCheckIsMember: TButton
         Left = 8
-        Top = 88
+        Top = 24
         Width = 121
         Height = 25
         Caption = '가입여부 확인'
         TabOrder = 2
+        OnClick = btnCheckIsMemberClick
       end
     end
     object GroupBox11: TGroupBox
@@ -127,7 +128,7 @@ object frmExample: TfrmExample
         Height = 25
         Caption = '포인트 충전 URL'
         TabOrder = 1
-        OnClick = btnGetPopBillURL_LOGINClick
+        OnClick = btnGetPopbillURL_CHRGClick
       end
     end
     object GroupBox4: TGroupBox
