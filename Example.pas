@@ -91,6 +91,9 @@ begin
         
         //연동환경 설정값, true(테스트용), false(상업용)
         faxService.IsTest := true;
+
+        //Exception 처리 설정값, true(기본값)
+        faxService.IsThrowException := true;
         
         //그리드 초기화
         stringgrid1.Cells[0,0] := 'sendState';
