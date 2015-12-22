@@ -11,6 +11,7 @@ object frmExample: TfrmExample
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -323,6 +324,15 @@ object frmExample: TfrmExample
       Caption = '전송내역 조회 팝업'
       TabOrder = 9
       OnClick = btnGetUrlClick
+    end
+    object btnSearch: TButton
+      Left = 592
+      Top = 64
+      Width = 145
+      Height = 33
+      Caption = '전송내역 검색조회'
+      TabOrder = 10
+      OnClick = btnSearchClick
     end
   end
   object OpenDialog1: TOpenDialog

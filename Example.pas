@@ -52,6 +52,7 @@ type
     btnGetCorpInfo: TButton;
     btnUpdateCorpInfo: TButton;
     btnGetPopbillURL_CHRG: TButton;
+    btnSearch: TButton;
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
@@ -73,6 +74,7 @@ type
     procedure btnUpdateCorpInfoClick(Sender: TObject);
     procedure btnCheckIsMemberClick(Sender: TObject);
     procedure btnGetPopbillURL_CHRGClick(Sender: TObject);
+    procedure btnSearchClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -600,10 +602,10 @@ var
 begin
         corpInfo := TCorpInfo.Create;
 
-        corpInfo.ceoname := '대표자명_수정';         //대표자명
-        corpInfo.corpName := '팝빌_수정';    // 회사명
-        corpInfo.bizType := '업태';             // 업태
-        corpInfo.bizClass := '업종';            // 업종
+        corpInfo.ceoname := '대표자명_수정';            //대표자명
+        corpInfo.corpName := '팝빌_수정';               // 회사명
+        corpInfo.bizType := '업태';                     // 업태
+        corpInfo.bizClass := '업종';                    // 업종
         corpInfo.addr := '서울특별시 강남구 영동대로 517';  // 주소
         
         try
@@ -649,6 +651,75 @@ begin
         end;
 
         ShowMessage('ResultURL is ' + #13 + resultURL);
+end;
+
+procedure TfrmExample.btnSearchClick(Sender: TObject);
+var
+        SDate, EDate, tmp: String;
+        Page, PerPage : Integer;
+        State : Array Of String;
+        ReserveYN, SenderYN : boolean;
+        SearchList : TFaxSearchList;
+        i : integer;
+begin
+
+        SDate := '201506011';    // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
+        EDate := '20151221';    // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
+
+        SetLength(State, 4);    // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
+        State[0] := '3';
+        State[1] := '2';
+        State[2] := '3';
+        State[3] := '4';
+
+        ReserveYN := false;   // 예약전송 검색여부, true-예약전송건 검색, false-즉시전송건 검색
+        SenderYN := false;    // 개인조회여부, true(개인조회), false(회사조회).
+
+        Page := 1;            // 페이지 번호, 기본값 1
+        PerPage := 40;       // 페이지당 검색갯수, 기본값 500
+
+        try
+                SearchList := faxService.search(txtCorpNum.text,SDate,EDate,State,ReserveYN,SenderYN,Page,PerPage,txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        tmp := 'code : '+IntToStr(SearchList.code) + #13;
+        tmp := tmp + 'total : '+ IntToStr(SearchList.total) + #13;
+        tmp := tmp + 'perPage : '+ IntToStr(SearchList.perPage) + #13;
+        tmp := tmp + 'pageNum : '+ IntToStr(SearchList.pageNum) + #13;
+        tmp := tmp + 'pageCount : '+ IntToStr(SearchList.pageCount) + #13;
+        tmp := tmp + 'message : '+ SearchList.message + #13#13;
+
+        tmp := tmp + 'sendState | convState | sendNum | receiveNum | receiveName | sendPageCnt | successPageCnt | failPageCnt | refundPageCnt |'
+                + ' cancelPageCnt | reserveDT | sendDT | resultDT | sendResult ' + #13;
+
+        
+        for i:=0 to Length(SearchList.list) -1 do begin
+            tmp := tmp + IntToStr(SearchList.list[i].sendState) + ' | '                 // 전송상태
+                        + IntToStr(SearchList.list[i].convState) + ' | '                // 변환상태
+
+                        + SearchList.list[i].sendNum + ' | '                            // 발신번호
+                        + SearchList.list[i].receiveNum + ' | '                         // 수신번호
+                        + SearchList.list[i].receiveName + ' | '                        // 수신자명
+
+                        + IntToStr(SearchList.list[i].sendPageCnt) + ' | '              // 페이지수
+                        + IntToStr(SearchList.list[i].successPageCnt) + ' | '           // 성공 페이지수
+                        + IntToStr(SearchList.list[i].failPageCnt) + ' | '              // 실패 페이지수
+                        + IntToStr(SearchList.list[i].refundPageCnt) + ' | '            // 환불 페이지수
+                        + IntToStr(SearchList.list[i].cancelPageCnt) + ' | '            // 취소 페이지 수
+
+                        + SearchList.list[i].reserveDT + ' | '                          // 예약전송 일시
+                        + SearchList.list[i].sendDT + ' | '                             // 전송일시
+                        + SearchList.list[i].resultDT + ' | '                           // 전송결과 수신일시
+                        + IntToSTr(SearchList.list[i].sendResult)                       // 전송결과
+                        + #13;
+        end;
+        
+        ShowMessage(tmp);
 end;
 
 end.
