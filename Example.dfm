@@ -1,8 +1,8 @@
 object frmExample: TfrmExample
-  Left = 485
-  Top = 180
-  Width = 825
-  Height = 677
+  Left = 252
+  Top = 173
+  Width = 1124
+  Height = 669
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -215,8 +215,8 @@ object frmExample: TfrmExample
   object GroupBox5: TGroupBox
     Left = 24
     Top = 240
-    Width = 778
-    Height = 387
+    Width = 1075
+    Height = 366
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'ÆËºô FAX °ü·Ã ±â´É'
     TabOrder = 3
@@ -254,9 +254,9 @@ object frmExample: TfrmExample
     object StringGrid1: TStringGrid
       Left = 8
       Top = 144
-      Width = 729
-      Height = 201
-      ColCount = 14
+      Width = 1049
+      Height = 209
+      ColCount = 15
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2

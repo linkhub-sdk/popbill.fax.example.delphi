@@ -114,6 +114,7 @@ begin
         stringgrid1.Cells[11,0] := 'sendDT';
         stringgrid1.Cells[12,0] := 'resultDT';
         stringgrid1.Cells[13,0] := 'sendResult';
+        stringgrid1.Cells[14,0] := 'fileNames';        
 end;
 
 function IfThen(condition :bool; trueVal :String ; falseVal : String) : string;
@@ -299,7 +300,7 @@ begin
         senderNum := '07075103710';     // 발신번호
 
         // 수신자 정보배열, 최대 1000건 
-        SetLength(receivers,500);
+        SetLength(receivers,5);
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
 
@@ -324,6 +325,8 @@ procedure TfrmExample.btnGetMessageClick(Sender: TObject);
 var
         FaxDetails : TFaxDetailList;
         i :integer;
+        j : integer;
+        fileNameList : String;
 begin
         try
                 FaxDetails := faxService.getSendDetail(txtCorpNum.Text,txtReceiptNum.Text,txtUserID.Text);
@@ -337,6 +340,7 @@ begin
         stringgrid1.RowCount := Length(FaxDetails) + 1;                                          
 
         for i:= 0 to Length(FaxDetails) -1 do begin
+
                stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].sendState);
                stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].convState);
                stringgrid1.Cells[2,i+1] := FaxDetails[i].sendNum;
@@ -354,6 +358,16 @@ begin
                stringgrid1.Cells[12,i+1] := FaxDetails[i].resultDT;
                stringgrid1.Cells[13,i+1] := IntToStr(FaxDetails[i].sendResult);
 
+               fileNameList := '';
+
+               for j:= 0 to length(FaxDetails[i].fileNames) -1 do begin
+                        if j = length(FaxDetails[i].fileNames) -1 then
+                                fileNameList := fileNameList +FaxDetails[i].fileNames[j]
+                        else
+                                fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
+               end ;
+               
+               stringgrid1.Cells[14,i+1] := fileNameList;
         end;
 end;
 
@@ -429,7 +443,7 @@ begin
         end;
 
         senderNum := '07075103710';     //발신번호
-        receiverNum := '070111222';     //수신번호
+        receiverNum := '070000111';     //수신번호
         receiverName := '수신자명';     //수신자명
 
         try
@@ -661,22 +675,24 @@ var
         ReserveYN, SenderYN : boolean;
         SearchList : TFaxSearchList;
         i : integer;
+        j : integer;
+        fileNameList : String;
 begin
 
-        SDate := '201506011';    // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        EDate := '20151221';    // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
+        SDate := '20151001';    // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
+        EDate := '20151225';    // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
 
         SetLength(State, 4);    // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
-        State[0] := '3';
+        State[0] := '1';
         State[1] := '2';
         State[2] := '3';
         State[3] := '4';
 
-        ReserveYN := false;   // 예약전송 검색여부, true-예약전송건 검색, false-즉시전송건 검색
-        SenderYN := false;    // 개인조회여부, true(개인조회), false(회사조회).
+        ReserveYN := false;   // 예약전송 검색여부, true-예약전송건 검색
+        SenderYN := true;    // 개인조회여부, true(개인조회), false(회사조회).
 
-        Page := 1;            // 페이지 번호, 기본값 1
-        PerPage := 40;       // 페이지당 검색갯수, 기본값 500
+        Page := 1;           // 페이지 번호, 기본값 1
+        PerPage := 10;       // 페이지당 검색갯수, 기본값 500
 
         try
                 SearchList := faxService.search(txtCorpNum.text,SDate,EDate,State,ReserveYN,SenderYN,Page,PerPage,txtUserID.Text);
@@ -694,32 +710,40 @@ begin
         tmp := tmp + 'pageCount : '+ IntToStr(SearchList.pageCount) + #13;
         tmp := tmp + 'message : '+ SearchList.message + #13#13;
 
-        tmp := tmp + 'sendState | convState | sendNum | receiveNum | receiveName | sendPageCnt | successPageCnt | failPageCnt | refundPageCnt |'
-                + ' cancelPageCnt | reserveDT | sendDT | resultDT | sendResult ' + #13;
-
-        
-        for i:=0 to Length(SearchList.list) -1 do begin
-            tmp := tmp + IntToStr(SearchList.list[i].sendState) + ' | '                 // 전송상태
-                        + IntToStr(SearchList.list[i].convState) + ' | '                // 변환상태
-
-                        + SearchList.list[i].sendNum + ' | '                            // 발신번호
-                        + SearchList.list[i].receiveNum + ' | '                         // 수신번호
-                        + SearchList.list[i].receiveName + ' | '                        // 수신자명
-
-                        + IntToStr(SearchList.list[i].sendPageCnt) + ' | '              // 페이지수
-                        + IntToStr(SearchList.list[i].successPageCnt) + ' | '           // 성공 페이지수
-                        + IntToStr(SearchList.list[i].failPageCnt) + ' | '              // 실패 페이지수
-                        + IntToStr(SearchList.list[i].refundPageCnt) + ' | '            // 환불 페이지수
-                        + IntToStr(SearchList.list[i].cancelPageCnt) + ' | '            // 취소 페이지 수
-
-                        + SearchList.list[i].reserveDT + ' | '                          // 예약전송 일시
-                        + SearchList.list[i].sendDT + ' | '                             // 전송일시
-                        + SearchList.list[i].resultDT + ' | '                           // 전송결과 수신일시
-                        + IntToSTr(SearchList.list[i].sendResult)                       // 전송결과
-                        + #13;
-        end;
-        
         ShowMessage(tmp);
+
+        stringgrid1.RowCount := Length(SearchList.list) + 1;
+
+        for i:= 0 to Length(SearchList.list) -1 do begin
+
+               stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].sendState);
+               stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].convState);
+               stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;
+               stringgrid1.Cells[3,i+1] := SearchList.list[i].receiveNum;
+               stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveName;
+
+               stringgrid1.Cells[5,i+1] := IntToStr(SearchList.list[i].sendPageCnt);
+               stringgrid1.Cells[6,i+1] := IntToStr(SearchList.list[i].successPageCnt);
+               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].failPageCnt);
+               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].refundPageCnt);
+               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
+
+               stringgrid1.Cells[10,i+1] := SearchList.list[i].reserveDT;
+               stringgrid1.Cells[11,i+1] := SearchList.list[i].sendDT;
+               stringgrid1.Cells[12,i+1] := SearchList.list[i].resultDT;
+               stringgrid1.Cells[13,i+1] := IntToStr(SearchList.list[i].sendResult);
+
+               fileNameList := '';
+
+               for j:= 0 to length(SearchList.list[i].fileNames) -1 do begin
+                        if j = length(SearchList.list[i].fileNames) -1 then
+                                fileNameList := fileNameList +SearchList.list[i].fileNames[j]
+                        else
+                                fileNameList := fileNameList +SearchList.list[i].fileNames[j] + ', '
+               end ;
+               
+               stringgrid1.Cells[14,i+1] := fileNameList;
+        end;
 end;
 
 end.
