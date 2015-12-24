@@ -262,6 +262,22 @@ object frmExample: TfrmExample
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
       TabOrder = 2
+      ColWidths = (
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        131)
     end
     object btnCancelReserve: TButton
       Left = 448
