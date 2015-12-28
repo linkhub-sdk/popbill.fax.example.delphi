@@ -671,6 +671,7 @@ procedure TfrmExample.btnSearchClick(Sender: TObject);
 var
         SDate, EDate, tmp: String;
         Page, PerPage : Integer;
+        Order : String;
         State : Array Of String;
         ReserveYN, SenderYN : boolean;
         SearchList : TFaxSearchList;
@@ -694,8 +695,10 @@ begin
         Page := 1;           // 페이지 번호, 기본값 1
         PerPage := 10;       // 페이지당 검색갯수, 기본값 500
 
+        Order := 'A';        // 'D' : 내림차순 , 'A' : 오름차순
+
         try
-                SearchList := faxService.search(txtCorpNum.text,SDate,EDate,State,ReserveYN,SenderYN,Page,PerPage,txtUserID.Text);
+                SearchList := faxService.search(txtCorpNum.text,SDate,EDate,State,ReserveYN,SenderYN,Page,PerPage,Order, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
