@@ -111,10 +111,11 @@ begin
         stringgrid1.Cells[9,0] := 'cancelCnt';
 
         stringgrid1.Cells[10,0] := 'reserveDT';
-        stringgrid1.Cells[11,0] := 'sendDT';
-        stringgrid1.Cells[12,0] := 'resultDT';
-        stringgrid1.Cells[13,0] := 'sendResult';
-        stringgrid1.Cells[14,0] := 'fileNames';        
+        stringgrid1.Cells[11,0] := 'receiptDT';
+        stringgrid1.Cells[12,0] := 'sendDT';
+        stringgrid1.Cells[13,0] := 'resultDT';
+        stringgrid1.Cells[14,0] := 'sendResult';
+        stringgrid1.Cells[15,0] := 'fileNames';
 end;
 
 function IfThen(condition :bool; trueVal :String ; falseVal : String) : string;
@@ -245,8 +246,8 @@ begin
                 Exit;
         end;
         
-        senderNum := '07075103710';     //발신번호
-        receiverNum := '070111222';     //수신번호
+        senderNum := '0264429700';     //발신번호
+        receiverNum := '0264429700';     //수신번호
         receiverName := '수신자명';     //수신자명
 
         try
@@ -354,9 +355,10 @@ begin
                stringgrid1.Cells[9,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
 
                stringgrid1.Cells[10,i+1] := FaxDetails[i].reserveDT;
-               stringgrid1.Cells[11,i+1] := FaxDetails[i].sendDT;
-               stringgrid1.Cells[12,i+1] := FaxDetails[i].resultDT;
-               stringgrid1.Cells[13,i+1] := IntToStr(FaxDetails[i].sendResult);
+               stringgrid1.Cells[11,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[12,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].resultDT;
+               stringgrid1.Cells[14,i+1] := IntToStr(FaxDetails[i].sendResult);
 
                fileNameList := '';
 
@@ -732,9 +734,10 @@ begin
                stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
 
                stringgrid1.Cells[10,i+1] := SearchList.list[i].reserveDT;
-               stringgrid1.Cells[11,i+1] := SearchList.list[i].sendDT;
-               stringgrid1.Cells[12,i+1] := SearchList.list[i].resultDT;
-               stringgrid1.Cells[13,i+1] := IntToStr(SearchList.list[i].sendResult);
+               stringgrid1.Cells[11,i+1] := SearchList.list[i].receiptDT;
+               stringgrid1.Cells[12,i+1] := SearchList.list[i].sendDT;
+               stringgrid1.Cells[13,i+1] := SearchList.list[i].resultDT;
+               stringgrid1.Cells[14,i+1] := IntToStr(SearchList.list[i].sendResult);
 
                fileNameList := '';
 

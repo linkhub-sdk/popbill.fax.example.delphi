@@ -256,7 +256,7 @@ object frmExample: TfrmExample
       Top = 144
       Width = 1049
       Height = 209
-      ColCount = 15
+      ColCount = 16
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
@@ -277,7 +277,8 @@ object frmExample: TfrmExample
         64
         64
         64
-        131)
+        131
+        64)
     end
     object btnCancelReserve: TButton
       Left = 448
