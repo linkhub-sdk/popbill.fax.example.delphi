@@ -369,7 +369,7 @@ begin
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
                
-               stringgrid1.Cells[14,i+1] := fileNameList;
+               stringgrid1.Cells[15,i+1] := fileNameList;
         end;
 end;
 
@@ -748,7 +748,7 @@ begin
                                 fileNameList := fileNameList +SearchList.list[i].fileNames[j] + ', '
                end ;
                
-               stringgrid1.Cells[14,i+1] := fileNameList;
+               stringgrid1.Cells[15,i+1] := fileNameList;
         end;
 end;
 

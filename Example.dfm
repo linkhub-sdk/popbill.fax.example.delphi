@@ -277,8 +277,8 @@ object frmExample: TfrmExample
         64
         64
         64
-        131
-        64)
+        60
+        74)
     end
     object btnCancelReserve: TButton
       Left = 448
