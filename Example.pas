@@ -53,12 +53,13 @@ type
     btnUpdateCorpInfo: TButton;
     btnGetPopbillURL_CHRG: TButton;
     btnSearch: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
     procedure btnGetUnitCostClick(Sender: TObject);
     procedure btnGetPartnerBalanceClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure btnSendFax_singleClick(Sender: TObject);
     procedure btnCancelReserveClick(Sender: TObject);
     procedure btnSendThousandSameClick(Sender: TObject);
@@ -116,6 +117,12 @@ begin
         stringgrid1.Cells[13,0] := 'resultDT';
         stringgrid1.Cells[14,0] := 'sendResult';
         stringgrid1.Cells[15,0] := 'fileNames';
+end;
+
+procedure TfrmExample.FormClose(Sender:TObject; var Action:TCloseAction);
+begin
+	faxService.free;
+	Action := caFree;
 end;
 
 function IfThen(condition :bool; trueVal :String ; falseVal : String) : string;
