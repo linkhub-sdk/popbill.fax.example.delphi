@@ -757,6 +757,7 @@ begin
                
                stringgrid1.Cells[15,i+1] := fileNameList;
         end;
+        SearchList.Free;
 end;
 
 end.
