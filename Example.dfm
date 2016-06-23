@@ -2,7 +2,7 @@ object frmExample: TfrmExample
   Left = 252
   Top = 173
   Width = 1124
-  Height = 669
+  Height = 680
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -33,7 +33,7 @@ object frmExample: TfrmExample
     Left = 24
     Top = 56
     Width = 777
-    Height = 169
+    Height = 193
     Caption = 'ÆËºô ±âº» API'
     TabOrder = 0
     object GroupBox9: TGroupBox
@@ -75,7 +75,7 @@ object frmExample: TfrmExample
       Left = 152
       Top = 24
       Width = 145
-      Height = 129
+      Height = 153
       Caption = 'Æ÷ÀÎÆ® °ü·Ã'
       TabOrder = 1
       object btnGetUnitCost: TButton
@@ -104,6 +104,15 @@ object frmExample: TfrmExample
         Caption = 'ÀÜ¿©Æ÷ÀÎÆ® È®ÀÎ'
         TabOrder = 2
         OnClick = btnGetBalanceClick
+      end
+      object btnGetChargeInfo: TButton
+        Left = 8
+        Top = 120
+        Width = 129
+        Height = 25
+        Caption = '°ú±ÝÁ¤º¸ È®ÀÎ'
+        TabOrder = 3
+        OnClick = btnGetChargeInfoClick
       end
     end
     object GroupBox12: TGroupBox
@@ -214,9 +223,9 @@ object frmExample: TfrmExample
   end
   object GroupBox5: TGroupBox
     Left = 24
-    Top = 240
+    Top = 264
     Width = 1075
-    Height = 366
+    Height = 369
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'ÆËºô FAX °ü·Ã ±â´É'
     TabOrder = 3

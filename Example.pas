@@ -53,6 +53,7 @@ type
     btnUpdateCorpInfo: TButton;
     btnGetPopbillURL_CHRG: TButton;
     btnSearch: TButton;
+    btnGetChargeInfo: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
@@ -76,6 +77,7 @@ type
     procedure btnCheckIsMemberClick(Sender: TObject);
     procedure btnGetPopbillURL_CHRGClick(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
+    procedure btnGetChargeInfoClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -758,6 +760,29 @@ begin
                stringgrid1.Cells[15,i+1] := fileNameList;
         end;
         SearchList.Free;
+end;
+
+procedure TfrmExample.btnGetChargeInfoClick(Sender: TObject);
+var
+        chargeInfo : TFaxChargeInfo;
+        tmp : String;
+begin
+
+        try
+                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
+                        Exit;
+                end;
+        end;
+
+        tmp := 'unitCost (단가) : ' + chargeInfo.unitCost + #13;
+        tmp := tmp + 'chargeMethod (과금유형) : ' + chargeInfo.chargeMethod + #13;
+        tmp := tmp + 'rateSystem (과금제도) : ' + chargeInfo.rateSystem + #13;
+
+        ShowMessage(tmp);
+
 end;
 
 end.
