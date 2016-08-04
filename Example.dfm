@@ -1,7 +1,7 @@
 object frmExample: TfrmExample
-  Left = 252
+  Left = 173
   Top = 173
-  Width = 1124
+  Width = 1186
   Height = 680
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
   Color = clBtnFace
@@ -224,7 +224,7 @@ object frmExample: TfrmExample
   object GroupBox5: TGroupBox
     Left = 24
     Top = 264
-    Width = 1075
+    Width = 1137
     Height = 369
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'ÆËºô FAX °ü·Ã ±â´É'
@@ -263,31 +263,32 @@ object frmExample: TfrmExample
     object StringGrid1: TStringGrid
       Left = 8
       Top = 144
-      Width = 1049
+      Width = 1105
       Height = 209
-      ColCount = 16
+      ColCount = 17
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
       TabOrder = 2
       ColWidths = (
+        54
+        53
         64
         64
         64
+        56
+        56
+        59
+        55
+        54
+        53
         64
-        64
-        64
-        64
-        64
-        64
-        64
-        64
-        64
-        64
-        64
-        60
-        74)
+        80
+        76
+        74
+        74
+        64)
     end
     object btnCancelReserve: TButton
       Left = 448
@@ -346,7 +347,7 @@ object frmExample: TfrmExample
       Left = 592
       Top = 24
       Width = 145
-      Height = 33
+      Height = 34
       Caption = 'Àü¼Û³»¿ª Á¶È¸ ÆË¾÷'
       TabOrder = 9
       OnClick = btnGetUrlClick
@@ -355,7 +356,7 @@ object frmExample: TfrmExample
       Left = 592
       Top = 64
       Width = 145
-      Height = 33
+      Height = 34
       Caption = 'Àü¼Û³»¿ª °Ë»öÁ¶È¸'
       TabOrder = 10
       OnClick = btnSearchClick

@@ -8,6 +8,10 @@ uses
   Popbill, PopbillFax, ExtCtrls, Grids;
 
 const
+
+        // 링크허브 파트너 가입시 메일로 발급받은 인증정보(링크아이디, 비밀키) 입력하시기 바랍니다.
+        // [참고] 팝빌 서비스 API 이용절차 안내 - http://blog.linkhub.co.kr/105/
+
         // 링크아이디.
         LinkID = 'TESTER';
         // 파트너 통신용 비밀키. 유출 주의.
@@ -92,6 +96,7 @@ implementation
 
 procedure TfrmExample.FormCreate(Sender: TObject);
 begin
+        //팩스 API 모듈 초기화
         faxService := TFaxService.Create(LinkID,SecretKey);
         
         //연동환경 설정값, true(테스트용), false(상업용)
@@ -104,21 +109,22 @@ begin
         stringgrid1.Cells[0,0] := 'sendState';
         stringgrid1.Cells[1,0] := 'convState';
         stringgrid1.Cells[2,0] := 'sendnum';
-        stringgrid1.Cells[3,0] := 'receiveNum';
-        stringgrid1.Cells[4,0] := 'receiveName';
+        stringgrid1.Cells[3,0] := 'senderName';
+        stringgrid1.Cells[4,0] := 'receiveNum';
+        stringgrid1.Cells[5,0] := 'receiveName';
 
-        stringgrid1.Cells[5,0] := 'sendCnt';
-        stringgrid1.Cells[6,0] := 'successCnt';
-        stringgrid1.Cells[7,0] := 'failCnt';
-        stringgrid1.Cells[8,0] := 'refundCnt';
-        stringgrid1.Cells[9,0] := 'cancelCnt';
+        stringgrid1.Cells[6,0] := 'sendCnt';
+        stringgrid1.Cells[7,0] := 'successCnt';
+        stringgrid1.Cells[8,0] := 'failCnt';
+        stringgrid1.Cells[9,0] := 'refundCnt';
+        stringgrid1.Cells[10,0] := 'cancelCnt';
 
-        stringgrid1.Cells[10,0] := 'reserveDT';
-        stringgrid1.Cells[11,0] := 'receiptDT';
-        stringgrid1.Cells[12,0] := 'sendDT';
-        stringgrid1.Cells[13,0] := 'resultDT';
-        stringgrid1.Cells[14,0] := 'sendResult';
-        stringgrid1.Cells[15,0] := 'fileNames';
+        stringgrid1.Cells[11,0] := 'reserveDT';
+        stringgrid1.Cells[12,0] := 'receiptDT';
+        stringgrid1.Cells[13,0] := 'sendDT';
+        stringgrid1.Cells[14,0] := 'resultDT';
+        stringgrid1.Cells[15,0] := 'sendResult';
+        stringgrid1.Cells[16,0] := 'fileNames';
 end;
 
 procedure TfrmExample.FormClose(Sender:TObject; var Action:TCloseAction);
@@ -161,20 +167,48 @@ var
         response : TResponse;
         joinInfo : TJoinForm;
 begin
-        joinInfo.LinkID := LinkID; //링크아이디
-        joinInfo.CorpNum := '1231212312'; //사업자번호 '-' 제외.
+        // 파트너의 연동회원으로 가입을 신청합니다.
+
+        // 링크아이디
+        joinInfo.LinkID := LinkID;
+
+        // 사업자번호 '-' 제외.
+        joinInfo.CorpNum := '1231212312';
+
+        // 대표자 성명 
         joinInfo.CEOName := '대표자성명';
+
+        // 상호 
         joinInfo.CorpName := '상호';
+
+        // 주소 
         joinInfo.Addr := '주소';
-        joinInfo.ZipCode := '500-100';
+
+        // 업태 
         joinInfo.BizType := '업태';
-        joinInfo.BizClass := '업종';
-        joinInfo.ID     := 'userid';  //6자 이상 20자 미만.
-        joinInfo.PWD    := 'pwd_must_be_long_enough'; //6자 이상 20자 미만.
+
+        // 종목
+        joinInfo.BizClass := '종목';
+
+        // 6자 이상 20자 미만.
+        joinInfo.ID     := 'userid';
+
+        // 6자 이상 20자 미만.
+        joinInfo.PWD    := 'pwd_must_be_long_enough';
+
+        // 담당자 성명
         joinInfo.ContactName := '담당자명';
+        
+        // 담당자 연락처
         joinInfo.ContactTEL :='02-999-9999';
+        
+        // 담당자 휴대폰 번호 
         joinInfo.ContactHP := '010-1234-5678';
+
+        // 담당자 팩스 번호
         joinInfo.ContactFAX := '02-999-9998';
+
+        // 담당자 이메일주소
         joinInfo.ContactEmail := 'test@test.com';
 
         try
@@ -246,6 +280,7 @@ var
         filePath : string;
         receiptNum : String;
         senderNum : String;
+        sendName : String;
         receiverNum : String;
         receiverName : string;
 begin
@@ -254,13 +289,21 @@ begin
         end else begin
                 Exit;
         end;
-        
-        senderNum := '0264429700';     //발신번호
-        receiverNum := '0264429700';     //수신번호
-        receiverName := '수신자명';     //수신자명
+
+        // 발신번호
+        senderNum := '07075103710';
+
+        // 발신자명
+        sendName := '발신자명';
+
+        // 수신번호
+        receiverNum := '070111222';
+
+        // 수신자명
+        receiverName := '수신자명';
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, receiverNum, receiverName, filePath,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, sendName, receiverNum, receiverName, filePath,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -298,6 +341,7 @@ var
         receiptNum :String;
         filePath : string;
         senderNum : string;
+        sendName : String;
         receivers : TReceiverList;
         i :Integer;
 begin
@@ -307,25 +351,30 @@ begin
                 Exit;
         end;
 
-        senderNum := '07075103710';     // 발신번호
+        // 발신번호
+        senderNum := '07075103710';
+
+        // 발신자명 
+        sendName := '발신자명';
 
         // 수신자 정보배열, 최대 1000건 
         SetLength(receivers,5);
+        
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
-
-                receivers[i].receiveNum := '070111222';         //수신번호
+                receivers[i].receiveNum := '070111222';         // 수신번호
                 receivers[i].receiveName := IntToStr(i) + '번째 수신자';        //수신자명
         end;
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,senderNum,receivers,filePath,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,senderNum, sendName, receivers,filePath,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
                         Exit;
                 end;
         end;
+        
         txtReceiptNum.Text := receiptNum;
 
         ShowMessage('접수번호 :' + receiptNum);
@@ -354,20 +403,21 @@ begin
                stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].sendState);
                stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].convState);
                stringgrid1.Cells[2,i+1] := FaxDetails[i].sendNum;
-               stringgrid1.Cells[3,i+1] := FaxDetails[i].receiveNum;
-               stringgrid1.Cells[4,i+1] := FaxDetails[i].receiveName;
+               stringgrid1.Cells[3,i+1] := FaxDetails[i].senderName;
+               stringgrid1.Cells[4,i+1] := FaxDetails[i].receiveNum;
+               stringgrid1.Cells[5,i+1] := FaxDetails[i].receiveName;
 
-               stringgrid1.Cells[5,i+1] := IntToStr(FaxDetails[i].sendPageCnt);
-               stringgrid1.Cells[6,i+1] := IntToStr(FaxDetails[i].successPageCnt);
-               stringgrid1.Cells[7,i+1] := IntToStr(FaxDetails[i].failPageCnt);
-               stringgrid1.Cells[8,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
-               stringgrid1.Cells[9,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
+               stringgrid1.Cells[6,i+1] := IntToStr(FaxDetails[i].sendPageCnt);
+               stringgrid1.Cells[7,i+1] := IntToStr(FaxDetails[i].successPageCnt);
+               stringgrid1.Cells[8,i+1] := IntToStr(FaxDetails[i].failPageCnt);
+               stringgrid1.Cells[9,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
+               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
 
-               stringgrid1.Cells[10,i+1] := FaxDetails[i].reserveDT;
-               stringgrid1.Cells[11,i+1] := FaxDetails[i].receiptDT;
-               stringgrid1.Cells[12,i+1] := FaxDetails[i].sendDT;
-               stringgrid1.Cells[13,i+1] := FaxDetails[i].resultDT;
-               stringgrid1.Cells[14,i+1] := IntToStr(FaxDetails[i].sendResult);
+               stringgrid1.Cells[11,i+1] := FaxDetails[i].reserveDT;
+               stringgrid1.Cells[12,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[14,i+1] := FaxDetails[i].resultDT;
+               stringgrid1.Cells[15,i+1] := IntToStr(FaxDetails[i].sendResult);
 
                fileNameList := '';
 
@@ -378,7 +428,7 @@ begin
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
                
-               stringgrid1.Cells[15,i+1] := fileNameList;
+               stringgrid1.Cells[16,i+1] := fileNameList;
         end;
 end;
 
@@ -386,6 +436,7 @@ procedure TfrmExample.btnMultiFileClick(Sender: TObject);
 var
         receiptNum :String;
         sendNum : String;
+        sendName : String;
         filePaths : Array Of string;
         receivers : TReceiverList;
         i :Integer;
@@ -405,7 +456,11 @@ begin
                 Exit;
         end;
 
-        sendNum := '07075103710';  //팩스 발신번호
+        // 발신번호
+        sendNum := '07075103710';
+
+        // 발신자명
+        sendName := '발신자명';
 
         // 수신정보배열 최대 1000건
         SetLength(receivers,500);
@@ -418,7 +473,7 @@ begin
         end;
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,sendNum,receivers,filePaths,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,sendNum,sendName,receivers,filePaths,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -434,9 +489,10 @@ procedure TfrmExample.btnMultiFileSingleClick(Sender: TObject);
 var
         filePaths : Array Of string;
         receiptNum : String;
-        senderNum : string;
-        receiverNum : string;
-        receiverName : string;
+        sendNum : string;
+        sendName : String;
+        receiveNum : string;
+        receiveName : string;
 begin
         // 팩스전송파일 경로 배열, 최대 5건
         setLength(filePaths, 2);
@@ -453,12 +509,20 @@ begin
                 Exit;
         end;
 
-        senderNum := '07075103710';     //발신번호
-        receiverNum := '070000111';     //수신번호
-        receiverName := '수신자명';     //수신자명
+        // 발신번호
+        sendNum := '07075103710';
+
+        // 발신자명
+        sendName := '링크허브 담당자';
+
+        //수신번호
+        receiveNum := '070000111';
+
+        //수신자명
+        receiveName := '수신자명';
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text,senderNum,receiverNum,receiverName,filePaths,txtReserveDT.Text,txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text,sendNum,sendName,receiveNum,receiveName,filePaths,txtReserveDT.Text,txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage(IntToStr(le.code) + ' | ' +  le.Message);
@@ -496,6 +560,8 @@ procedure TfrmExample.btnCheckIDClick(Sender: TObject);
 var
         response : TResponse;
 begin
+        // 팝빌 연동회원 가입을 위해 아이디중복을 체크합니다.
+        
         try
                 response := faxService.CheckID(txtUserID.Text);
         except
@@ -513,15 +579,32 @@ var
         response : TResponse;
         joinInfo : TJoinContact;
 begin
-        joinInfo.id := 'userid';                        // [필수] 아이디 (6자 이상 20자 미만)
-        joinInfo.pwd := 'thisispassword';               // [필수] 비밀번호 (6자 이상 20자 미만)
-        joinInfo.personName := '담당자성명';            // [필수] 담당자명(한글이나 영문 30자 이내)
-        joinInfo.tel := '070-7510-3710';                // [필수] 연락처
-        joinInfo.hp := '010-1111-2222';                 // 휴대폰번호
-        joinInfo.fax := '02-6442-9700';                 // 팩스번호
-        joinInfo.email := 'test@test.com';              // [필수] 이메일
-        joinInfo.searchAllAllowYN := false;             // 조회권한(true 회사조회/ false 개인조회)
-        joinInfo.mgrYN     := false;                    // 관리자 권한여부
+        // [필수] 아이디 (6자 이상 20자 미만)
+        joinInfo.id := 'userid';
+
+        // [필수] 비밀번호 (6자 이상 20자 미만)
+        joinInfo.pwd := 'thisispassword';
+
+        // [필수] 담당자명(한글이나 영문 30자 이내)
+        joinInfo.personName := '담당자성명';
+
+        // [필수] 연락처
+        joinInfo.tel := '070-7510-3710';
+
+        // 담당자 휴대폰번호
+        joinInfo.hp := '010-1111-2222';
+
+        // 담당자 팩스번호
+        joinInfo.fax := '02-6442-9700';
+
+        // [필수] 담당자 이메일
+        joinInfo.email := 'test@test.com';
+
+        // 조회권한 (true-회사조회, false-개인조회)
+        joinInfo.searchAllAllowYN := false;
+
+        // 관리자 권한여부
+        joinInfo.mgrYN     := false;
 
         try
                 response := faxService.RegistContact(txtCorpNum.text,joinInfo,txtUserID.text);
@@ -577,13 +660,26 @@ var
 begin
         contactInfo := TContactInfo.Create;
 
-        contactInfo.personName := '테스트 담당자';      // 담당자명
-        contactInfo.tel := '070-7510-3710';             // 연락처
-        contactInfo.hp := '010-4324-1111';              // 휴대폰번호
-        contactInfo.email := 'test@test.com';           // 이메일 주소
-        contactInfo.fax := '02-6442-9799';              // 팩스번호
-        contactInfo.searchAllAllowYN := true;           // 회사조회 권한여부
-        contactInfo.mgrYN := false;                     // 관리자 전환 여부 
+        // 담당자명
+        contactInfo.personName := '테스트 담당자';
+
+        // 연락처
+        contactInfo.tel := '070-7510-3710';
+
+        // 휴대폰번호
+        contactInfo.hp := '010-4324-1111';
+
+        // 이메일 주소
+        contactInfo.email := 'test@test.com';
+
+        // 팩스번호
+        contactInfo.fax := '02-6442-9799';
+
+        // 회사조회 권한여부
+        contactInfo.searchAllAllowYN := true;
+
+        // 관리자 전환 여부
+        contactInfo.mgrYN := false;
 
         try
                 response := faxService.UpdateContact(txtCorpNum.text,contactInfo,txtUserID.Text);
@@ -611,11 +707,11 @@ begin
                 end;
         end;
 
-        tmp := 'CorpName : ' + corpInfo.CorpName + #13;
-        tmp := tmp + 'CeoName : ' + corpInfo.CeoName + #13;
-        tmp := tmp + 'BizType : ' + corpInfo.BizType + #13;
-        tmp := tmp + 'BizClass : ' + corpInfo.BizClass + #13;
-        tmp := tmp + 'Addr : ' + corpInfo.Addr + #13;
+        tmp := 'CorpName (상호) : ' + corpInfo.CorpName + #13;
+        tmp := tmp + 'CeoName (대표자성명) : ' + corpInfo.CeoName + #13;
+        tmp := tmp + 'BizType (업태) : ' + corpInfo.BizType + #13;
+        tmp := tmp + 'BizClass (종목) : ' + corpInfo.BizClass + #13;
+        tmp := tmp + 'Addr (주소) : ' + corpInfo.Addr + #13;
 
         ShowMessage(tmp);
 end;
@@ -650,6 +746,7 @@ procedure TfrmExample.btnCheckIsMemberClick(Sender: TObject);
 var
         response : TResponse;
 begin
+        // 해당 사업자가 파트너의 연동회원 가입되어 있는지 여부를 확인합니다. 
         try
                 response := faxService.CheckIsMember(txtCorpNum.text,LinkID);
         except
@@ -691,22 +788,33 @@ var
         fileNameList : String;
 begin
 
-        SDate := '20151001';    // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        EDate := '20151225';    // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
+        // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
+        SDate := '20160801';
 
-        SetLength(State, 4);    // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
+        // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
+        EDate := '20160831';
+
+        // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
+        SetLength(State, 4);
         State[0] := '1';
         State[1] := '2';
         State[2] := '3';
         State[3] := '4';
 
-        ReserveYN := false;   // 예약전송 검색여부, true-예약전송건 검색
-        SenderYN := true;    // 개인조회여부, true(개인조회), false(회사조회).
+        // 예약전송 검색여부, true-예약전송건 검색
+        ReserveYN := false;
 
-        Page := 1;           // 페이지 번호, 기본값 1
-        PerPage := 10;       // 페이지당 검색갯수, 기본값 500
+        // 개인조회여부, true(개인조회), false(회사조회).
+        SenderYN := false;
 
-        Order := 'A';        // 'D' : 내림차순 , 'A' : 오름차순
+        // 페이지 번호, 기본값 1
+        Page := 1;
+
+        // 페이지당 검색갯수, 기본값 500
+        PerPage := 10;
+
+        // 정렬방향, 'D' : 내림차순 , 'A' : 오름차순
+        Order := 'D';
 
         try
                 SearchList := faxService.search(txtCorpNum.text,SDate,EDate,State,ReserveYN,SenderYN,Page,PerPage,Order, txtUserID.Text);
@@ -733,20 +841,21 @@ begin
                stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].sendState);
                stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].convState);
                stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;
-               stringgrid1.Cells[3,i+1] := SearchList.list[i].receiveNum;
-               stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveName;
+               stringgrid1.Cells[3,i+1] := SearchList.list[i].senderName;
+               stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNum;
+               stringgrid1.Cells[5,i+1] := SearchList.list[i].receiveName;
 
-               stringgrid1.Cells[5,i+1] := IntToStr(SearchList.list[i].sendPageCnt);
-               stringgrid1.Cells[6,i+1] := IntToStr(SearchList.list[i].successPageCnt);
-               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].failPageCnt);
-               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].refundPageCnt);
-               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
+               stringgrid1.Cells[6,i+1] := IntToStr(SearchList.list[i].sendPageCnt);
+               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].successPageCnt);
+               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].failPageCnt);
+               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].refundPageCnt);
+               stringgrid1.Cells[10,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
 
-               stringgrid1.Cells[10,i+1] := SearchList.list[i].reserveDT;
-               stringgrid1.Cells[11,i+1] := SearchList.list[i].receiptDT;
-               stringgrid1.Cells[12,i+1] := SearchList.list[i].sendDT;
-               stringgrid1.Cells[13,i+1] := SearchList.list[i].resultDT;
-               stringgrid1.Cells[14,i+1] := IntToStr(SearchList.list[i].sendResult);
+               stringgrid1.Cells[11,i+1] := SearchList.list[i].reserveDT;
+               stringgrid1.Cells[12,i+1] := SearchList.list[i].receiptDT;
+               stringgrid1.Cells[13,i+1] := SearchList.list[i].sendDT;
+               stringgrid1.Cells[14,i+1] := SearchList.list[i].resultDT;
+               stringgrid1.Cells[15,i+1] := IntToStr(SearchList.list[i].sendResult);
 
                fileNameList := '';
 
@@ -757,7 +866,7 @@ begin
                                 fileNameList := fileNameList +SearchList.list[i].fileNames[j] + ', '
                end ;
                
-               stringgrid1.Cells[15,i+1] := fileNameList;
+               stringgrid1.Cells[16,i+1] := fileNameList;
         end;
         SearchList.Free;
 end;
