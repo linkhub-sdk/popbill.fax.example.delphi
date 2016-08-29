@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 173
-  Top = 173
+  Left = 289
+  Top = 184
   Width = 1186
   Height = 680
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
@@ -265,7 +265,7 @@ object frmExample: TfrmExample
       Top = 144
       Width = 1105
       Height = 209
-      ColCount = 17
+      ColCount = 18
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
@@ -288,6 +288,7 @@ object frmExample: TfrmExample
         76
         74
         74
+        64
         64)
     end
     object btnCancelReserve: TButton
