@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 289
-  Top = 184
+  Left = 241
+  Top = 149
   Width = 1186
   Height = 680
   Caption = '팝빌 팩스 SDK Examples'
@@ -40,7 +40,7 @@ object frmExample: TfrmExample
       Left = 8
       Top = 24
       Width = 137
-      Height = 129
+      Height = 159
       Caption = '회원 정보'
       TabOrder = 0
       object btnJoin: TButton
@@ -75,12 +75,12 @@ object frmExample: TfrmExample
       Left = 152
       Top = 24
       Width = 145
-      Height = 153
+      Height = 159
       Caption = '포인트 관련'
       TabOrder = 1
       object btnGetUnitCost: TButton
         Left = 8
-        Top = 56
+        Top = 120
         Width = 129
         Height = 25
         Caption = '전송 단가 확인'
@@ -98,7 +98,7 @@ object frmExample: TfrmExample
       end
       object btnGetBalance: TButton
         Left = 8
-        Top = 24
+        Top = 56
         Width = 129
         Height = 25
         Caption = '잔여포인트 확인'
@@ -107,7 +107,7 @@ object frmExample: TfrmExample
       end
       object btnGetChargeInfo: TButton
         Left = 8
-        Top = 120
+        Top = 24
         Width = 129
         Height = 25
         Caption = '과금정보 확인'
@@ -119,7 +119,7 @@ object frmExample: TfrmExample
       Left = 312
       Top = 24
       Width = 137
-      Height = 129
+      Height = 159
       Caption = '팝빌 기본 URL'
       TabOrder = 2
       object btnGetPopBillURL_LOGIN: TButton
@@ -145,7 +145,7 @@ object frmExample: TfrmExample
       Left = 464
       Top = 24
       Width = 145
-      Height = 129
+      Height = 158
       Caption = '담당자 관련'
       TabOrder = 3
       object btnLitContact: TButton
@@ -180,7 +180,7 @@ object frmExample: TfrmExample
       Left = 616
       Top = 24
       Width = 145
-      Height = 129
+      Height = 158
       Caption = '회사정보 관련'
       TabOrder = 4
       object btnGetCorpInfo: TButton
