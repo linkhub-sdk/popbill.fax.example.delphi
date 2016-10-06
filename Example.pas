@@ -1,15 +1,36 @@
+{******************************************************************************}
+{ 팝빌 팩스 API Delphi SDK Example                                             }
+{                                                                              }
+{ - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/1059                  }
+{ - 업데이트 일자 : 2016-10-06                                                 }
+{ - 연동 기술지원 연락처 : 1600-8536 / 070-4304-2991 (정요한 대리)             }
+{ - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
+{                                                                              }
+{ <테스트 연동개발 준비사항>                                                   }
+{ (1) 32, 35번 라인에 선언된 링크아이디(LinkID)와 비밀키(SecretKey)를          }
+{    링크허브 가입시 메일로 발급받은 인증정보로 수정                           }
+{ (2) 팝빌 개발용 사이트(test.popbill.com)에 연동회원으로 가입                 }
+{                                                                              }
+{******************************************************************************}
+
 unit Example;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, TypInfo,
-  Popbill, PopbillFax, ExtCtrls, Grids;
+  StdCtrls, TypInfo, Popbill, PopbillFax, ExtCtrls, Grids;
 
 const
+        {**********************************************************************}
+        { - 인증정보(링크아이디, 비밀키)는 파트너의 연동회원을 식별하는        }
+        {   인증에 사용되므로 유출되지 않도록 주의하시기 바랍니다              }
+        { - 상업용 전환이후에도 인증정보는 변경되지 않습니다.                  }
+        {**********************************************************************}
+
         // 링크아이디.
         LinkID = 'TESTER';
+
         // 파트너 통신용 비밀키. 유출 주의.
         SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=';
 
@@ -143,6 +164,11 @@ procedure TfrmExample.btnGetPopBillURL_LOGINClick(Sender: TObject);
 var
         resultURL : String;
 begin
+        {**********************************************************************}
+        {    팝빌(www.popbill.com)에 로그인된 팝업 URL을 반환합니다.           }
+        {    URL 보안정책에 따라 반환된 URL은 30초의 유효시간을 갖습니다.      }
+        {**********************************************************************}
+
         try
                 resultURL := faxService.getPopbillURL(txtCorpNum.Text, txtUserID.Text, 'LOGIN');
         except
@@ -228,6 +254,12 @@ procedure TfrmExample.btnGetBalanceClick(Sender: TObject);
 var
         balance : Double;
 begin
+        {**********************************************************************}
+        { 연동회원의 잔여포인트를 확인합니다.                                  }
+        { - 과금방식이 연동과금이 아닌 파트너과금인 경우 파트너 잔여포인트     }
+        {   확인(GetPartnerBalance API) 기능 이용하시기 바랍니다               }
+        {**********************************************************************}
+        
         try
                 balance := faxService.GetBalance(txtCorpNum.text);
         except
@@ -245,6 +277,10 @@ procedure TfrmExample.btnGetUnitCostClick(Sender: TObject);
 var
         unitcost : Single;
 begin
+        {**********************************************************************}
+        { 팩스 전송단가를 확인합니다.                                          }
+        {**********************************************************************}
+        
         try
                 unitcost := faxService.GetUnitCost(txtCorpNum.text);
         except
@@ -261,7 +297,13 @@ procedure TfrmExample.btnGetPartnerBalanceClick(Sender: TObject);
 var
         balance : Double;
 begin
-         try
+        {**********************************************************************}
+        { 파트너의 잔여포인트를 확인합니다. 과금방식이 파트너과금이 아닌       }
+        { 연동과금인 경우 연동회원 잔여포인트 확인(GetBalance API)를           }
+        { 이용하시기 바랍니다                                                  }
+        {**********************************************************************}
+        
+        try
                 balance := faxService.GetPartnerBalance(txtCorpNum.text);
         except
                 on le : EPopbillException do begin
@@ -284,6 +326,12 @@ var
         receiverNum : String;
         receiverName : string;
 begin
+        {**********************************************************************}
+        { 팩스 전송을 요청합니다.                                              }
+        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
         if OpenDialog1.Execute then begin
               filePath := OpenDialog1.FileName;
         end else begin
@@ -321,6 +369,10 @@ procedure TfrmExample.btnCancelReserveClick(Sender: TObject);
 var
         response : TResponse;
 begin
+        {**********************************************************************}
+        { 팩스 예약전송건을 취소합니다.                                        }
+        { - 예약취소는 팩스변환 이후 가능합니다.                               }
+        {**********************************************************************}
 
         try
                 response := faxService.CancelReserve(txtCorpNum.Text, txtReceiptNum.Text, txtUserID.Text);
@@ -343,6 +395,12 @@ var
         receivers : TReceiverList;
         i :Integer;
 begin
+        {**********************************************************************}
+        { 팩스 전송을 요청합니다.                                              }
+        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
         if OpenDialog1.Execute then begin
               filePath := OpenDialog1.FileName;
         end else begin
@@ -350,7 +408,7 @@ begin
         end;
 
         // 발신번호
-        senderNum := '07075103710';
+        senderNum := '07043042991';
 
         // 발신자명
         senderName := '발신자명';
@@ -388,10 +446,11 @@ var
         j : integer;
         fileNameList : String;
 begin
-        {*********************************************************}
-        { 응답항목에 대한 자세한 사항은 "[팩스 API 연동매뉴얼] >  }
-        { 3.3.1. GetFaxDetail (전송내역 및 전송상태 확인) 참조    }
-        {*********************************************************}
+        {**********************************************************************}
+        { 팩스 전송결과를 확인합니다.                                          }
+        { - 응답항목에 대한 자세한 사항은 "[팩스 API 연동매뉴얼] >  3.3.1      }
+        {    GetFaxDetail (전송내역 및 전송상태 확인)을 참조하시기 바랍니다.   }
+        {**********************************************************************}
         
         try
                 FaxDetails := faxService.getSendDetail(txtCorpNum.Text,
@@ -447,6 +506,12 @@ var
         receivers : TReceiverList;
         i :Integer;
 begin
+        {**********************************************************************}
+        { 팩스 전송을 요청합니다.                                              }
+        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
         //팩스전송 파일경로 배열, 최대 5개
         setLength(filePaths, 2);
 
@@ -499,6 +564,12 @@ var
         receiverNum : string;
         receiverName : string;
 begin
+        {**********************************************************************}
+        { 팩스 전송을 요청합니다.                                              }
+        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
         // 팩스전송파일 경로 배열, 최대 5건
         setLength(filePaths, 2);
 
@@ -541,8 +612,10 @@ procedure TfrmExample.btnGetUrlClick(Sender: TObject);
 var
   resultURL : String;
 begin
-
-        // 반환된 URL은 보안정책으로 인해 30초의 유효시간을 갖습니다.
+        {**********************************************************************}
+        { 팩스 전송내역 팝업 URL 반환합니다.                                   }
+        {    URL 보안정책에 따라 반환된 URL은 30초의 유효시간을 갖습니다.      }
+        {**********************************************************************}
 
         try
                 resultURL := faxService.getURL(txtCorpNum.Text, txtUserID.Text, 'BOX');
@@ -561,6 +634,10 @@ procedure TfrmExample.btnCheckIDClick(Sender: TObject);
 var
         response : TResponse;
 begin
+        {**********************************************************************}
+        { 회원가입(JoinMember API)을 호출하기 전 아이디 중복을 확인합니다.     }
+        {**********************************************************************}
+        
         try
                 response := faxService.CheckID(txtUserID.Text);
         except
@@ -578,6 +655,10 @@ var
         response : TResponse;
         joinInfo : TJoinContact;
 begin
+        {**********************************************************************}
+        { 연동회원의 담당자를 신규로 등록합니다.                               }
+        {**********************************************************************}
+
         // [필수] 담당자 아이디 (6자 이상 20자 미만)
         joinInfo.id := 'userid';
         
@@ -624,6 +705,9 @@ var
         tmp : string;
         i : Integer;
 begin
+        {**********************************************************************}
+        { 연동회원의 담당자 목록을 확인합니다.                                 }
+        {**********************************************************************}
 
         try
                 InfoList := faxService.ListContact(txtCorpNum.text, txtUserID.text);
@@ -657,6 +741,10 @@ var
         contactInfo : TContactInfo;
         response : TResponse;
 begin
+        {**********************************************************************}
+        { 연동회원의 담당자 정보를 수정합니다.                                 }
+        {**********************************************************************}
+        
         contactInfo := TContactInfo.Create;
 
         // 담당자명
@@ -698,6 +786,10 @@ var
         corpInfo : TCorpInfo;
         tmp : string;
 begin
+        {**********************************************************************}
+        { 연동회원의 회사정보를 확인합니다.                                    }
+        {**********************************************************************}
+        
         try
                 corpInfo := faxService.GetCorpInfo(txtCorpNum.text, txtUserID.Text);
         except
@@ -721,6 +813,10 @@ var
         corpInfo : TCorpInfo;
         response : TResponse;
 begin
+        {**********************************************************************}
+        { 연동회원의 회사정보를 수정합니다.                                    }
+        {**********************************************************************}
+        
         corpInfo := TCorpInfo.Create;
 
         // 대표자명, 최대 30자
@@ -755,6 +851,11 @@ procedure TfrmExample.btnCheckIsMemberClick(Sender: TObject);
 var
         response : TResponse;
 begin
+        {**********************************************************************}
+        { 해당 사업자의 연동회원 가입여부를 확인합니다.                        }
+        { - LinkID는 파트너를 식별하는 인증정보(32번라인)에 설정되어 있습니다. }
+        {**********************************************************************}
+        
         try
                 response := faxService.CheckIsMember(txtCorpNum.text, LinkID);
         except
@@ -771,6 +872,11 @@ procedure TfrmExample.btnGetPopbillURL_CHRGClick(Sender: TObject);
 var
         resultURL : String;
 begin
+        {**********************************************************************}
+        { 연동회원 포인트 충전 URL을 반환합니다.                               }
+        { - 보안정책으로 인해 반환된 URL의 유효시간은 30초입니다.              }
+        {**********************************************************************}
+        
         try
                 resultURL := faxService.getPopbillURL(txtCorpNum.Text, txtUserID.Text, 'CHRG');
         except
@@ -890,7 +996,10 @@ var
         chargeInfo : TFaxChargeInfo;
         tmp : String;
 begin
-
+        {**********************************************************************}
+        { 연동회원의 현금영수증 API 서비스 과금정보를 확인합니다.              }
+        {**********************************************************************}
+        
         try
                 chargeInfo := faxService.GetChargeInfo(txtCorpNum.text);
         except
