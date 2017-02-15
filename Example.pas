@@ -912,10 +912,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20160901';
+        SDate := '20170101';
         
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20161031';
+        EDate := '20170301';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
         SetLength(State, 4);
@@ -1046,10 +1046,10 @@ begin
 
         // 수신자팩스번호와 수신자명을 모두 공백처리시 기존발송정보로 전송
         // 수신팩스번호
-        receiverNum := '070000124';
+        receiverNum := '';
 
         // 수신자명
-        receiverName := '수신자명';
+        receiverName := '';
 
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
@@ -1071,7 +1071,7 @@ var
         senderNum : String;
         senderName : String;
         receivers : TReceiverList;
-        i :Integer;       
+        i : Integer;
 begin
         {**********************************************************************}
         { 팩스 재전송을 요청합니다.                                            }
@@ -1089,7 +1089,7 @@ begin
 
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
-        // SetLength(receivers, 0);
+        //SetLength(receivers, 0);
 
         
         // 수신자 정보가 기존전송정보와 다른 경우 수신정보배열에 기재
