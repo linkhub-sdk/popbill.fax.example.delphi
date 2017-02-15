@@ -75,6 +75,8 @@ type
     btnGetPopbillURL_CHRG: TButton;
     btnSearch: TButton;
     btnGetChargeInfo: TButton;
+    btnResendFax: TButton;
+    btnResendFaxSame: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
@@ -99,6 +101,8 @@ type
     procedure btnGetPopbillURL_CHRGClick(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure btnGetChargeInfoClick(Sender: TObject);
+    procedure btnResendFaxClick(Sender: TObject);
+    procedure btnResendFaxSameClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -337,7 +341,7 @@ begin
         end else begin
                 Exit;
         end;
-        
+
         //발신번호
         senderNum := '07043042991';
 
@@ -1015,6 +1019,100 @@ begin
 
         ShowMessage(tmp);
 
+end;
+
+procedure TfrmExample.btnResendFaxClick(Sender: TObject);
+var
+        receiptNum : String;
+        senderNum : String;
+        senderName : String;
+        receiverNum : String;
+        receiverName : string;
+
+begin
+        {**********************************************************************}
+        { 팩스 재전송을 요청합니다.                                            }
+        { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
+        //발신번호, 공백처리시 기존발송정보로 전송
+        senderNum := '';
+
+        //발신자명, 공백처리시 기존발송정보로 전송
+        senderName := '';
+
+        //수신팩스번호, 공백처리시 기존발송정보로 전송
+        receiverNum := '070000111';
+
+        //수신자명, 공백처리시 기존발송정보로 전송
+        receiverName := '수신자명';
+
+
+        try
+                receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
+                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text, txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        txtReceiptNum.Text := receiptNum;
+
+        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+end;
+
+procedure TfrmExample.btnResendFaxSameClick(Sender: TObject);
+var
+        receiptNum : String;
+        senderNum : String;
+        senderName : String;
+        receivers : TReceiverList;
+        i :Integer;       
+begin
+        {**********************************************************************}
+        { 팩스 재전송을 요청합니다.                                            }
+        { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
+        //발신번호, 공백처리시 기존발송정보로 전송
+        senderNum := '';
+
+        //발신자명, 공백처리시 기존발송정보로 전송
+        senderName := '';
+
+        // 수신자 정보를 기존전송정보와 동일하게 전송 하는경우
+        // 아래와같이 receviers 배열의 길이를 0으로 선언
+        // SetLength(receivers,0);
+
+        
+        // 수신정보배열 최대 1000건
+        SetLength(receivers,10);
+
+        for i := 0 to Length(receivers) - 1 do begin
+                receivers[i] := TReceiver.create;
+
+                //수신팩스번호
+                receivers[i].receiveNum := '01000011'+IntToStr(i);
+
+                //수신자명
+                receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자';
+        end;
+        
+        try
+                receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
+                        senderNum, senderName, receivers, txtReserveDT.Text, txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        txtReceiptNum.Text := receiptNum;
+
+        ShowMessage('접수번호(receiptNum) :' + receiptNum);        
 end;
 
 end.

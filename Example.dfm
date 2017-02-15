@@ -2,7 +2,7 @@ object frmExample: TfrmExample
   Left = 235
   Top = 210
   Width = 1186
-  Height = 680
+  Height = 786
   Caption = '팝빌 팩스 SDK Examples'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -225,13 +225,13 @@ object frmExample: TfrmExample
     Left = 24
     Top = 264
     Width = 1137
-    Height = 369
+    Height = 475
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = '팝빌 FAX 관련 기능'
     TabOrder = 3
     object Label1: TLabel
       Left = 16
-      Top = 116
+      Top = 148
       Width = 60
       Height = 13
       Caption = '접수 번호 : '
@@ -245,7 +245,7 @@ object frmExample: TfrmExample
     end
     object txtReceiptNum: TEdit
       Left = 88
-      Top = 112
+      Top = 144
       Width = 233
       Height = 21
       ImeName = 'Microsoft IME 2010'
@@ -253,7 +253,7 @@ object frmExample: TfrmExample
     end
     object btnGetMessage: TButton
       Left = 336
-      Top = 110
+      Top = 142
       Width = 97
       Height = 25
       Caption = '전송상태확인'
@@ -262,9 +262,9 @@ object frmExample: TfrmExample
     end
     object StringGrid1: TStringGrid
       Left = 8
-      Top = 144
+      Top = 184
       Width = 1105
-      Height = 209
+      Height = 273
       ColCount = 18
       DefaultRowHeight = 18
       FixedCols = 0
@@ -293,8 +293,8 @@ object frmExample: TfrmExample
     end
     object btnCancelReserve: TButton
       Left = 448
-      Top = 110
-      Width = 97
+      Top = 142
+      Width = 121
       Height = 25
       Caption = '예약전송취소'
       TabOrder = 3
@@ -345,7 +345,7 @@ object frmExample: TfrmExample
       OnClick = btnMultiFileSingleClick
     end
     object btnGetUrl: TButton
-      Left = 592
+      Left = 624
       Top = 24
       Width = 145
       Height = 34
@@ -354,13 +354,31 @@ object frmExample: TfrmExample
       OnClick = btnGetUrlClick
     end
     object btnSearch: TButton
-      Left = 592
+      Left = 624
       Top = 64
       Width = 145
       Height = 34
       Caption = '전송내역 검색조회'
       TabOrder = 10
       OnClick = btnSearchClick
+    end
+    object btnResendFax: TButton
+      Left = 16
+      Top = 94
+      Width = 97
+      Height = 35
+      Caption = '팩스 재전송'
+      TabOrder = 11
+      OnClick = btnResendFaxClick
+    end
+    object btnResendFaxSame: TButton
+      Left = 128
+      Top = 94
+      Width = 121
+      Height = 35
+      Caption = '팩스 동보재전송'
+      TabOrder = 12
+      OnClick = btnResendFaxSameClick
     end
   end
   object OpenDialog1: TOpenDialog
