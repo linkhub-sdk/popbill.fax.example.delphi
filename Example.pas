@@ -1043,10 +1043,10 @@ begin
         senderName := '';
 
         //수신팩스번호, 공백처리시 기존발송정보로 전송
-        receiverNum := '070000111';
+        receiverNum := '0700001234';
 
         //수신자명, 공백처리시 기존발송정보로 전송
-        receiverName := '수신자명';
+        receiverName := 'dddddddddddd';
 
 
         try
@@ -1084,10 +1084,9 @@ begin
         senderName := '';
 
         // 수신자 정보를 기존전송정보와 동일하게 전송 하는경우
-        // 아래와같이 receviers 배열의 길이를 0으로 선언
+        // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
         // SetLength(receivers,0);
-
-        
+       
         // 수신정보배열 최대 1000건
         SetLength(receivers,10);
 
