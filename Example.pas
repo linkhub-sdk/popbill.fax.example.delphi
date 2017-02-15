@@ -1042,11 +1042,11 @@ begin
         //발신자명, 공백처리시 기존발송정보로 전송
         senderName := '';
 
-        //수신팩스번호, 공백처리시 기존발송정보로 전송
-        receiverNum := '0700001234';
+        // 수신팩스번호, 공백처리시 기존발송정보로 전송
+        receiverNum := '070000124';
 
-        //수신자명, 공백처리시 기존발송정보로 전송
-        receiverName := 'dddddddddddd';
+        // 수신자명, 공백처리시 기존발송정보로 전송
+        receiverName := '수신자명';
 
 
         try
@@ -1083,11 +1083,16 @@ begin
         //발신자명, 공백처리시 기존발송정보로 전송
         senderName := '';
 
-        // 수신자 정보를 기존전송정보와 동일하게 전송 하는경우
+                
+        // 수신자 정보를 기존전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
-        // SetLength(receivers,0);
-       
+        // SetLength(receivers, 0);
+
+
+        
+        // 수신자 정보가 기존정송정보와 다르게 전송하는 경우
         // 수신정보배열 최대 1000건
+        
         SetLength(receivers,10);
 
         for i := 0 to Length(receivers) - 1 do begin
@@ -1099,6 +1104,7 @@ begin
                 //수신자명
                 receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자';
         end;
+        
         
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
