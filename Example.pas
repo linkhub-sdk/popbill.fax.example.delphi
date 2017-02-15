@@ -1042,12 +1042,12 @@ begin
         //발신자명, 공백처리시 기존발송정보로 전송
         senderName := '';
 
-        // 수신팩스번호, 공백처리시 기존발송정보로 전송
+        // 수신자팩스번호와 수신자명을 모두 공백처리시 기존발송정보로 전송
+        // 수신팩스번호
         receiverNum := '070000124';
 
-        // 수신자명, 공백처리시 기존발송정보로 전송
+        // 수신자명
         receiverName := '수신자명';
-
 
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
