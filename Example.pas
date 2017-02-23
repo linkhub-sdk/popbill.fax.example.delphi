@@ -174,7 +174,7 @@ begin
         {**********************************************************************}
 
         try
-                resultURL := faxService.getPopbillURL(txtCorpNum.Text, txtUserID.Text, 'LOGIN');
+                resultURL := faxService.getPopbillURL(txtCorpNum.Text, 'LOGIN');
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -356,7 +356,7 @@ begin
 
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receiverNum,
-                                        receiverName, filePath,txtReserveDT.Text, txtUserID.Text);
+                                        receiverName, filePath, txtReserveDT.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -379,7 +379,7 @@ begin
         {**********************************************************************}
 
         try
-                response := faxService.CancelReserve(txtCorpNum.Text, txtReceiptNum.Text, txtUserID.Text);
+                response := faxService.CancelReserve(txtCorpNum.Text, txtReceiptNum.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -458,7 +458,7 @@ begin
         
         try
                 FaxDetails := faxService.getSendDetail(txtCorpNum.Text,
-                                        txtReceiptNum.Text, txtUserID.Text);
+                                        txtReceiptNum.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -622,7 +622,7 @@ begin
         {**********************************************************************}
 
         try
-                resultURL := faxService.getURL(txtCorpNum.Text, txtUserID.Text, 'BOX');
+                resultURL := faxService.getURL(txtCorpNum.Text, 'BOX');
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -691,7 +691,7 @@ begin
         joinInfo.mgrYN := false;
 
         try
-                response := faxService.RegistContact(txtCorpNum.text, joinInfo, txtUserID.text);
+                response := faxService.RegistContact(txtCorpNum.text, joinInfo);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -714,7 +714,7 @@ begin
         {**********************************************************************}
 
         try
-                InfoList := faxService.ListContact(txtCorpNum.text, txtUserID.text);
+                InfoList := faxService.ListContact(txtCorpNum.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -795,7 +795,7 @@ begin
         {**********************************************************************}
         
         try
-                corpInfo := faxService.GetCorpInfo(txtCorpNum.text, txtUserID.Text);
+                corpInfo := faxService.GetCorpInfo(txtCorpNum.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -839,7 +839,7 @@ begin
         corpInfo.addr := '서울특별시 강남구 영동대로 517';
         
         try
-                response := faxService.UpdateCorpInfo(txtCorpNum.text, corpInfo, txtUserID.Text);
+                response := faxService.UpdateCorpInfo(txtCorpNum.text, corpInfo);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -882,7 +882,7 @@ begin
         {**********************************************************************}
         
         try
-                resultURL := faxService.getPopbillURL(txtCorpNum.Text, txtUserID.Text, 'CHRG');
+                resultURL := faxService.getPopbillURL(txtCorpNum.Text, 'CHRG');
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -941,7 +941,7 @@ begin
 
         try
                 SearchList := faxService.search(txtCorpNum.text, SDate, EDate, State,
-                                        ReserveYN, SenderYN, Page, PerPage, Order, txtUserID.Text);
+                                        ReserveYN, SenderYN, Page, PerPage, Order);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1053,7 +1053,7 @@ begin
 
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
-                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text, txtUserID.Text);
+                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1109,7 +1109,7 @@ begin
         
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
-                        senderNum, senderName, receivers, txtReserveDT.Text, txtUserID.Text);
+                        senderNum, senderName, receivers, txtReserveDT.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
