@@ -344,24 +344,6 @@ object frmExample: TfrmExample
       TabOrder = 8
       OnClick = btnMultiFileSingleClick
     end
-    object btnGetUrl: TButton
-      Left = 624
-      Top = 24
-      Width = 145
-      Height = 34
-      Caption = '전송내역 조회 팝업'
-      TabOrder = 9
-      OnClick = btnGetUrlClick
-    end
-    object btnSearch: TButton
-      Left = 624
-      Top = 64
-      Width = 145
-      Height = 34
-      Caption = '전송내역 검색조회'
-      TabOrder = 10
-      OnClick = btnSearchClick
-    end
     object btnResendFax: TButton
       Left = 16
       Top = 94
@@ -379,6 +361,58 @@ object frmExample: TfrmExample
       Caption = '팩스 동보재전송'
       TabOrder = 12
       OnClick = btnResendFaxSameClick
+    end
+    object GroupBox2: TGroupBox
+      Left = 704
+      Top = 16
+      Width = 162
+      Height = 111
+      Caption = '부가기능'
+      TabOrder = 13
+    end
+    object btnGetUrl: TButton
+      Left = 712
+      Top = 40
+      Width = 145
+      Height = 34
+      Caption = '전송내역 조회 팝업'
+      TabOrder = 9
+      OnClick = btnGetUrlClick
+    end
+    object btnSearch: TButton
+      Left = 712
+      Top = 80
+      Width = 145
+      Height = 34
+      Caption = '전송내역 검색조회'
+      TabOrder = 10
+      OnClick = btnSearchClick
+    end
+    object GroupBox3: TGroupBox
+      Left = 880
+      Top = 16
+      Width = 147
+      Height = 110
+      Caption = '발신번호 관련 기능'
+      TabOrder = 14
+      object btnGetSenderNumberList: TButton
+        Left = 8
+        Top = 24
+        Width = 129
+        Height = 33
+        Caption = '발신번호 목록 조회'
+        TabOrder = 0
+        OnClick = btnGetSenderNumberListClick
+      end
+      object btnGetURL_SENDER: TButton
+        Left = 8
+        Top = 64
+        Width = 129
+        Height = 33
+        Caption = '발신번호 관리 팝업'
+        TabOrder = 1
+        OnClick = btnGetURL_SENDERClick
+      end
     end
   end
   object OpenDialog1: TOpenDialog

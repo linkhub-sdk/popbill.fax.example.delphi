@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2017-05-23                                                 }
+{ - 업데이트 일자 : 2017-05-29                                                 }
 { - 연동 기술지원 연락처 : 1600-8536 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -77,6 +77,10 @@ type
     btnGetChargeInfo: TButton;
     btnResendFax: TButton;
     btnResendFaxSame: TButton;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    btnGetSenderNumberList: TButton;
+    btnGetURL_SENDER: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
@@ -103,6 +107,8 @@ type
     procedure btnGetChargeInfoClick(Sender: TObject);
     procedure btnResendFaxClick(Sender: TObject);
     procedure btnResendFaxSameClick(Sender: TObject);
+    procedure btnGetSenderNumberListClick(Sender: TObject);
+    procedure btnGetURL_SENDERClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -1123,4 +1129,57 @@ begin
 
         ShowMessage('접수번호(receiptNum) :' + receiptNum);        
 end;
+procedure TfrmExample.btnGetSenderNumberListClick(Sender: TObject);
+var
+        SenderNumberList : TFAXSenderNumberList;
+        tmp : String;
+        i : Integer;
+begin
+        {**********************************************************************}
+        { 팩스 발신번호 목록을 조회합니다                                     }
+        {**********************************************************************}
+
+        try
+             SenderNumberList := faxService.getSenderNumberList(txtCorpNum.Text);
+
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+
+        for i := 0 to Length(SenderNumberList) -1 do
+        begin
+                tmp := tmp + '******** 팩스 발신번호 목록 ['+ IntToStr(i+1) + '] ********' + #13;
+                tmp := tmp + '발신번호(number) : ' + SenderNumberList[i].number + #13;
+                tmp := tmp + '등록상태(state) : ' + IntToStr(SenderNumberList[i].state) + #13;
+                tmp := tmp + '대표번호 지정여부(representYN) : ' + BoolToStr(SenderNumberList[i].representYN) + #13 + #13;
+        end;
+
+        ShowMessage(tmp);
+end;
+
+procedure TfrmExample.btnGetURL_SENDERClick(Sender: TObject);
+var
+  resultURL : String;
+begin
+        {**********************************************************************}
+        { 팩스 발신번호 관리 팝업 URL 반환합니다.                              }
+        { - URL 보안정책에 따라 반환된 URL은 30초의 유효시간을 갖습니다.       }
+        {**********************************************************************}
+
+        try
+                resultURL := faxService.getURL(txtCorpNum.Text, 'SENDER');
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+
+        txtUserID.text := resultURL;
+        ShowMessage('ResultURL is ' + #13 + resultURL);
+end;
+
 end.
