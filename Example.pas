@@ -335,6 +335,7 @@ var
         senderName : String;
         receiverNum : String;
         receiverName : string;
+        adsYN : Boolean;
 begin
         {**********************************************************************}
         { 팩스 전송을 요청합니다.                                              }
@@ -349,20 +350,23 @@ begin
         end;
 
         //발신번호
-        senderNum := '07043042991';
+        senderNum := '07043042992';
 
         //발신자명
         senderName := '발신자명';
 
         //수신팩스번호
-        receiverNum := '070000111';
+        receiverNum := '070111222';
 
         //수신자명
         receiverName := '수신자명';
 
+        //광고팩스 전송여부
+        adsYN := False;
+
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receiverNum,
-                                        receiverName, filePath, txtReserveDT.Text, txtUserID.Text);
+                                        receiverName, filePath, txtReserveDT.Text, txtUserID.Text, adsYN);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -402,6 +406,7 @@ var
         filePath : string;
         senderNum : string;
         senderName : string;
+        adsYN : Boolean;
         receivers : TReceiverList;
         i :Integer;
 begin
@@ -418,10 +423,13 @@ begin
         end;
 
         // 발신번호
-        senderNum := '07043042991';
+        senderNum := '07043042992';
 
         // 발신자명
         senderName := '발신자명';
+
+        // 광고팩스 전송여부
+        adsYN := False;
 
         // 수신자 정보배열, 최대 1000건 
         SetLength(receivers,5);
@@ -437,7 +445,7 @@ begin
 
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receivers,
-                                        filePath, txtReserveDT.Text, txtUserID.Text);
+                                        filePath, txtReserveDT.Text, txtUserID.Text, adsYN);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -512,6 +520,7 @@ procedure TfrmExample.btnMultiFileClick(Sender: TObject);
 var
         receiptNum :String;
         sendNum : String;
+        adsYN : Boolean;
         filePaths : Array Of string;
         receivers : TReceiverList;
         i :Integer;
@@ -538,10 +547,13 @@ begin
         end;
 
         //팩스 발신번호
-        sendNum := '07043042991';
+        sendNum := '07043042992';
+
+        // 광고팩스 전송여부
+        adsYN := False;
 
         // 수신정보배열 최대 1000건
-        SetLength(receivers,100);
+        SetLength(receivers,5);
 
         for i := 0 to Length(receivers) - 1 do begin
                 receivers[i] := TReceiver.create;
@@ -554,7 +566,8 @@ begin
         end;
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum, receivers, filePaths, txtReserveDT.Text, txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum, receivers,
+                                filePaths, txtReserveDT.Text, txtUserID.Text, adsYN);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);   
@@ -573,6 +586,7 @@ var
         senderNum : string;
         receiverNum : string;
         receiverName : string;
+        adsYN : Boolean;
 begin
         {**********************************************************************}
         { 팩스 전송을 요청합니다.                                              }
@@ -596,17 +610,20 @@ begin
         end;
 
         //발신번호
-        senderNum := '07043042991';
-        
+        senderNum := '07043042992';
+
         //수신팩스번호
-        receiverNum := '070000111';
+        receiverNum := '070111222';
 
         //수신자명
         receiverName := '수신자명';
 
+        //광고팩스 전송여부
+        adsYN := False;
+
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, receiverNum,
-                                        receiverName, filePaths, txtReserveDT.Text, txtUserID.Text);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, receiverNum, receiverName,
+                                        filePaths, txtReserveDT.Text, txtUserID.Text, adsYN);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
