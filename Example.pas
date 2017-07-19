@@ -2,8 +2,8 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2017-06-05                                                 }
-{ - 연동 기술지원 연락처 : 1600-8536 / 070-4304-2991                           }
+{ - 업데이트 일자 : 2017-07-19                                                 }
+{ - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
 { <테스트 연동개발 준비사항>                                                   }
@@ -132,8 +132,8 @@ begin
         faxService.IsThrowException := true;
         
         //그리드 초기화
-        stringgrid1.Cells[0,0] := 'sendState';
-        stringgrid1.Cells[1,0] := 'convState';
+        stringgrid1.Cells[0,0] := 'state';
+        stringgrid1.Cells[1,0] := 'result';
         stringgrid1.Cells[2,0] := 'sendnum';
         stringgrid1.Cells[3,0] := 'senderName';
         stringgrid1.Cells[4,0] := 'receiveNum';
@@ -149,7 +149,7 @@ begin
         stringgrid1.Cells[12,0] := 'receiptDT';
         stringgrid1.Cells[13,0] := 'sendDT';
         stringgrid1.Cells[14,0] := 'resultDT';
-        stringgrid1.Cells[15,0] := 'sendResult';
+        stringgrid1.Cells[15,0] := 'title';
         stringgrid1.Cells[16,0] := 'fileNames';
 end;
 
@@ -329,12 +329,7 @@ end;
 
 procedure TfrmExample.btnSendFax_singleClick(Sender: TObject);
 var
-        filePath : string;
-        receiptNum : String;
-        senderNum : String;
-        senderName : String;
-        receiverNum : String;
-        receiverName : string;
+        filePath, receiptNum, senderNum, senderName, receiverNum, receiverName, title: string;
         adsYN : Boolean;
 begin
         {**********************************************************************}
@@ -349,24 +344,28 @@ begin
                 Exit;
         end;
 
-        //발신번호
+        // 발신번호
         senderNum := '07043042992';
 
-        //발신자명
+        // 발신자명
         senderName := '발신자명';
 
-        //수신팩스번호
+        // 수신팩스번호
         receiverNum := '070111222';
 
-        //수신자명
+        // 수신자명
         receiverName := '수신자명';
 
-        //광고팩스 전송여부
+        // 광고팩스 전송여부
         adsYN := False;
 
+        // 팩스제목
+        title := '팩스 단건전송 제목';
+
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receiverNum,
-                                        receiverName, filePath, txtReserveDT.Text, txtUserID.Text, adsYN);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName,
+                        receiverNum, receiverName, filePath, txtReserveDT.Text,
+                        txtUserID.Text, adsYN, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -402,10 +401,7 @@ end;
 
 procedure TfrmExample.btnSendThousandSameClick(Sender: TObject);
 var
-        receiptNum :String;
-        filePath : string;
-        senderNum : string;
-        senderName : string;
+        receiptNum, filePath, senderNum, senderName, title: String;
         adsYN : Boolean;
         receivers : TReceiverList;
         i :Integer;
@@ -431,6 +427,9 @@ begin
         // 광고팩스 전송여부
         adsYN := False;
 
+        // 팩스제목
+        title := '팩스전송 제목';
+
         // 수신자 정보배열, 최대 1000건 
         SetLength(receivers,5);
         for i :=0 to Length(receivers) -1 do begin
@@ -445,7 +444,7 @@ begin
 
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receivers,
-                                        filePath, txtReserveDT.Text, txtUserID.Text, adsYN);
+                                        filePath, txtReserveDT.Text, txtUserID.Text, adsYN, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -484,8 +483,8 @@ begin
 
         for i:= 0 to Length(FaxDetails) -1 do begin
 
-               stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].sendState);
-               stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].convState);
+               stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].state);
+               stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].result);
                stringgrid1.Cells[2,i+1] := FaxDetails[i].sendNum;
                stringgrid1.Cells[3,i+1] := FaxDetails[i].senderName;
                stringgrid1.Cells[4,i+1] := FaxDetails[i].receiveNum;
@@ -501,7 +500,7 @@ begin
                stringgrid1.Cells[12,i+1] := FaxDetails[i].receiptDT;
                stringgrid1.Cells[13,i+1] := FaxDetails[i].sendDT;
                stringgrid1.Cells[14,i+1] := FaxDetails[i].resultDT;
-               stringgrid1.Cells[15,i+1] := IntToStr(FaxDetails[i].sendResult);
+               stringgrid1.Cells[15,i+1] := FaxDetails[i].title;
 
                fileNameList := '';
 
@@ -518,8 +517,7 @@ end;
 
 procedure TfrmExample.btnMultiFileClick(Sender: TObject);
 var
-        receiptNum :String;
-        sendNum : String;
+        receiptNum, sendNum, senderName, title : String;
         adsYN : Boolean;
         filePaths : Array Of string;
         receivers : TReceiverList;
@@ -546,12 +544,18 @@ begin
                 Exit;
         end;
 
-        //팩스 발신번호
+        // 발신번호
         sendNum := '07043042992';
+
+        // 발신자명
+        senderName := '발신자명';
 
         // 광고팩스 전송여부
         adsYN := False;
 
+        // 팩스제목
+        title := '팩스 다수파일 동보전송 제목';
+        
         // 수신정보배열 최대 1000건
         SetLength(receivers,5);
 
@@ -564,10 +568,10 @@ begin
                 //수신자명
                 receivers[i].receiveName := IntToStr(i) + '번째 수신자';
         end;
-
+        
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum, receivers,
-                                filePaths, txtReserveDT.Text, txtUserID.Text, adsYN);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum, senderName, receivers,
+                                filePaths, txtReserveDT.Text, txtUserID.Text, adsYN, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);   
@@ -581,11 +585,8 @@ end;
 
 procedure TfrmExample.btnMultiFileSingleClick(Sender: TObject);
 var
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
         filePaths : Array Of string;
-        receiptNum : String;
-        senderNum : string;
-        receiverNum : string;
-        receiverName : string;
         adsYN : Boolean;
 begin
         {**********************************************************************}
@@ -609,21 +610,28 @@ begin
                 Exit;
         end;
 
-        //발신번호
+        // 발신번호
         senderNum := '07043042992';
 
-        //수신팩스번호
+        // 발신자명
+        senderName := '발신자명';
+
+        // 수신팩스번호
         receiverNum := '070111222';
 
-        //수신자명
+        // 수신자명
         receiverName := '수신자명';
 
-        //광고팩스 전송여부
+        // 광고팩스 전송여부
         adsYN := False;
 
+        // 팩스제목
+        title := '팩스 단건 다중파일 전송 제목';
+
+
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, receiverNum, receiverName,
-                                        filePaths, txtReserveDT.Text, txtUserID.Text, adsYN);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receiverNum, receiverName,
+                                        filePaths, txtReserveDT.Text, txtUserID.Text, adsYN, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -938,10 +946,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20170101';
+        SDate := '20170601';
         
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20170301';
+        EDate := '20171231';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
         SetLength(State, 4);
@@ -988,8 +996,8 @@ begin
 
         for i:= 0 to Length(SearchList.list) - 1 do begin
 
-               stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].sendState);
-               stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].convState);
+               stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].state);
+               stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].result);
                stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;
                stringgrid1.Cells[3,i+1] := SearchList.list[i].senderName;
                stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNum;
@@ -1005,7 +1013,7 @@ begin
                stringgrid1.Cells[12,i+1] := SearchList.list[i].receiptDT;
                stringgrid1.Cells[13,i+1] := SearchList.list[i].sendDT;
                stringgrid1.Cells[14,i+1] := SearchList.list[i].resultDT;
-               stringgrid1.Cells[15,i+1] := IntToStr(SearchList.list[i].sendResult);
+               stringgrid1.Cells[15,i+1] := SearchList.list[i].title;
 
                fileNameList := '';
 
@@ -1049,12 +1057,7 @@ end;
 
 procedure TfrmExample.btnResendFaxClick(Sender: TObject);
 var
-        receiptNum : String;
-        senderNum : String;
-        senderName : String;
-        receiverNum : String;
-        receiverName : string;
-
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
 begin
         {**********************************************************************}
         { 팩스 재전송을 요청합니다.                                            }
@@ -1077,9 +1080,13 @@ begin
         // 수신자명
         receiverName := '';
 
+        // 팩스제목
+        title := '팩스 재전송 제목';
+
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
-                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text);
+                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text,
+                        txtUserID.text, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1093,9 +1100,7 @@ end;
 
 procedure TfrmExample.btnResendFaxSameClick(Sender: TObject);
 var
-        receiptNum : String;
-        senderNum : String;
-        senderName : String;
+        receiptNum, senderNum, senderName, title : String;
         receivers : TReceiverList;
         i : Integer;
 begin
@@ -1107,11 +1112,14 @@ begin
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
 
-        //발신번호, 공백처리시 기존발송정보로 전송
+        // 발신번호, 공백처리시 기존발송정보로 전송
         senderNum := '';
 
-        //발신자명, 공백처리시 기존발송정보로 전송
+        // 발신자명, 공백처리시 기존발송정보로 전송
         senderName := '';
+
+        // 팩스제목
+        title := '팩스 재전송 동보전송 제목';
 
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
@@ -1135,7 +1143,7 @@ begin
         
         try
                 receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
-                        senderNum, senderName, receivers, txtReserveDT.Text);
+                        senderNum, senderName, receivers, txtReserveDT.Text, txtUserID.Text, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
