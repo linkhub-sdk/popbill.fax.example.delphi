@@ -49,11 +49,7 @@ type
     Label4: TLabel;
     txtUserID: TEdit;
     GroupBox5: TGroupBox;
-    Label1: TLabel;
-    txtReceiptNum: TEdit;
-    btnGetMessage: TButton;
     StringGrid1: TStringGrid;
-    btnCancelReserve: TButton;
     Label2: TLabel;
     txtReserveDT: TEdit;
     btnSendFax_single: TButton;
@@ -61,7 +57,6 @@ type
     OpenDialog1: TOpenDialog;
     btnMultiFile: TButton;
     btnMultiFileSingle: TButton;
-    btnGetUrl: TButton;
     btnCheckID: TButton;
     btnCheckIsMember: TButton;
     btnLitContact: TButton;
@@ -70,20 +65,33 @@ type
     btnRegistContact: TButton;
     btnGetCorpInfo: TButton;
     btnUpdateCorpInfo: TButton;
-    btnSearch: TButton;
     btnGetChargeInfo: TButton;
-    btnResendFax: TButton;
-    btnResendFaxSame: TButton;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     btnGetSenderNumberList: TButton;
     btnGetURL_SENDER: TButton;
-    GroupBox6: TGroupBox;
+    GroupBox10: TGroupBox;
+    GroupBox13: TGroupBox;
+    Label1: TLabel;
+    txtReceiptNum: TEdit;
+    btnGetMessage: TButton;
+    btnCancelReserve: TButton;
+    btnResendFax: TButton;
+    btnResendFaxSame: TButton;
+    btnGetUrl: TButton;
+    btnSearch: TButton;
     GroupBox7: TGroupBox;
-    btnGetBalance: TButton;
-    btnGetPopbillURL_CHRG: TButton;
     btnGetPartnerBalance: TButton;
     btnGetPartnerURL_CHRG: TButton;
+    GroupBox6: TGroupBox;
+    btnGetBalance: TButton;
+    btnGetPopbillURL_CHRG: TButton;
+    Label5: TLabel;
+    txtRequestNum: TEdit;
+    btnGetMessageRN: TButton;
+    btnCancelReserveRN: TButton;
+    btnResendFaxRN: TButton;
+    btnResendFaxSameRN: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
@@ -113,6 +121,10 @@ type
     procedure btnGetSenderNumberListClick(Sender: TObject);
     procedure btnGetURL_SENDERClick(Sender: TObject);
     procedure btnGetPartnerURL_CHRGClick(Sender: TObject);
+    procedure btnGetMessageRNClick(Sender: TObject);
+    procedure btnCancelReserveRNClick(Sender: TObject);
+    procedure btnResendFaxRNClick(Sender: TObject);
+    procedure btnResendFaxSameRNClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -367,9 +379,12 @@ begin
         title := '팩스 단건전송 제목';
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName,
-                        receiverNum, receiverName, filePath, txtReserveDT.Text,
-                        txtUserID.Text, adsYN, title);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum,
+                                                 senderName, receiverNum,
+                                                 receiverName, filePath,
+                                                 txtReserveDT.Text, txtUserID.Text,
+                                                 adsYN, title,
+                                                 txtRequestNum.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -434,21 +449,24 @@ begin
         // 팩스제목
         title := '팩스전송 제목';
 
-        // 수신자 정보배열, 최대 1000건 
+        // 수신자 정보배열, 최대 1000건
         SetLength(receivers,5);
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
 
                 //수신번호
                 receivers[i].receiveNum := '070111222';
-                
+
                 //수신자명
                 receivers[i].receiveName := IntToStr(i) + '번째 수신자';
         end;
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receivers,
-                                        filePath, txtReserveDT.Text, txtUserID.Text, adsYN, title);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum,
+                                                 senderName, receivers,
+                                                 filePath, txtReserveDT.Text,
+                                                 txtUserID.Text, adsYN,
+                                                 title, txtRequestNum.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -514,7 +532,7 @@ begin
                         else
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
-               
+
                stringgrid1.Cells[16,i+1] := fileNameList;
         end;
 end;
@@ -533,7 +551,7 @@ begin
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
 
-        //팩스전송 파일경로 배열, 최대 5개
+        //팩스전송 파일경로 배열, 최대 20개
         setLength(filePaths, 2);
 
         if OpenDialog1.Execute then begin
@@ -559,7 +577,7 @@ begin
 
         // 팩스제목
         title := '팩스 다수파일 동보전송 제목';
-        
+
         // 수신정보배열 최대 1000건
         SetLength(receivers,5);
 
@@ -568,14 +586,17 @@ begin
 
                 //수신팩스번호
                 receivers[i].receiveNum := '070111222';
-                
+
                 //수신자명
                 receivers[i].receiveName := IntToStr(i) + '번째 수신자';
         end;
         
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum, senderName, receivers,
-                                filePaths, txtReserveDT.Text, txtUserID.Text, adsYN, title);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum,
+                                                 senderName, receivers,
+                                                 filePaths, txtReserveDT.Text,
+                                                 txtUserID.Text, adsYN,
+                                                 title, txtRequestNum.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);   
@@ -592,6 +613,8 @@ var
         receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
         filePaths : Array Of string;
         adsYN : Boolean;
+
+        Loop : Integer;
 begin
         {**********************************************************************}
         { 팩스 전송을 요청합니다.                                              }
@@ -599,7 +622,7 @@ begin
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
 
-        // 팩스전송파일 경로 배열, 최대 5건
+        // 팩스전송파일 경로 배열, 최대 20건
         setLength(filePaths, 2);
 
         if OpenDialog1.Execute then begin
@@ -634,8 +657,12 @@ begin
 
 
         try
-                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum, senderName, receiverNum, receiverName,
-                                        filePaths, txtReserveDT.Text, txtUserID.Text, adsYN, title);
+                receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum,
+                                                 senderName, receiverNum,
+                                                 receiverName, filePaths,
+                                                 txtReserveDT.Text, txtUserID.Text,
+                                                 adsYN, title,
+                                                 txtRequestNum.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1039,7 +1066,7 @@ var
         tmp : String;
 begin
         {**********************************************************************}
-        { 연동회원의 현금영수증 API 서비스 과금정보를 확인합니다.              }
+        { 연동회원의 팩스 API 서비스 과금정보를 확인합니다.                    }
         {**********************************************************************}
         
         try
@@ -1156,7 +1183,7 @@ begin
         end;
         txtReceiptNum.Text := receiptNum;
 
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);        
+        ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 procedure TfrmExample.btnGetSenderNumberListClick(Sender: TObject);
 var
@@ -1207,7 +1234,6 @@ begin
                 end;
         end;
 
-        txtUserID.text := resultURL;
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
@@ -1232,4 +1258,185 @@ begin
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
+procedure TfrmExample.btnGetMessageRNClick(Sender: TObject);
+var
+        FaxDetails : TFaxDetailList;
+        i :integer;
+        j : integer;
+        fileNameList : String;
+begin
+        {****************************************************************************************}
+        { 팩스 전송결과를 확인합니다.                                                            }
+        { - 응답항목에 대한 자세한 사항은 "[팩스 API 연동매뉴얼] >  3.3.2                        }
+        {    GetFaxDetailRN (전송내역 및 전송상태 확인 - 요청번호 할당)을 참조하시기 바랍니다.   }
+        {****************************************************************************************}
+
+        try
+                FaxDetails := faxService.getSendDetailRN(txtCorpNum.Text,
+                                                         txtRequestNum.Text,
+                                                         txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+
+        stringgrid1.RowCount := Length(FaxDetails) + 1;
+
+        for i:= 0 to Length(FaxDetails) -1 do begin
+
+               stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].state);
+               stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].result);
+               stringgrid1.Cells[2,i+1] := FaxDetails[i].sendNum;
+               stringgrid1.Cells[3,i+1] := FaxDetails[i].senderName;
+               stringgrid1.Cells[4,i+1] := FaxDetails[i].receiveNum;
+               stringgrid1.Cells[5,i+1] := FaxDetails[i].receiveName;
+
+               stringgrid1.Cells[6,i+1] := IntToStr(FaxDetails[i].sendPageCnt);
+               stringgrid1.Cells[7,i+1] := IntToStr(FaxDetails[i].successPageCnt);
+               stringgrid1.Cells[8,i+1] := IntToStr(FaxDetails[i].failPageCnt);
+               stringgrid1.Cells[9,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
+               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
+
+               stringgrid1.Cells[11,i+1] := FaxDetails[i].reserveDT;
+               stringgrid1.Cells[12,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[14,i+1] := FaxDetails[i].resultDT;
+               stringgrid1.Cells[15,i+1] := FaxDetails[i].title;
+
+               fileNameList := '';
+
+               for j:= 0 to length(FaxDetails[i].fileNames) -1 do begin
+                        if j = length(FaxDetails[i].fileNames) -1 then
+                                fileNameList := fileNameList +FaxDetails[i].fileNames[j]
+                        else
+                                fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
+               end ;
+
+               stringgrid1.Cells[16,i+1] := fileNameList;
+        end;
+end;
+
+procedure TfrmExample.btnCancelReserveRNClick(Sender: TObject);
+var
+        response : TResponse;
+begin
+        {**********************************************************************}
+        { 팩스 예약전송건을 취소합니다.                                        }
+        { - 예약취소는 팩스변환 이후 가능합니다.                               }
+        {**********************************************************************}
+
+        try
+                response := faxService.CancelReserveRN(txtCorpNum.Text, txtRequestNum.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
+end;
+
+procedure TfrmExample.btnResendFaxRNClick(Sender: TObject);
+var
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
+begin
+        {**********************************************************************}
+        { 팩스 재전송을 요청합니다.                                            }
+        { - 발신/수신정보를 공백으로 처리하는 경우 원 팩스전송정보와 동일하게  }
+        {   팩스가 전송됩니다.                                                 }
+        { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
+        //발신번호, 공백처리시 기존발송정보로 전송
+        senderNum := '';
+
+        //발신자명, 공백처리시 기존발송정보로 전송
+        senderName := '';
+
+        // 수신자팩스번호와 수신자명을 모두 공백처리시 기존발송정보로 전송
+        // 수신팩스번호
+        receiverNum := '';
+
+        // 수신자명
+        receiverName := '';
+
+        // 팩스제목
+        title := '팩스 재전송 제목';
+
+        try
+                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, txtRequestNum.Text,
+                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text,
+                        txtUserID.text, title);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        txtReceiptNum.Text := receiptNum;
+
+        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+end;
+
+procedure TfrmExample.btnResendFaxSameRNClick(Sender: TObject);
+var
+        receiptNum, senderNum, senderName, title : String;
+        receivers : TReceiverList;
+        i : Integer;
+begin
+        {**********************************************************************}
+        { 팩스 재전송을 요청합니다.                                            }
+        { - 수신정보 배열의 길이를 0으로 선언하여 함수를 호출하는 경우         }
+        {   기존 팩스전송정보와 동일하게 팩스가 전송됩니다.                    }
+        { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
+        { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
+        {**********************************************************************}
+
+        // 발신번호, 공백처리시 기존발송정보로 전송
+        senderNum := '';
+
+        // 발신자명, 공백처리시 기존발송정보로 전송
+        senderName := '';
+
+        // 팩스제목
+        title := '팩스 재전송 동보전송 제목';
+
+        // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
+        // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
+        //SetLength(receivers, 0);
+
+        
+        // 수신자 정보가 기존전송정보와 다른 경우 수신정보배열에 기재
+        // 수신정보배열 최대 1000건
+        SetLength(receivers,10);
+
+        for i := 0 to Length(receivers) - 1 do begin
+                receivers[i] := TReceiver.create;
+
+                //수신팩스번호
+                receivers[i].receiveNum := '01000011'+IntToStr(i);
+
+                //수신자명
+                receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자';
+        end;
+        
+        
+        try
+                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, txtRequestNum.Text,
+                        senderNum, senderName, receivers, txtReserveDT.Text, txtUserID.Text, title);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        txtReceiptNum.Text := receiptNum;
+
+        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+end;
+
 end.
+
