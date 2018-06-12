@@ -1340,7 +1340,7 @@ end;
 
 procedure TfrmExample.btnResendFaxRNClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title, OriginalFAXRequestNum, RequestNum : String;
 begin
         {**********************************************************************}
         { 팩스 재전송을 요청합니다.                                            }
@@ -1366,10 +1366,17 @@ begin
         // 팩스제목
         title := '팩스 재전송 제목';
 
+        // 원본 팩스의 전송요청번호 (RequestNum)
+        OriginalFAXRequestNum := '';
+
+        // 재전송 팩스의 전송요청번호
+        // 재전송 팩스의 전송상태확인(getSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        RequestNum := txtRequestNum.Text;
+
         try
-                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, txtRequestNum.Text,
+                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, RequestNum,
                         senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text,
-                        txtUserID.text, title);
+                        OriginalFAXRequestNum, txtUserID.text, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1383,7 +1390,7 @@ end;
 
 procedure TfrmExample.btnResendFaxSameRNClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, title : String;
+        receiptNum, senderNum, senderName, title, OriginalFAXRequestNum, RequestNum : String;
         receivers : TReceiverList;
         i : Integer;
 begin
@@ -1403,6 +1410,14 @@ begin
 
         // 팩스제목
         title := '팩스 재전송 동보전송 제목';
+
+        // 원본 팩스의 전송요청번호 (RequestNum)
+        OriginalFAXRequestNum := '';
+
+        // 재전송 팩스의 전송요청번호
+        // 재전송 팩스의 전송상태확인(getSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        RequestNum := txtRequestNum.text;
+
 
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
@@ -1425,8 +1440,9 @@ begin
         
         
         try
-                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, txtRequestNum.Text,
-                        senderNum, senderName, receivers, txtReserveDT.Text, txtUserID.Text, title);
+                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, RequestNum,
+                        senderNum, senderName, receivers, txtReserveDT.Text,
+                        OriginalFAXRequestNum, txtUserID.Text, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
