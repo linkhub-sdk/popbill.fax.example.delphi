@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 665
-  Top = 133
+  Left = 536
+  Top = 118
   Width = 1211
   Height = 855
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
