@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2018-06-15                                                 }
+{ - 업데이트 일자 : 2018-06-18                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -345,7 +345,8 @@ end;
 
 procedure TfrmExample.btnSendFax_singleClick(Sender: TObject);
 var
-        filePath, receiptNum, senderNum, senderName, receiverNum, receiverName, title: string;
+        filePath, receiptNum, senderNum, senderName, receiverNum, receiverName,
+        title, requestNum : string;
         adsYN : Boolean;
 begin
         {**********************************************************************}
@@ -378,13 +379,18 @@ begin
         // 팩스제목
         title := '팩스 단건전송 제목';
 
+        // 전송요청번호
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        requestNum := txtRequestNum.text;
+
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum,
                                                  senderName, receiverNum,
                                                  receiverName, filePath,
                                                  txtReserveDT.Text, txtUserID.Text,
                                                  adsYN, title,
-                                                 txtRequestNum.text);
+                                                 requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -420,7 +426,7 @@ end;
 
 procedure TfrmExample.btnSendThousandSameClick(Sender: TObject);
 var
-        receiptNum, filePath, senderNum, senderName, title: String;
+        receiptNum, filePath, senderNum, senderName, title, requestNum : String;
         adsYN : Boolean;
         receivers : TReceiverList;
         i :Integer;
@@ -449,6 +455,11 @@ begin
         // 팩스제목
         title := '팩스전송 제목';
 
+        // 전송요청번호
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        requestNum := txtRequestNum.text;
+
         // 수신자 정보배열, 최대 1000건
         SetLength(receivers,5);
         for i :=0 to Length(receivers) -1 do begin
@@ -466,7 +477,7 @@ begin
                                                  senderName, receivers,
                                                  filePath, txtReserveDT.Text,
                                                  txtUserID.Text, adsYN,
-                                                 title, txtRequestNum.text);
+                                                 title, requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -539,7 +550,7 @@ end;
 
 procedure TfrmExample.btnMultiFileClick(Sender: TObject);
 var
-        receiptNum, sendNum, senderName, title : String;
+        receiptNum, sendNum, senderName, title, requestNum : String;
         adsYN : Boolean;
         filePaths : Array Of string;
         receivers : TReceiverList;
@@ -578,6 +589,11 @@ begin
         // 팩스제목
         title := '팩스 다수파일 동보전송 제목';
 
+        // 전송요청번호
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        requestNum := txtRequestNum.text;
+
         // 수신정보배열 최대 1000건
         SetLength(receivers,5);
 
@@ -596,7 +612,7 @@ begin
                                                  senderName, receivers,
                                                  filePaths, txtReserveDT.Text,
                                                  txtUserID.Text, adsYN,
-                                                 title, txtRequestNum.text);
+                                                 title, requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);   
@@ -610,7 +626,8 @@ end;
 
 procedure TfrmExample.btnMultiFileSingleClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title,
+        requestNum : String;
         filePaths : Array Of string;
         adsYN : Boolean;
 
@@ -655,6 +672,11 @@ begin
         // 팩스제목
         title := '팩스 단건 다중파일 전송 제목';
 
+        // 전송요청번호
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        requestNum := txtRequestNum.text;
+
 
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum,
@@ -662,7 +684,7 @@ begin
                                                  receiverName, filePaths,
                                                  txtReserveDT.Text, txtUserID.Text,
                                                  adsYN, title,
-                                                 txtRequestNum.text);
+                                                 requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1266,7 +1288,7 @@ var
         fileNameList : String;
 begin
         {****************************************************************************************}
-        { 팩스전송요청시 할당한 전송요청번호(RequestNum)으로 전송결과를 확인합니다               }
+        { 팩스전송요청시 할당한 전송요청번호(requestNum)으로 전송결과를 확인합니다               }
         { - 응답항목에 대한 자세한 사항은 "[팩스 API 연동매뉴얼] >  3.3.2                        }
         {    GetFaxDetailRN (전송내역 및 전송상태 확인 - 요청번호 할당)을 참조하시기 바랍니다.   }
         {****************************************************************************************}
@@ -1323,7 +1345,7 @@ var
         response : TResponse;
 begin
         {**********************************************************************}
-        { 팩스전송요청시 할당한 전송요청번호(RequestNum)로                     }
+        { 팩스전송요청시 할당한 전송요청번호(requestNum)로                     }
         { 팩스 예약전송건을 취소합니다.                                        }
         { - 예약취소는 팩스변환 이후 가능합니다.                               }
         {**********************************************************************}
@@ -1341,10 +1363,11 @@ end;
 
 procedure TfrmExample.btnResendFaxRNClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, receiverNum, receiverName, title, OriginalFAXRequestNum, RequestNum : String;
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title,
+        originalFAXrequestNum, requestNum : String;
 begin
         {**********************************************************************}
-        { 전송요청번호(RequestNum)을 할당한 팩스를 재전송합니다.               }
+        { 전송요청번호(requestNum)을 할당한 팩스를 재전송합니다.               }
         { - 발신/수신정보를 공백으로 처리하는 경우 원 팩스전송정보와 동일하게  }
         {   팩스가 전송됩니다.                                                 }
         { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
@@ -1367,17 +1390,19 @@ begin
         // 팩스제목
         title := '팩스 재전송 제목';
 
-        // 원본 팩스의 전송요청번호 (RequestNum)
-        OriginalFAXRequestNum := '';
+        // 원본 팩스 전송시 할당한 전송요청번호 (requestNum)
+        originalFAXrequestNum := '';
 
         // 재전송 팩스의 전송요청번호
-        // 재전송 팩스의 전송상태확인(getSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
-        RequestNum := txtRequestNum.Text;
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        requestNum := txtRequestNum.Text;
 
         try
-                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, RequestNum,
+                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, requestNum,
                         senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text,
-                        OriginalFAXRequestNum, txtUserID.text, title);
+                        originalFAXrequestNum, txtUserID.text, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1391,12 +1416,12 @@ end;
 
 procedure TfrmExample.btnResendFaxSameRNClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, title, OriginalFAXRequestNum, RequestNum : String;
+        receiptNum, senderNum, senderName, title, originalFAXrequestNum, requestNum : String;
         receivers : TReceiverList;
         i : Integer;
 begin
         {**********************************************************************}
-        { 전송요청번호(RequestNum)을 할당한 팩스를 재전송합니다.               }
+        { 전송요청번호(requestNum)을 할당한 팩스를 재전송합니다.               }
         { - 수신정보 배열의 길이를 0으로 선언하여 함수를 호출하는 경우         }
         {   기존 팩스전송정보와 동일하게 팩스가 전송됩니다.                    }
         { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
@@ -1412,12 +1437,14 @@ begin
         // 팩스제목
         title := '팩스 재전송 동보전송 제목';
 
-        // 원본 팩스의 전송요청번호 (RequestNum)
-        OriginalFAXRequestNum := '';
+        // 원본 팩스 전송시 할당한 전송요청번호 (requestNum)
+        originalFAXrequestNum := '';
 
         // 재전송 팩스의 전송요청번호
-        // 재전송 팩스의 전송상태확인(getSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
-        RequestNum := txtRequestNum.text;
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        requestNum := txtRequestNum.text;
 
 
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
@@ -1441,9 +1468,9 @@ begin
         
         
         try
-                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, RequestNum,
+                receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, requestNum,
                         senderNum, senderName, receivers, txtReserveDT.Text,
-                        OriginalFAXRequestNum, txtUserID.Text, title);
+                        originalFAXrequestNum, txtUserID.Text, title);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
