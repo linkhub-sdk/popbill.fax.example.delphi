@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2018-06-18                                                 }
+{ - 업데이트 일자 : 2018-06-28                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -1110,7 +1110,8 @@ end;
 
 procedure TfrmExample.btnResendFaxClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, receiverNum, receiverName, title : String;
+        receiptNum, senderNum, senderName, receiverNum, receiverName, title,
+        requestNum : String;
 begin
         {**********************************************************************}
         { 팩스 재전송을 요청합니다.                                            }
@@ -1136,10 +1137,23 @@ begin
         // 팩스제목
         title := '팩스 재전송 제목';
 
+        // 재전송 팩스의 전송요청번호
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        requestNum := '';
+
         try
-                receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
-                        senderNum, senderName, receiverNum, receiverName, txtReserveDT.Text,
-                        txtUserID.text, title);
+                receiptNum := faxService.ResendFAX(txtCorpNum.Text,
+                                                   txtReceiptNum.Text,
+                                                   senderNum,
+                                                   senderName,
+                                                   receiverNum,
+                                                   receiverName,
+                                                   txtReserveDT.Text,
+                                                   txtUserID.text,
+                                                   title,
+                                                   requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1153,7 +1167,7 @@ end;
 
 procedure TfrmExample.btnResendFaxSameClick(Sender: TObject);
 var
-        receiptNum, senderNum, senderName, title : String;
+        receiptNum, senderNum, senderName, title, requestNum : String;
         receivers : TReceiverList;
         i : Integer;
 begin
@@ -1174,11 +1188,17 @@ begin
         // 팩스제목
         title := '팩스 재전송 동보전송 제목';
 
+        // 재전송 팩스의 전송요청번호
+        // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
+        // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        requestNum := '';        
+
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
         //SetLength(receivers, 0);
 
-        
+
         // 수신자 정보가 기존전송정보와 다른 경우 수신정보배열에 기재
         // 수신정보배열 최대 1000건
         SetLength(receivers,10);
@@ -1195,8 +1215,16 @@ begin
         
         
         try
-                receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
-                        senderNum, senderName, receivers, txtReserveDT.Text, txtUserID.Text, title);
+                receiptNum := faxService.ResendFAX(txtCorpNum.Text,
+                                                   txtReceiptNum.Text,
+                                                   senderNum,
+                                                   senderName,
+                                                   receivers,
+                                                   txtReserveDT.
+                                                   Text,
+                                                   txtUserID.Text,
+                                                   title,
+                                                   requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
