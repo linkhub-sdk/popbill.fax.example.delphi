@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 536
-  Top = 118
+  Left = 694
+  Top = 143
   Width = 1211
   Height = 855
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
@@ -265,7 +265,7 @@ object frmExample: TfrmExample
       Top = 272
       Width = 1119
       Height = 273
-      ColCount = 18
+      ColCount = 19
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
@@ -288,6 +288,7 @@ object frmExample: TfrmExample
         76
         74
         74
+        64
         64
         64)
     end

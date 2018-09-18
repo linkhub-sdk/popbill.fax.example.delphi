@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2018-06-28                                                 }
+{ - 업데이트 일자 : 2018-09-18                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -154,19 +154,19 @@ begin
         stringgrid1.Cells[3,0] := 'senderName';
         stringgrid1.Cells[4,0] := 'receiveNum';
         stringgrid1.Cells[5,0] := 'receiveName';
-
-        stringgrid1.Cells[6,0] := 'sendCnt';
-        stringgrid1.Cells[7,0] := 'successCnt';
-        stringgrid1.Cells[8,0] := 'failCnt';
-        stringgrid1.Cells[9,0] := 'refundCnt';
-        stringgrid1.Cells[10,0] := 'cancelCnt';
-
-        stringgrid1.Cells[11,0] := 'reserveDT';
-        stringgrid1.Cells[12,0] := 'receiptDT';
-        stringgrid1.Cells[13,0] := 'sendDT';
-        stringgrid1.Cells[14,0] := 'resultDT';
-        stringgrid1.Cells[15,0] := 'title';
+        stringgrid1.Cells[6,0] := 'title';
+        stringgrid1.Cells[7,0] := 'sendCnt';
+        stringgrid1.Cells[8,0] := 'successCnt';
+        stringgrid1.Cells[9,0] := 'failCnt';
+        stringgrid1.Cells[10,0] := 'refundCnt';
+        stringgrid1.Cells[11,0] := 'cancelCnt';
+        stringgrid1.Cells[12,0] := 'reserveDT';
+        stringgrid1.Cells[13,0] := 'receiptDT';
+        stringgrid1.Cells[14,0] := 'sendDT';
+        stringgrid1.Cells[15,0] := 'resultDT';
         stringgrid1.Cells[16,0] := 'fileNames';
+        stringgrid1.Cells[17,0] := 'receiptNum';
+        stringgrid1.Cells[18,0] := 'requestNum';
 end;
 
 procedure TfrmExample.FormClose(Sender:TObject; var Action:TCloseAction);
@@ -516,24 +516,22 @@ begin
 
         for i:= 0 to Length(FaxDetails) -1 do begin
 
-               stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].state);
-               stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].result);
-               stringgrid1.Cells[2,i+1] := FaxDetails[i].sendNum;
-               stringgrid1.Cells[3,i+1] := FaxDetails[i].senderName;
-               stringgrid1.Cells[4,i+1] := FaxDetails[i].receiveNum;
-               stringgrid1.Cells[5,i+1] := FaxDetails[i].receiveName;
-
-               stringgrid1.Cells[6,i+1] := IntToStr(FaxDetails[i].sendPageCnt);
-               stringgrid1.Cells[7,i+1] := IntToStr(FaxDetails[i].successPageCnt);
-               stringgrid1.Cells[8,i+1] := IntToStr(FaxDetails[i].failPageCnt);
-               stringgrid1.Cells[9,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
-               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
-
-               stringgrid1.Cells[11,i+1] := FaxDetails[i].reserveDT;
-               stringgrid1.Cells[12,i+1] := FaxDetails[i].receiptDT;
-               stringgrid1.Cells[13,i+1] := FaxDetails[i].sendDT;
-               stringgrid1.Cells[14,i+1] := FaxDetails[i].resultDT;
-               stringgrid1.Cells[15,i+1] := FaxDetails[i].title;
+               stringgrid1.Cells[0,i+1]  := IntToStr(FaxDetails[i].state);
+               stringgrid1.Cells[1,i+1]  := IntToStr(FaxDetails[i].result);
+               stringgrid1.Cells[2,i+1]  := FaxDetails[i].sendNum;
+               stringgrid1.Cells[3,i+1]  := FaxDetails[i].senderName;
+               stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNum;
+               stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveName;
+               stringgrid1.Cells[6,i+1]  := FaxDetails[i].title;
+               stringgrid1.Cells[7,i+1]  := IntToStr(FaxDetails[i].sendPageCnt);
+               stringgrid1.Cells[8,i+1]  := IntToStr(FaxDetails[i].successPageCnt);
+               stringgrid1.Cells[9,i+1]  := IntToStr(FaxDetails[i].failPageCnt);
+               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
+               stringgrid1.Cells[11,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
+               stringgrid1.Cells[12,i+1] := FaxDetails[i].reserveDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[14,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[15,i+1] := FaxDetails[i].resultDT;
 
                fileNameList := '';
 
@@ -543,8 +541,9 @@ begin
                         else
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
-
                stringgrid1.Cells[16,i+1] := fileNameList;
+               stringgrid1.Cells[17,i+1] := FaxDetails[i].receiptNum;
+               stringgrid1.Cells[18,i+1] := FaxDetails[i].requestNum;
         end;
 end;
 
@@ -983,27 +982,26 @@ end;
 
 procedure TfrmExample.btnSearchClick(Sender: TObject);
 var
-        SDate, EDate, tmp: String;
+        SDate, EDate, tmp, Order, fileNameList, QString : String;
         Page, PerPage : Integer;
-        Order : String;
         State : Array Of String;
         ReserveYN, SenderYN : boolean;
         SearchList : TFaxSearchList;
         i : integer;
         j : integer;
-        fileNameList : String;
 begin
         {**********************************************************************}
         { - 조회일자와 상세조건들을 사용해 팩스전송내역을 조회합니다.          }
+        { - 최대 검색기간 : 6개월 이내                                         }
         { - 응답항목에 대한 자세한 사항은 "[팩스 API 연동매뉴얼] >             }
         {   3.3.2. 전송내역 목록 조회" 을 참조하시기 바랍니다.                 }
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20170601';
-        
+        SDate := '20180801';
+
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20171231';
+        EDate := '20180820';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
         SetLength(State, 4);
@@ -1027,9 +1025,12 @@ begin
         // 정렬방향, 'D' : 내림차순 , 'A' : 오름차순
         Order := 'D';
 
+        // 조회 검색어, 발신자명 또는 수신자명 기재
+        QString := '';
+
         try
                 SearchList := faxService.search(txtCorpNum.text, SDate, EDate, State,
-                                        ReserveYN, SenderYN, Page, PerPage, Order);
+                                        ReserveYN, SenderYN, Page, PerPage, Order, QString, txtUserID.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1056,18 +1057,16 @@ begin
                stringgrid1.Cells[3,i+1] := SearchList.list[i].senderName;
                stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNum;
                stringgrid1.Cells[5,i+1] := SearchList.list[i].receiveName;
-
-               stringgrid1.Cells[6,i+1] := IntToStr(SearchList.list[i].sendPageCnt);
-               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].successPageCnt);
-               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].failPageCnt);
-               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].refundPageCnt);
-               stringgrid1.Cells[10,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
-
-               stringgrid1.Cells[11,i+1] := SearchList.list[i].reserveDT;
-               stringgrid1.Cells[12,i+1] := SearchList.list[i].receiptDT;
-               stringgrid1.Cells[13,i+1] := SearchList.list[i].sendDT;
-               stringgrid1.Cells[14,i+1] := SearchList.list[i].resultDT;
-               stringgrid1.Cells[15,i+1] := SearchList.list[i].title;
+               stringgrid1.Cells[6,i+1] := SearchList.list[i].title;
+               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].sendPageCnt);
+               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].successPageCnt);
+               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].failPageCnt);
+               stringgrid1.Cells[10,i+1] := IntToStr(SearchList.list[i].refundPageCnt);
+               stringgrid1.Cells[11,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
+               stringgrid1.Cells[12,i+1] := SearchList.list[i].reserveDT;
+               stringgrid1.Cells[13,i+1] := SearchList.list[i].receiptDT;
+               stringgrid1.Cells[14,i+1] := SearchList.list[i].sendDT;
+               stringgrid1.Cells[15,i+1] := SearchList.list[i].resultDT;
 
                fileNameList := '';
 
@@ -1077,8 +1076,9 @@ begin
                         else
                                 fileNameList := fileNameList +SearchList.list[i].fileNames[j] + ', '
                end ;
-               
                stringgrid1.Cells[16,i+1] := fileNameList;
+               stringgrid1.Cells[17,i+1] := SearchList.list[i].receiptNum;
+               stringgrid1.Cells[18,i+1] := SearchList.list[i].requestNum;
         end;
         SearchList.Free;
 end;
@@ -1337,24 +1337,22 @@ begin
 
         for i:= 0 to Length(FaxDetails) -1 do begin
 
-               stringgrid1.Cells[0,i+1] := IntToStr(FaxDetails[i].state);
-               stringgrid1.Cells[1,i+1] := IntToStr(FaxDetails[i].result);
-               stringgrid1.Cells[2,i+1] := FaxDetails[i].sendNum;
-               stringgrid1.Cells[3,i+1] := FaxDetails[i].senderName;
-               stringgrid1.Cells[4,i+1] := FaxDetails[i].receiveNum;
-               stringgrid1.Cells[5,i+1] := FaxDetails[i].receiveName;
-
-               stringgrid1.Cells[6,i+1] := IntToStr(FaxDetails[i].sendPageCnt);
-               stringgrid1.Cells[7,i+1] := IntToStr(FaxDetails[i].successPageCnt);
-               stringgrid1.Cells[8,i+1] := IntToStr(FaxDetails[i].failPageCnt);
-               stringgrid1.Cells[9,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
-               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
-
-               stringgrid1.Cells[11,i+1] := FaxDetails[i].reserveDT;
-               stringgrid1.Cells[12,i+1] := FaxDetails[i].receiptDT;
-               stringgrid1.Cells[13,i+1] := FaxDetails[i].sendDT;
-               stringgrid1.Cells[14,i+1] := FaxDetails[i].resultDT;
-               stringgrid1.Cells[15,i+1] := FaxDetails[i].title;
+               stringgrid1.Cells[0,i+1]  := IntToStr(FaxDetails[i].state);
+               stringgrid1.Cells[1,i+1]  := IntToStr(FaxDetails[i].result);
+               stringgrid1.Cells[2,i+1]  := FaxDetails[i].sendNum;
+               stringgrid1.Cells[3,i+1]  := FaxDetails[i].senderName;
+               stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNum;
+               stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveName;
+               stringgrid1.Cells[6,i+1]  := FaxDetails[i].title;
+               stringgrid1.Cells[7,i+1]  := IntToStr(FaxDetails[i].sendPageCnt);
+               stringgrid1.Cells[8,i+1]  := IntToStr(FaxDetails[i].successPageCnt);
+               stringgrid1.Cells[9,i+1]  := IntToStr(FaxDetails[i].failPageCnt);
+               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
+               stringgrid1.Cells[11,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
+               stringgrid1.Cells[12,i+1] := FaxDetails[i].reserveDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[14,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[15,i+1] := FaxDetails[i].resultDT;
 
                fileNameList := '';
 
@@ -1364,8 +1362,9 @@ begin
                         else
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
-
                stringgrid1.Cells[16,i+1] := fileNameList;
+               stringgrid1.Cells[17,i+1] := FaxDetails[i].receiptNum;
+               stringgrid1.Cells[18,i+1] := FaxDetails[i].requestNum;
         end;
 end;
 
