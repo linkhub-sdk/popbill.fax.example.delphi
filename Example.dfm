@@ -265,7 +265,7 @@ object frmExample: TfrmExample
       Top = 272
       Width = 1119
       Height = 273
-      ColCount = 19
+      ColCount = 21
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
@@ -288,6 +288,8 @@ object frmExample: TfrmExample
         76
         74
         74
+        64
+        64
         64
         64
         64)

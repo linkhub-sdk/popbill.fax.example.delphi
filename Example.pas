@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2018-09-18                                                 }
+{ - 업데이트 일자 : 2018-09-26                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -167,6 +167,8 @@ begin
         stringgrid1.Cells[16,0] := 'fileNames';
         stringgrid1.Cells[17,0] := 'receiptNum';
         stringgrid1.Cells[18,0] := 'requestNum';
+        stringgrid1.Cells[19,0] := 'chargePageCnt';
+        stringgrid1.Cells[20,0] := 'tiffFileSize';
 end;
 
 procedure TfrmExample.FormClose(Sender:TObject; var Action:TCloseAction);
@@ -544,6 +546,8 @@ begin
                stringgrid1.Cells[16,i+1] := fileNameList;
                stringgrid1.Cells[17,i+1] := FaxDetails[i].receiptNum;
                stringgrid1.Cells[18,i+1] := FaxDetails[i].requestNum;
+               stringgrid1.Cells[19,i+1] := IntToStr(FaxDetails[i].chargePageCnt);
+               stringgrid1.Cells[20,i+1] := FaxDetails[i].tiffFileSize + 'byte';
         end;
 end;
 
@@ -1079,6 +1083,8 @@ begin
                stringgrid1.Cells[16,i+1] := fileNameList;
                stringgrid1.Cells[17,i+1] := SearchList.list[i].receiptNum;
                stringgrid1.Cells[18,i+1] := SearchList.list[i].requestNum;
+               stringgrid1.Cells[19,i+1] := IntToStr(SearchList.list[i].chargePageCnt);
+               stringgrid1.Cells[20,i+1] := SearchList.list[i].tiffFileSize + 'byte';
         end;
         SearchList.Free;
 end;
@@ -1365,6 +1371,8 @@ begin
                stringgrid1.Cells[16,i+1] := fileNameList;
                stringgrid1.Cells[17,i+1] := FaxDetails[i].receiptNum;
                stringgrid1.Cells[18,i+1] := FaxDetails[i].requestNum;
+               stringgrid1.Cells[19,i+1] := IntToStr(FaxDetails[i].chargePageCnt);
+               stringgrid1.Cells[20,i+1] := FaxDetails[i].tiffFileSize + 'byte';
         end;
 end;
 
