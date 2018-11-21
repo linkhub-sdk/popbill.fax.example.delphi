@@ -69,7 +69,7 @@ type
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     btnGetSenderNumberList: TButton;
-    btnGetURL_SENDER: TButton;
+    btnGetSenderNumberMgtURL: TButton;
     GroupBox10: TGroupBox;
     GroupBox13: TGroupBox;
     Label1: TLabel;
@@ -78,7 +78,7 @@ type
     btnCancelReserve: TButton;
     btnResendFax: TButton;
     btnResendFaxSame: TButton;
-    btnGetUrl: TButton;
+    btnGetSentListURL: TButton;
     btnSearch: TButton;
     GroupBox7: TGroupBox;
     btnGetPartnerBalance: TButton;
@@ -105,7 +105,7 @@ type
     procedure btnGetMessageClick(Sender: TObject);
     procedure btnMultiFileClick(Sender: TObject);
     procedure btnMultiFileSingleClick(Sender: TObject);
-    procedure btnGetUrlClick(Sender: TObject);
+    procedure btnGetSentListURLClick(Sender: TObject);
     procedure btnCheckIDClick(Sender: TObject);
     procedure btnRegistContactClick(Sender: TObject);
     procedure btnLitContactClick(Sender: TObject);
@@ -119,7 +119,7 @@ type
     procedure btnResendFaxClick(Sender: TObject);
     procedure btnResendFaxSameClick(Sender: TObject);
     procedure btnGetSenderNumberListClick(Sender: TObject);
-    procedure btnGetURL_SENDERClick(Sender: TObject);
+    procedure btnGetSenderNumberMgtURLClick(Sender: TObject);
     procedure btnGetPartnerURL_CHRGClick(Sender: TObject);
     procedure btnGetMessageRNClick(Sender: TObject);
     procedure btnCancelReserveRNClick(Sender: TObject);
@@ -699,7 +699,7 @@ begin
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
-procedure TfrmExample.btnGetUrlClick(Sender: TObject);
+procedure TfrmExample.btnGetSentListURLClick(Sender: TObject);
 var
   resultURL : String;
 begin
@@ -709,7 +709,7 @@ begin
         {**********************************************************************}
 
         try
-                resultURL := faxService.getURL(txtCorpNum.Text, 'BOX');
+                resultURL := faxService.getSentListURL(txtCorpNum.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1273,7 +1273,7 @@ begin
         ShowMessage(tmp);
 end;
 
-procedure TfrmExample.btnGetURL_SENDERClick(Sender: TObject);
+procedure TfrmExample.btnGetSenderNumberMgtURLClick(Sender: TObject);
 var
   resultURL : String;
 begin
@@ -1283,7 +1283,7 @@ begin
         {**********************************************************************}
 
         try
-                resultURL := faxService.getURL(txtCorpNum.Text, 'SENDER');
+                resultURL := faxService.getSenderNumberMgtURL(txtCorpNum.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);

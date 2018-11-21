@@ -345,14 +345,14 @@ object frmExample: TfrmExample
       Height = 105
       Caption = '부가기능'
       TabOrder = 6
-      object btnGetUrl: TButton
+      object btnGetSentListURL: TButton
         Left = 8
         Top = 32
         Width = 137
         Height = 25
         Caption = '전송내역 조회 팝업'
         TabOrder = 0
-        OnClick = btnGetUrlClick
+        OnClick = btnGetSentListURLClick
       end
       object btnSearch: TButton
         Left = 8
@@ -380,14 +380,14 @@ object frmExample: TfrmExample
         TabOrder = 0
         OnClick = btnGetSenderNumberListClick
       end
-      object btnGetURL_SENDER: TButton
+      object btnGetSenderNumberMgtURL: TButton
         Left = 8
         Top = 64
         Width = 137
         Height = 25
         Caption = '발신번호 관리 팝업'
         TabOrder = 1
-        OnClick = btnGetURL_SENDERClick
+        OnClick = btnGetSenderNumberMgtURLClick
       end
     end
     object GroupBox10: TGroupBox
