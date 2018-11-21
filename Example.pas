@@ -92,6 +92,7 @@ type
     btnCancelReserveRN: TButton;
     btnResendFaxRN: TButton;
     btnResendFaxSameRN: TButton;
+    btnGetPreviewURL: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetAccessURLClick(Sender: TObject);
@@ -125,6 +126,7 @@ type
     procedure btnCancelReserveRNClick(Sender: TObject);
     procedure btnResendFaxRNClick(Sender: TObject);
     procedure btnResendFaxSameRNClick(Sender: TObject);
+    procedure btnGetPreviewURLClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -1518,5 +1520,26 @@ begin
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
+procedure TfrmExample.btnGetPreviewURLClick(Sender: TObject);
+var
+        resultURL : String;
+begin
+        {**********************************************************************}
+        {    팩스 미리보기 URL을 반환합니다.           }
+        {    URL 보안정책에 따라 반환된 URL은 30초의 유효시간을 갖습니다.      }
+        {**********************************************************************}
+
+        try
+                resultURL := faxService.getPreviewURL(txtCorpNum.Text, txtReceiptNum.Text, txtUserID.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+
+        ShowMessage('ResultURL is ' + #13 + resultURL);
+
+        end;
 end.
 

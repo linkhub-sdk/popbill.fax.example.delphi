@@ -342,7 +342,7 @@ object frmExample: TfrmExample
       Left = 821
       Top = 16
       Width = 153
-      Height = 105
+      Height = 137
       Caption = '부가기능'
       TabOrder = 6
       object btnGetSentListURL: TButton
@@ -362,6 +362,15 @@ object frmExample: TfrmExample
         Caption = '전송내역 검색조회'
         TabOrder = 1
         OnClick = btnSearchClick
+      end
+      object btnGetPreviewURL: TButton
+        Left = 8
+        Top = 96
+        Width = 137
+        Height = 25
+        Caption = '팩스 미리보기 팝업 '
+        TabOrder = 2
+        OnClick = btnGetPreviewURLClick
       end
     end
     object GroupBox3: TGroupBox
