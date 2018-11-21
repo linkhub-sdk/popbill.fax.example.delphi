@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 694
-  Top = 143
+  Left = 333
+  Top = 116
   Width = 1211
   Height = 855
   Caption = 'ÆËºô ÆÑ½º SDK Examples'
@@ -104,14 +104,14 @@ object frmExample: TfrmExample
       Height = 125
       Caption = 'ÆËºô ±âº» URL'
       TabOrder = 2
-      object btnGetPopBillURL_LOGIN: TButton
+      object btnGetAccessURL: TButton
         Left = 8
         Top = 24
         Width = 137
         Height = 25
         Caption = 'ÆËºô ·Î±×ÀÎ URL'
         TabOrder = 0
-        OnClick = btnGetPopBillURL_LOGINClick
+        OnClick = btnGetAccessURLClick
       end
     end
     object GroupBox4: TGroupBox
@@ -217,14 +217,14 @@ object frmExample: TfrmExample
         TabOrder = 0
         OnClick = btnGetBalanceClick
       end
-      object btnGetPopbillURL_CHRG: TButton
+      object btnGetChargeURL: TButton
         Left = 8
         Top = 56
         Width = 137
         Height = 25
         Caption = 'Æ÷ÀÎÆ® ÃæÀü URL'
         TabOrder = 1
-        OnClick = btnGetPopbillURL_CHRGClick
+        OnClick = btnGetChargeURLClick
       end
     end
   end

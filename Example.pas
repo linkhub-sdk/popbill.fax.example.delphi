@@ -42,7 +42,7 @@ type
     GroupBox11: TGroupBox;
     btnGetUnitCost: TButton;
     GroupBox12: TGroupBox;
-    btnGetPopBillURL_LOGIN: TButton;
+    btnGetAccessURL: TButton;
     txtCorpNum: TEdit;
     Label3: TLabel;
     GroupBox4: TGroupBox;
@@ -85,7 +85,7 @@ type
     btnGetPartnerURL_CHRG: TButton;
     GroupBox6: TGroupBox;
     btnGetBalance: TButton;
-    btnGetPopbillURL_CHRG: TButton;
+    btnGetChargeURL: TButton;
     Label5: TLabel;
     txtRequestNum: TEdit;
     btnGetMessageRN: TButton;
@@ -94,7 +94,7 @@ type
     btnResendFaxSameRN: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
-    procedure btnGetPopBillURL_LOGINClick(Sender: TObject);
+    procedure btnGetAccessURLClick(Sender: TObject);
     procedure btnJoinClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
     procedure btnGetUnitCostClick(Sender: TObject);
@@ -113,7 +113,7 @@ type
     procedure btnGetCorpInfoClick(Sender: TObject);
     procedure btnUpdateCorpInfoClick(Sender: TObject);
     procedure btnCheckIsMemberClick(Sender: TObject);
-    procedure btnGetPopbillURL_CHRGClick(Sender: TObject);
+    procedure btnGetChargeURLClick(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure btnGetChargeInfoClick(Sender: TObject);
     procedure btnResendFaxClick(Sender: TObject);
@@ -188,7 +188,7 @@ begin
     if b = false then BoolToStr:='False';
 end;
 
-procedure TfrmExample.btnGetPopBillURL_LOGINClick(Sender: TObject);
+procedure TfrmExample.btnGetAccessURLClick(Sender: TObject);
 var
         resultURL : String;
 begin
@@ -198,7 +198,7 @@ begin
         {**********************************************************************}
 
         try
-                resultURL := faxService.getPopbillURL(txtCorpNum.Text, 'LOGIN');
+                resultURL := faxService.getAccessURL(txtCorpNum.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -963,7 +963,7 @@ begin
         ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
 end;
 
-procedure TfrmExample.btnGetPopbillURL_CHRGClick(Sender: TObject);
+procedure TfrmExample.btnGetChargeURLClick(Sender: TObject);
 var
         resultURL : String;
 begin
@@ -973,7 +973,7 @@ begin
         {**********************************************************************}
         
         try
-                resultURL := faxService.getPopbillURL(txtCorpNum.Text, 'CHRG');
+                resultURL := faxService.getChargeURL(txtCorpNum.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1002,10 +1002,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20180801';
+        SDate := '20180601';
 
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20180820';
+        EDate := '20180930';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
         SetLength(State, 4);
@@ -1024,7 +1024,7 @@ begin
         Page := 1;
         
         // 페이지당 검색갯수, 기본값 500
-        PerPage := 10;
+        PerPage := 100;
 
         // 정렬방향, 'D' : 내림차순 , 'A' : 오름차순
         Order := 'D';
