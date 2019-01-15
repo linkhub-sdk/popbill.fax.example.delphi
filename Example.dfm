@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 333
-  Top = 116
+  Left = 691
+  Top = 162
   Width = 1211
   Height = 855
   Caption = '팝빌 팩스 SDK Examples'
@@ -342,12 +342,12 @@ object frmExample: TfrmExample
       Left = 821
       Top = 16
       Width = 153
-      Height = 137
+      Height = 129
       Caption = '부가기능'
       TabOrder = 6
       object btnGetSentListURL: TButton
         Left = 8
-        Top = 32
+        Top = 24
         Width = 137
         Height = 25
         Caption = '전송내역 조회 팝업'
@@ -356,7 +356,7 @@ object frmExample: TfrmExample
       end
       object btnSearch: TButton
         Left = 8
-        Top = 64
+        Top = 56
         Width = 137
         Height = 25
         Caption = '전송내역 검색조회'
@@ -365,7 +365,7 @@ object frmExample: TfrmExample
       end
       object btnGetPreviewURL: TButton
         Left = 8
-        Top = 96
+        Top = 88
         Width = 137
         Height = 25
         Caption = '팩스 미리보기 팝업 '
@@ -377,12 +377,12 @@ object frmExample: TfrmExample
       Left = 982
       Top = 16
       Width = 153
-      Height = 105
+      Height = 97
       Caption = '발신번호 관련 기능'
       TabOrder = 7
       object btnGetSenderNumberList: TButton
         Left = 8
-        Top = 32
+        Top = 24
         Width = 137
         Height = 25
         Caption = '발신번호 목록 조회'
@@ -391,7 +391,7 @@ object frmExample: TfrmExample
       end
       object btnGetSenderNumberMgtURL: TButton
         Left = 8
-        Top = 64
+        Top = 56
         Width = 137
         Height = 25
         Caption = '발신번호 관리 팝업'

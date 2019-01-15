@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2018-11-21                                                 }
+{ - 업데이트 일자 : 2019-01-15                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -230,28 +230,28 @@ begin
         // 사업자번호 '-' 제외, 10자리
         joinInfo.CorpNum := '4364364364';
 
-        // 대표자성명, 최대 30자
+        // 대표자성명, 최대 100자
         joinInfo.CEOName := '대표자성명';
 
-        // 상호명, 최대 70자
+        // 상호명, 최대 200자
         joinInfo.CorpName := '링크허브';
 
         // 주소, 최대 300자
         joinInfo.Addr := '주소';
 
-        // 업태, 최대 40자
+        // 업태, 최대 100자
         joinInfo.BizType := '업태';
 
-        // 종목, 최대 40자
+        // 종목, 최대 100자
         joinInfo.BizClass := '종목';
 
-        // 아이디, 6자이상 20자 미만
+        // 아이디, 6자이상 50자 미만
         joinInfo.ID     := 'userid';
 
         // 비밀번호, 6자이상 20자 미만
         joinInfo.PWD    := 'pwd_must_be_long_enough';
 
-        // 담당자명, 최대 30자
+        // 담당자명, 최대 100자
         joinInfo.ContactName := '담당자명';
 
         // 담당자 연락처, 최대 20자
@@ -263,7 +263,7 @@ begin
         // 담당자 팩스번호, 최대 20자
         joinInfo.ContactFAX := '02-6442-9700';
 
-        // 담당자 메일, 최대 70자
+        // 담당자 메일, 최대 100자
         joinInfo.ContactEmail := 'code@linkhub.co.kr';
 
 
@@ -562,7 +562,7 @@ var
         i :Integer;
 begin
         {**********************************************************************}
-        { 팩스 전송을 요청합니다.                                              }
+        { 팩스 전송을 요청합니다. (전송할 파일 개수는 최대 20개까지 가능)      }
         { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
@@ -639,7 +639,7 @@ var
         Loop : Integer;
 begin
         {**********************************************************************}
-        { 팩스 전송을 요청합니다.                                              }
+        { 팩스 전송을 요청합니다. (전송할 파일 개수는 최대 20개까지 가능)      }
         { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
@@ -752,31 +752,31 @@ begin
         { 연동회원의 담당자를 신규로 등록합니다.                               }
         {**********************************************************************}
 
-        // [필수] 담당자 아이디 (6자 이상 20자 미만)
-        joinInfo.id := 'userid';
-        
+        // [필수] 담당자 아이디 (6자 이상 50자 미만)
+        joinInfo.id := 'testkorea0222_01';
+
         // [필수] 비밀번호 (6자 이상 20자 미만)
         joinInfo.pwd := 'thisispassword';
 
-        // [필수] 담당자명(한글이나 영문 30자 이내)
+        // [필수] 담당자명(한글이나 영문 100자 이내)
         joinInfo.personName := '담당자성명';
 
-        // [필수] 연락처
+        // [필수] 연락처 (최대 20자)
         joinInfo.tel := '070-4304-2991';
 
-        // 휴대폰번호
+        // 휴대폰번호 (최대 20자)
         joinInfo.hp := '010-1111-2222';
 
-        // 팩스번호
+        // 팩스번호 (최대 20자)
         joinInfo.fax := '02-6442-9700';
-        
-        // [필수] 이메일
+
+        // [필수] 이메일 (최대 100자)
         joinInfo.email := 'test@test.com';
 
         // 회사조회 권한여부, true-회사조회 / false-개인조회
         joinInfo.searchAllAllowYN := false;
 
-        // 관리자 권한여부
+        // 관리자 권한여부, true-관리자 / false-사용자
         joinInfo.mgrYN := false;
 
         try
@@ -810,7 +810,9 @@ begin
                         Exit;
                 end;
         end;
-        tmp := 'id | email | hp | personName | searchAllAlloyYN | tel | fax | mgrYN | regDT | state' + #13;
+        tmp := 'id(아이디) | email(이메일) | hp(휴대폰) | personName(성명) | searchAllAllowYN(회사조회 권한) | ';
+        tmp := tmp + 'tel(연락처) | fax(팩스) | mgrYN(관리자 여부) | regDT(등록일시) | state(상태)' + #13;
+        
         for i := 0 to Length(InfoList) - 1 do
         begin
             tmp := tmp + InfoList[i].id + ' | ';
@@ -838,31 +840,31 @@ begin
         {**********************************************************************}
         { 연동회원의 담당자 정보를 수정합니다.                                 }
         {**********************************************************************}
-        
+
         contactInfo := TContactInfo.Create;
-        
+
         // 담당자 아이디
         contactInfo.id := 'testkorea';
 
-        // 담당자명
+        // 담당자명 (최대 100자)
         contactInfo.personName := '테스트 담당자';
 
-        // 연락처
+        // 연락처 (최대 20자)
         contactInfo.tel := '070-4304-2991';
 
-        // 휴대폰번호
-        contactInfo.hp := '010-000-111';
+        // 휴대폰번호 (최대 20자)
+        contactInfo.hp := '010-4324-1111';
 
-        // 이메일 주소
+        // 이메일 주소 (최대 100자)
         contactInfo.email := 'test@test.com';
-        
-        // 팩스번호
+
+        // 팩스번호 (최대 20자)
         contactInfo.fax := '02-6442-9799';
 
         // 조회권한, true(회사조회), false(개인조회)
         contactInfo.searchAllAllowYN := true;
 
-        // 관리자권한 설정여부
+        // 관리자권한 설정여부, true-관리자 / false-사용자
         contactInfo.mgrYN := false;
 
 
@@ -913,19 +915,19 @@ begin
         {**********************************************************************}
         { 연동회원의 회사정보를 수정합니다.                                    }
         {**********************************************************************}
-        
+
         corpInfo := TCorpInfo.Create;
 
-        // 대표자명, 최대 30자
+        // 대표자명, 최대 100자
         corpInfo.ceoname := '대표자명';
 
-        // 상호, 최대 70자
+        // 상호, 최대 200자
         corpInfo.corpName := '상호';
 
-        // 업태, 최대 40자
+        // 업태, 최대 100자
         corpInfo.bizType := '업태';
 
-        // 종목, 최대 40자
+        // 종목, 최대 100자
         corpInfo.bizClass := '종목';
 
         // 주소, 최대 300자
@@ -1004,10 +1006,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20180601';
+        SDate := '20190101';
 
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20180930';
+        EDate := '20190115';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
         SetLength(State, 4);
@@ -1024,7 +1026,7 @@ begin
 
         // 페이지 번호, 기본값 1
         Page := 1;
-        
+
         // 페이지당 검색갯수, 기본값 500
         PerPage := 100;
 
@@ -1269,9 +1271,9 @@ begin
         for i := 0 to Length(SenderNumberList) -1 do
         begin
                 tmp := tmp + '******** 팩스 발신번호 목록 ['+ IntToStr(i+1) + '] ********' + #13;
-                tmp := tmp + '발신번호(number) : ' + SenderNumberList[i].number + #13;
-                tmp := tmp + '등록상태(state) : ' + IntToStr(SenderNumberList[i].state) + #13;
-                tmp := tmp + '대표번호 지정여부(representYN) : ' + BoolToStr(SenderNumberList[i].representYN) + #13 + #13;
+                tmp := tmp + 'number(발신번호) : ' + SenderNumberList[i].number + #13;
+                tmp := tmp + 'state(등록상태) : ' + IntToStr(SenderNumberList[i].state) + #13;
+                tmp := tmp + 'representYN(대표번호 지정여부) : ' + BoolToStr(SenderNumberList[i].representYN) + #13 + #13;
         end;
 
         ShowMessage(tmp);
