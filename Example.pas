@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2019-01-15                                                 }
+{ - 업데이트 일자 : 2019-01-31                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -38,7 +38,7 @@ type
   TfrmExample = class(TForm)
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
-    btnJoin: TButton;
+    btnJoinMember: TButton;
     GroupBox11: TGroupBox;
     btnGetUnitCost: TButton;
     GroupBox12: TGroupBox;
@@ -96,7 +96,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetAccessURLClick(Sender: TObject);
-    procedure btnJoinClick(Sender: TObject);
+    procedure btnJoinMemberClick(Sender: TObject);
     procedure btnGetBalanceClick(Sender: TObject);
     procedure btnGetUnitCostClick(Sender: TObject);
     procedure btnGetPartnerBalanceClick(Sender: TObject);
@@ -207,13 +207,10 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
-
-
-procedure TfrmExample.btnJoinClick(Sender: TObject);
+procedure TfrmExample.btnJoinMemberClick(Sender: TObject);
 var
         response : TResponse;
         joinInfo : TJoinForm;
@@ -266,7 +263,6 @@ begin
         // 담당자 메일, 최대 100자
         joinInfo.ContactEmail := 'code@linkhub.co.kr';
 
-
         try
                 response := faxService.JoinMember(joinInfo);
         except
@@ -275,9 +271,7 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage(IntToStr(response.code) + ' | ' +  response.Message);
-
 end;
 
 procedure TfrmExample.btnGetBalanceClick(Sender: TObject);
@@ -298,9 +292,7 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('잔여포인트 : ' + FloatToStr(balance));
-
 end;
 
 procedure TfrmExample.btnGetUnitCostClick(Sender: TObject);
@@ -319,7 +311,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('FAX 전송단가 : '+ FloatToStr(unitcost));
 end;
 
@@ -341,11 +332,8 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('잔여포인트 : ' + FloatToStr(balance));
-
 end;
-
 
 procedure TfrmExample.btnSendFax_singleClick(Sender: TObject);
 var
@@ -401,10 +389,9 @@ begin
                         Exit;
                 end;
         end;
+
         txtReceiptNum.Text := receiptNum;
-
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
-
 end;
 
 procedure TfrmExample.btnCancelReserveClick(Sender: TObject);
@@ -436,7 +423,7 @@ var
         i :Integer;
 begin
         {**********************************************************************}
-        { 팩스 전송을 요청합니다.                                              }
+        { [동보전송] 팩스 전송을 요청합니다.                                   }
         { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
@@ -457,7 +444,7 @@ begin
         adsYN := False;
 
         // 팩스제목
-        title := '팩스전송 제목';
+        title := '동보전송 팩스전송 제목';
 
         // 전송요청번호
         // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
@@ -468,12 +455,8 @@ begin
         SetLength(receivers,5);
         for i :=0 to Length(receivers) -1 do begin
                 receivers[i] := TReceiver.create;
-
-                //수신번호
-                receivers[i].receiveNum := '070111222';
-
-                //수신자명
-                receivers[i].receiveName := IntToStr(i) + '번째 수신자';
+                receivers[i].receiveNum := '070111222';                    //수신번호
+                receivers[i].receiveName := IntToStr(i) + '번째 수신자';   //수신자명
         end;
 
         try
@@ -488,8 +471,8 @@ begin
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
@@ -592,7 +575,7 @@ begin
         adsYN := False;
 
         // 팩스제목
-        title := '팩스 다수파일 동보전송 제목';
+        title := '다중파일 동보 전송';
 
         // 전송요청번호
         // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
@@ -604,14 +587,10 @@ begin
 
         for i := 0 to Length(receivers) - 1 do begin
                 receivers[i] := TReceiver.create;
-
-                //수신팩스번호
-                receivers[i].receiveNum := '070111222';
-
-                //수신자명
-                receivers[i].receiveName := IntToStr(i) + '번째 수신자';
+                receivers[i].receiveNum := '070111222';                   //수신팩스번호
+                receivers[i].receiveName := IntToStr(i) + '번째 수신자';  //수신자명
         end;
-        
+
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, sendNum,
                                                  senderName, receivers,
@@ -620,12 +599,12 @@ begin
                                                  title, requestNum);
         except
                 on le : EPopbillException do begin
-                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);   
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
@@ -675,13 +654,12 @@ begin
         adsYN := False;
 
         // 팩스제목
-        title := '팩스 단건 다중파일 전송 제목';
+        title := '다중파일 전송 제목';
 
         // 전송요청번호
         // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
         // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
         requestNum := txtRequestNum.text;
-
 
         try
                 receiptNum := faxService.SendFAX(txtCorpNum.Text, senderNum,
@@ -696,8 +674,8 @@ begin
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
@@ -707,7 +685,7 @@ var
 begin
         {**********************************************************************}
         { 팩스 전송내역 팝업 URL 반환합니다.                                   }
-        {    URL 보안정책에 따라 반환된 URL은 30초의 유효시간을 갖습니다.      }
+        { URL 보안정책에 따라 반환된 URL은 30초의 유효시간을 갖습니다.         }
         {**********************************************************************}
 
         try
@@ -718,10 +696,8 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
-
 
 procedure TfrmExample.btnCheckIDClick(Sender: TObject);
 var
@@ -739,7 +715,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
 end;
 
@@ -753,7 +728,7 @@ begin
         {**********************************************************************}
 
         // [필수] 담당자 아이디 (6자 이상 50자 미만)
-        joinInfo.id := 'testkorea0222_01';
+        joinInfo.id := 'testkorea';
 
         // [필수] 비밀번호 (6자 이상 20자 미만)
         joinInfo.pwd := 'thisispassword';
@@ -787,9 +762,7 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
-
 end;
 
 procedure TfrmExample.btnLitContactClick(Sender: TObject);
@@ -812,7 +785,7 @@ begin
         end;
         tmp := 'id(아이디) | email(이메일) | hp(휴대폰) | personName(성명) | searchAllAllowYN(회사조회 권한) | ';
         tmp := tmp + 'tel(연락처) | fax(팩스) | mgrYN(관리자 여부) | regDT(등록일시) | state(상태)' + #13;
-        
+
         for i := 0 to Length(InfoList) - 1 do
         begin
             tmp := tmp + InfoList[i].id + ' | ';
@@ -826,11 +799,8 @@ begin
             tmp := tmp + InfoList[i].regDT + ' | ';
             tmp := tmp + IntToStr(InfoList[i].state) + #13;
         end;
-
         ShowMessage(tmp);
 end;
-
-
 
 procedure TfrmExample.btnUpdateContactClick(Sender: TObject);
 var
@@ -876,7 +846,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
 end;
 
@@ -903,7 +872,6 @@ begin
         tmp := tmp + 'BizType (업태) : ' + corpInfo.BizType + #13;
         tmp := tmp + 'BizClass (종목) : ' + corpInfo.BizClass + #13;
         tmp := tmp + 'Addr (주소) : ' + corpInfo.Addr + #13;
-
         ShowMessage(tmp);
 end;
 
@@ -932,7 +900,7 @@ begin
 
         // 주소, 최대 300자
         corpInfo.addr := '서울특별시 강남구 영동대로 517';
-        
+
         try
                 response := faxService.UpdateCorpInfo(txtCorpNum.text, corpInfo);
         except
@@ -941,9 +909,7 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
-
 end;
 
 procedure TfrmExample.btnCheckIsMemberClick(Sender: TObject);
@@ -951,10 +917,10 @@ var
         response : TResponse;
 begin
         {**********************************************************************}
-        { 해당 사업자의 연동회원 가입여부를 확인합니다.                        }
-        { - LinkID는 파트너를 식별하는 인증정보(32번라인)에 설정되어 있습니다. }
+        { 파트너의 연동회원으로 가입된 사업자번호인지 확인합니다.              }
+        { - LinkID는 인증정보에 설정되어 있는 링크아이디 입니다. (32번라인)    }
         {**********************************************************************}
-        
+
         try
                 response := faxService.CheckIsMember(txtCorpNum.text, LinkID);
         except
@@ -963,7 +929,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('응답코드 : ' + IntToStr(response.code) + #10#13 + '응답메시지 : '+ response.Message);
 end;
 
@@ -984,7 +949,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
@@ -1002,7 +966,7 @@ begin
         { - 조회일자와 상세조건들을 사용해 팩스전송내역을 조회합니다.          }
         { - 최대 검색기간 : 6개월 이내                                         }
         { - 응답항목에 대한 자세한 사항은 "[팩스 API 연동매뉴얼] >             }
-        {   3.3.2. 전송내역 목록 조회" 을 참조하시기 바랍니다.                 }
+        {   3.3.3. Search (전송내역 목록 조회)" 을 참조하시기 바랍니다.        }
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
@@ -1011,17 +975,17 @@ begin
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
         EDate := '20190115';
 
-        // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소 ex) State=1,2,4
+        // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소
         SetLength(State, 4);
         State[0] := '1';
         State[1] := '2';
         State[2] := '3';
         State[3] := '4';
 
-        // 예약전송 검색여부, true-예약전송건 검색
+        // 예약전송 검색여부, true-예약전송 조회, fasle-즉시전송 조회
         ReserveYN := false;
 
-        // 개인조회여부, true(개인조회), false(회사조회).
+        // 개인조회여부, true-개인조회, false-전체조회
         SenderYN := true;
 
         // 페이지 번호, 기본값 1
@@ -1030,7 +994,7 @@ begin
         // 페이지당 검색갯수, 기본값 500
         PerPage := 100;
 
-        // 정렬방향, 'D' : 내림차순 , 'A' : 오름차순
+        // 정렬방향, D-내림차순, A-오름차순
         Order := 'D';
 
         // 조회 검색어, 발신자명 또는 수신자명 기재
@@ -1052,13 +1016,11 @@ begin
         tmp := tmp + 'pageNum (페이지 번호) : '+ IntToStr(SearchList.pageNum) + #13;
         tmp := tmp + 'pageCount (페이지 개수) : '+ IntToStr(SearchList.pageCount) + #13;
         tmp := tmp + 'message (응답메시지) : '+ SearchList.message + #13#13;
-
         ShowMessage(tmp);
 
         stringgrid1.RowCount := Length(SearchList.list) + 1;
 
         for i:= 0 to Length(SearchList.list) - 1 do begin
-
                stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].state);
                stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].result);
                stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;
@@ -1075,7 +1037,6 @@ begin
                stringgrid1.Cells[13,i+1] := SearchList.list[i].receiptDT;
                stringgrid1.Cells[14,i+1] := SearchList.list[i].sendDT;
                stringgrid1.Cells[15,i+1] := SearchList.list[i].resultDT;
-
                fileNameList := '';
 
                for j:= 0 to length(SearchList.list[i].fileNames) -1 do begin
@@ -1101,7 +1062,7 @@ begin
         {**********************************************************************}
         { 연동회원의 팩스 API 서비스 과금정보를 확인합니다.                    }
         {**********************************************************************}
-        
+
         try
                 chargeInfo := faxService.GetChargeInfo(txtCorpNum.text);
         except
@@ -1114,9 +1075,7 @@ begin
         tmp := 'unitCost (단가) : ' + chargeInfo.unitCost + #13;
         tmp := tmp + 'chargeMethod (과금유형) : ' + chargeInfo.chargeMethod + #13;
         tmp := tmp + 'rateSystem (과금제도) : ' + chargeInfo.rateSystem + #13;
-
         ShowMessage(tmp);
-
 end;
 
 procedure TfrmExample.btnResendFaxClick(Sender: TObject);
@@ -1125,10 +1084,10 @@ var
         requestNum : String;
 begin
         {**********************************************************************}
-        { 팩스 재전송을 요청합니다.                                            }
+        { 발급받은 접수번호(receiptNum)로 팩스 재전송을 요청합니다.            }
         { - 접수일로부터 60일이 경과되지 않은 전송건만 재전송할 수 있습니다.   }
-        { - 발신/수신정보를 공백으로 처리하는 경우 원 팩스전송정보와 동일하게  }
-        {   팩스가 전송됩니다.                                                 }
+        { - 발신/수신정보를 공백으로 처리하는 경우 기존 팩스전송정보와         }
+        {   동일하게 팩스가 전송됩니다.                                        }
         { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
@@ -1139,11 +1098,10 @@ begin
         //발신자명, 공백처리시 기존발송정보로 전송
         senderName := '';
 
-        // 수신자팩스번호와 수신자명을 모두 공백처리시 기존발송정보로 전송
-        // 수신팩스번호
+        // 수신팩스번호, 공백처리시 기존발송정보로 전송
         receiverNum := '';
 
-        // 수신자명
+        // 수신자명, 공백처리시 기존발송정보로 전송
         receiverName := '';
 
         // 팩스제목
@@ -1156,24 +1114,19 @@ begin
         requestNum := '';
 
         try
-                receiptNum := faxService.ResendFAX(txtCorpNum.Text,
-                                                   txtReceiptNum.Text,
-                                                   senderNum,
-                                                   senderName,
-                                                   receiverNum,
-                                                   receiverName,
-                                                   txtReserveDT.Text,
-                                                   txtUserID.text,
-                                                   title,
-                                                   requestNum);
+                receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
+                                                   senderNum, senderName,
+                                                   receiverNum, receiverName,
+                                                   txtReserveDT.Text, txtUserID.text,
+                                                   title, requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
@@ -1184,7 +1137,7 @@ var
         i : Integer;
 begin
         {**********************************************************************}
-        { 팩스 재전송을 요청합니다.                                            }
+        { 발급받은 접수번호(receiptNum)로 팩스 재전송을 요청합니다.            }
         { - 접수일로부터 60일이 경과되지 않은 전송건만 재전송할 수 있습니다.   }
         { - 수신정보 배열의 길이를 0으로 선언하여 함수를 호출하는 경우         }
         {   기존 팩스전송정보와 동일하게 팩스가 전송됩니다.                    }
@@ -1204,13 +1157,11 @@ begin
         // 재전송 팩스의 전송요청번호
         // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
         // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
-        // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
-        requestNum := '';        
+        requestNum := '';
 
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
         //SetLength(receivers, 0);
-
 
         // 수신자 정보가 기존전송정보와 다른 경우 수신정보배열에 기재
         // 수신정보배열 최대 1000건
@@ -1218,36 +1169,25 @@ begin
 
         for i := 0 to Length(receivers) - 1 do begin
                 receivers[i] := TReceiver.create;
-
-                //수신팩스번호
-                receivers[i].receiveNum := '01000011'+IntToStr(i);
-
-                //수신자명
-                receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자';
+                receivers[i].receiveNum := '01000011'+IntToStr(i);       //수신팩스번호
+                receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자'; //수신자명
         end;
-        
-        
+
         try
-                receiptNum := faxService.ResendFAX(txtCorpNum.Text,
-                                                   txtReceiptNum.Text,
-                                                   senderNum,
-                                                   senderName,
-                                                   receivers,
-                                                   txtReserveDT.
-                                                   Text,
-                                                   txtUserID.Text,
-                                                   title,
-                                                   requestNum);
+                receiptNum := faxService.ResendFAX(txtCorpNum.Text, txtReceiptNum.Text,
+                                                   senderNum, senderName, receivers, txtReserveDT.
+                                                   Text, txtUserID.Text, title, requestNum);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
+
 procedure TfrmExample.btnGetSenderNumberListClick(Sender: TObject);
 var
         SenderNumberList : TFAXSenderNumberList;
@@ -1255,7 +1195,7 @@ var
         i : Integer;
 begin
         {**********************************************************************}
-        { 팩스 발신번호 목록을 조회합니다                                     }
+        { 팝빌에 등록된 팩스 발신번호 목록을 조회합니다                        }
         {**********************************************************************}
 
         try
@@ -1275,7 +1215,6 @@ begin
                 tmp := tmp + 'state(등록상태) : ' + IntToStr(SenderNumberList[i].state) + #13;
                 tmp := tmp + 'representYN(대표번호 지정여부) : ' + BoolToStr(SenderNumberList[i].representYN) + #13 + #13;
         end;
-
         ShowMessage(tmp);
 end;
 
@@ -1296,7 +1235,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
@@ -1317,7 +1255,6 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('ResultURL is ' + #13 + resultURL);
 end;
 
@@ -1411,8 +1348,8 @@ begin
         {**********************************************************************}
         { 전송요청번호(requestNum)을 할당한 팩스를 재전송합니다.               }
         { - 접수일로부터 60일이 경과되지 않은 전송건만 재전송할 수 있습니다.   }
-        { - 발신/수신정보를 공백으로 처리하는 경우 원 팩스전송정보와 동일하게  }
-        {   팩스가 전송됩니다.                                                 }
+        { - 발신/수신정보를 공백으로 처리하는 경우 기존 팩스전송정보와         }
+        {   동일하게 팩스가 전송됩니다.                                        }
         { - 팩스 재전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)      }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
@@ -1423,11 +1360,10 @@ begin
         //발신자명, 공백처리시 기존발송정보로 전송
         senderName := '';
 
-        // 수신자팩스번호와 수신자명을 모두 공백처리시 기존발송정보로 전송
-        // 수신팩스번호
+        // 수신팩스번호, 공백처리시 기존발송정보로 전송
         receiverNum := '';
 
-        // 수신자명
+        // 수신자명, 공백처리시 기존발송정보로 전송
         receiverName := '';
 
         // 팩스제목
@@ -1438,8 +1374,7 @@ begin
 
         // 재전송 팩스의 전송요청번호
         // 파트너가 전송 건에 대해 관리번호를 구성하여 관리하는 경우 사용.
-        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당.
-        // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
+        // 1~36자리로 구성. 영문, 숫자, 하이픈(-), 언더바(_)를 조합하여 팝빌 회원별로 중복되지 않도록 할당
         requestNum := txtRequestNum.Text;
 
         try
@@ -1452,8 +1387,8 @@ begin
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
@@ -1490,27 +1425,20 @@ begin
         // 재전송 팩스의 전송상태확인(GetSendDetailRN) / 예약전송취소(CancelReserveRN) 에 이용됩니다.
         requestNum := txtRequestNum.text;
 
-
         // 수신자 정보를 기존 팩스 전송정보와 동일하게 전송하는 경우
         // 아래 코드와 같이 receviers 배열의 길이를 0으로 선언하여 함수 호출
         //SetLength(receivers, 0);
 
-        
         // 수신자 정보가 기존전송정보와 다른 경우 수신정보배열에 기재
         // 수신정보배열 최대 1000건
         SetLength(receivers,10);
 
         for i := 0 to Length(receivers) - 1 do begin
                 receivers[i] := TReceiver.create;
-
-                //수신팩스번호
-                receivers[i].receiveNum := '01000011'+IntToStr(i);
-
-                //수신자명
-                receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자';
+                receivers[i].receiveNum := '01000011'+IntToStr(i);       //수신팩스번호
+                receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자'; //수신자명
         end;
-        
-        
+
         try
                 receiptNum := faxService.ResendFAXRN(txtCorpNum.Text, requestNum,
                         senderNum, senderName, receivers, txtReserveDT.Text,
@@ -1521,8 +1449,8 @@ begin
                         Exit;
                 end;
         end;
-        txtReceiptNum.Text := receiptNum;
 
+        txtReceiptNum.Text := receiptNum;
         ShowMessage('접수번호(receiptNum) :' + receiptNum);
 end;
 
@@ -1543,9 +1471,8 @@ begin
                         Exit;
                 end;
         end;
-
         ShowMessage('ResultURL is ' + #13 + resultURL);
+end;
 
-        end;
 end.
 

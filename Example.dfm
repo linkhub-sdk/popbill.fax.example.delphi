@@ -1,6 +1,6 @@
 object frmExample: TfrmExample
-  Left = 691
-  Top = 162
+  Left = 470
+  Top = 124
   Width = 1211
   Height = 855
   Caption = '팝빌 팩스 SDK Examples'
@@ -43,21 +43,21 @@ object frmExample: TfrmExample
       Height = 125
       Caption = '회원 정보'
       TabOrder = 0
-      object btnJoin: TButton
+      object btnJoinMember: TButton
         Left = 8
         Top = 88
         Width = 137
         Height = 25
         Caption = '회원 가입'
         TabOrder = 0
-        OnClick = btnJoinClick
+        OnClick = btnJoinMemberClick
       end
       object btnCheckID: TButton
         Left = 8
         Top = 56
         Width = 137
         Height = 25
-        Caption = 'ID 중복 확인'
+        Caption = '아이디 중복 확인'
         TabOrder = 1
         OnClick = btnCheckIDClick
       end
@@ -98,7 +98,7 @@ object frmExample: TfrmExample
       end
     end
     object GroupBox12: TGroupBox
-      Left = 499
+      Left = 659
       Top = 24
       Width = 153
       Height = 125
@@ -176,7 +176,7 @@ object frmExample: TfrmExample
       end
     end
     object GroupBox7: TGroupBox
-      Left = 660
+      Left = 500
       Top = 24
       Width = 153
       Height = 126
@@ -304,36 +304,36 @@ object frmExample: TfrmExample
     end
     object btnSendFax_single: TButton
       Left = 24
-      Top = 72
+      Top = 64
       Width = 137
-      Height = 25
-      Caption = '전송'
+      Height = 30
+      Caption = '팩스 단건 전송'
       TabOrder = 2
       OnClick = btnSendFax_singleClick
     end
     object btnSendThousandSame: TButton
       Left = 173
-      Top = 72
+      Top = 64
       Width = 137
-      Height = 25
+      Height = 30
       Caption = '동보 전송'
       TabOrder = 3
       OnClick = btnSendThousandSameClick
     end
     object btnMultiFile: TButton
       Left = 472
-      Top = 72
+      Top = 64
       Width = 137
-      Height = 25
+      Height = 30
       Caption = '다중파일 동보 전송'
       TabOrder = 4
       OnClick = btnMultiFileClick
     end
     object btnMultiFileSingle: TButton
       Left = 323
-      Top = 72
+      Top = 64
       Width = 137
-      Height = 25
+      Height = 30
       Caption = '다중파일 전송'
       TabOrder = 5
       OnClick = btnMultiFileSingleClick
@@ -341,8 +341,8 @@ object frmExample: TfrmExample
     object GroupBox2: TGroupBox
       Left = 821
       Top = 16
-      Width = 153
-      Height = 129
+      Width = 156
+      Height = 121
       Caption = '부가기능'
       TabOrder = 6
       object btnGetSentListURL: TButton
@@ -377,7 +377,7 @@ object frmExample: TfrmExample
       Left = 982
       Top = 16
       Width = 153
-      Height = 97
+      Height = 89
       Caption = '발신번호 관련 기능'
       TabOrder = 7
       object btnGetSenderNumberList: TButton
@@ -425,7 +425,7 @@ object frmExample: TfrmExample
         Left = 88
         Top = 56
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '전송상태확인'
         TabOrder = 1
         OnClick = btnGetMessageClick
@@ -434,7 +434,7 @@ object frmExample: TfrmExample
         Left = 232
         Top = 56
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '예약전송취소'
         TabOrder = 2
         OnClick = btnCancelReserveClick
@@ -443,7 +443,7 @@ object frmExample: TfrmExample
         Left = 88
         Top = 88
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '재전송'
         TabOrder = 3
         OnClick = btnResendFaxClick
@@ -452,7 +452,7 @@ object frmExample: TfrmExample
         Left = 232
         Top = 88
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '동보 재전송'
         TabOrder = 4
         OnClick = btnResendFaxSameClick
@@ -484,7 +484,7 @@ object frmExample: TfrmExample
         Left = 88
         Top = 56
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '전송상태확인'
         TabOrder = 1
         OnClick = btnGetMessageRNClick
@@ -493,7 +493,7 @@ object frmExample: TfrmExample
         Left = 232
         Top = 56
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '예약 전송 취소'
         TabOrder = 2
         OnClick = btnCancelReserveRNClick
@@ -502,7 +502,7 @@ object frmExample: TfrmExample
         Left = 88
         Top = 88
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '재전송'
         TabOrder = 3
         OnClick = btnResendFaxRNClick
@@ -511,7 +511,7 @@ object frmExample: TfrmExample
         Left = 232
         Top = 88
         Width = 137
-        Height = 25
+        Height = 27
         Caption = '동보 재전송'
         TabOrder = 4
         OnClick = btnResendFaxSameRNClick
