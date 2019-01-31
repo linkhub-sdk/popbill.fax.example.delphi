@@ -359,7 +359,7 @@ object frmExample: TfrmExample
         Top = 56
         Width = 137
         Height = 25
-        Caption = '전송내역 검색조회'
+        Caption = '전송내역 목록 조회'
         TabOrder = 1
         OnClick = btnSearchClick
       end
@@ -385,7 +385,7 @@ object frmExample: TfrmExample
         Top = 24
         Width = 137
         Height = 25
-        Caption = '발신번호 목록 조회'
+        Caption = '발신번호 목록 확인'
         TabOrder = 0
         OnClick = btnGetSenderNumberListClick
       end
@@ -422,36 +422,36 @@ object frmExample: TfrmExample
         TabOrder = 0
       end
       object btnGetMessage: TButton
-        Left = 88
+        Left = 24
         Top = 56
-        Width = 137
+        Width = 168
         Height = 27
-        Caption = '전송상태확인'
+        Caption = '전송내역 및 전송상태 확인'
         TabOrder = 1
         OnClick = btnGetMessageClick
       end
       object btnCancelReserve: TButton
-        Left = 232
+        Left = 200
         Top = 56
-        Width = 137
+        Width = 168
         Height = 27
-        Caption = '예약전송취소'
+        Caption = '예약전송 취소'
         TabOrder = 2
         OnClick = btnCancelReserveClick
       end
       object btnResendFax: TButton
-        Left = 88
+        Left = 24
         Top = 88
-        Width = 137
+        Width = 168
         Height = 27
-        Caption = '재전송'
+        Caption = '팩스 재전송'
         TabOrder = 3
         OnClick = btnResendFaxClick
       end
       object btnResendFaxSame: TButton
-        Left = 232
+        Left = 200
         Top = 88
-        Width = 137
+        Width = 168
         Height = 27
         Caption = '동보 재전송'
         TabOrder = 4
@@ -481,36 +481,36 @@ object frmExample: TfrmExample
         TabOrder = 0
       end
       object btnGetMessageRN: TButton
-        Left = 88
+        Left = 24
         Top = 56
-        Width = 137
+        Width = 168
         Height = 27
-        Caption = '전송상태확인'
+        Caption = '전송내역 및 전송상태 확인'
         TabOrder = 1
         OnClick = btnGetMessageRNClick
       end
       object btnCancelReserveRN: TButton
-        Left = 232
+        Left = 200
         Top = 56
-        Width = 137
+        Width = 168
         Height = 27
-        Caption = '예약 전송 취소'
+        Caption = '예약전송 취소'
         TabOrder = 2
         OnClick = btnCancelReserveRNClick
       end
       object btnResendFaxRN: TButton
-        Left = 88
+        Left = 24
         Top = 88
-        Width = 137
+        Width = 168
         Height = 27
-        Caption = '재전송'
+        Caption = '팩스 재전송'
         TabOrder = 3
         OnClick = btnResendFaxRNClick
       end
       object btnResendFaxSameRN: TButton
-        Left = 232
+        Left = 200
         Top = 88
-        Width = 137
+        Width = 168
         Height = 27
         Caption = '동보 재전송'
         TabOrder = 4
