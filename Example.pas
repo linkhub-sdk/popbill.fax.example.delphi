@@ -2,7 +2,7 @@
 { 팝빌 팩스 API Delphi SDK Example                                             }
 {                                                                              }
 { - 델파이 SDK 적용방법 안내 : http://blog.linkhub.co.kr/572                   }
-{ - 업데이트 일자 : 2019-01-31                                                 }
+{ - 업데이트 일자 : 2019-02-07                                                 }
 { - 연동 기술지원 연락처 : 1600-9854 / 070-4304-2991                           }
 { - 연동 기술지원 이메일 : code@linkhub.co.kr                                  }
 {                                                                              }
@@ -207,7 +207,7 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('ResultURL is ' + #13 + resultURL);
+        ShowMessage('URL :  ' + #13 + resultURL);
 end;
 
 procedure TfrmExample.btnJoinMemberClick(Sender: TObject);
@@ -343,7 +343,6 @@ var
 begin
         {**********************************************************************}
         { 팩스 전송을 요청합니다.                                              }
-        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
 
@@ -586,7 +585,6 @@ var
 begin
         {**********************************************************************}
         { 팩스 전송을 요청합니다. (전송할 파일 개수는 최대 20개까지 가능)      }
-        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
 
@@ -659,7 +657,6 @@ var
 begin
         {**********************************************************************}
         { 팩스 전송을 요청합니다. (전송할 파일 개수는 최대 20개까지 가능)      }
-        { - 팩스 전송 요청시 포인트가 차감됩니다. (전송실패시 환불처리)        }
         { - 팩스전송 문서 파일포맷 안내 : http://blog.linkhub.co.kr/2561       }
         {**********************************************************************}
 
@@ -736,7 +733,7 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('ResultURL is ' + #13 + resultURL);
+        ShowMessage('URL :  ' + #13 + resultURL);
 end;
 
 procedure TfrmExample.btnCheckIDClick(Sender: TObject);
@@ -989,7 +986,7 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('ResultURL is ' + #13 + resultURL);
+        ShowMessage('URL :  ' + #13 + resultURL);
 end;
 
 procedure TfrmExample.btnSearchClick(Sender: TObject);
@@ -1061,35 +1058,35 @@ begin
         stringgrid1.RowCount := Length(SearchList.list) + 1;
 
         for i:= 0 to Length(SearchList.list) - 1 do begin
-               stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].state);
-               stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].result);
-               stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;
-               stringgrid1.Cells[3,i+1] := SearchList.list[i].senderName;
-               stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNum;
-               stringgrid1.Cells[5,i+1] := SearchList.list[i].receiveName;
-               stringgrid1.Cells[6,i+1] := SearchList.list[i].title;
-               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].sendPageCnt);
-               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].successPageCnt);
-               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].failPageCnt);
-               stringgrid1.Cells[10,i+1] := IntToStr(SearchList.list[i].refundPageCnt);
-               stringgrid1.Cells[11,i+1] := IntToStr(SearchList.list[i].cancelPageCnt);
-               stringgrid1.Cells[12,i+1] := SearchList.list[i].reserveDT;
-               stringgrid1.Cells[13,i+1] := SearchList.list[i].receiptDT;
-               stringgrid1.Cells[14,i+1] := SearchList.list[i].sendDT;
-               stringgrid1.Cells[15,i+1] := SearchList.list[i].resultDT;
+               stringgrid1.Cells[0,i+1] := IntToStr(SearchList.list[i].state);          // 전송상태 코드
+               stringgrid1.Cells[1,i+1] := IntToStr(SearchList.list[i].result);         // 전송결과 코드
+               stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;                  // 발신번호
+               stringgrid1.Cells[3,i+1] := SearchList.list[i].senderName;               // 발신자명
+               stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNum;               // 수신번호
+               stringgrid1.Cells[5,i+1] := SearchList.list[i].receiveName;              // 수신자명
+               stringgrid1.Cells[6,i+1] := SearchList.list[i].title;                    // 팩스제목
+               stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].sendPageCnt);    // 전체 페이지수
+               stringgrid1.Cells[8,i+1] := IntToStr(SearchList.list[i].successPageCnt); // 성공 페이지수
+               stringgrid1.Cells[9,i+1] := IntToStr(SearchList.list[i].failPageCnt);    // 실패 페이지수
+               stringgrid1.Cells[10,i+1] := IntToStr(SearchList.list[i].refundPageCnt); // 환불 페이지수
+               stringgrid1.Cells[11,i+1] := IntToStr(SearchList.list[i].cancelPageCnt); // 취소 페이지수
+               stringgrid1.Cells[12,i+1] := SearchList.list[i].reserveDT;               // 예약시간
+               stringgrid1.Cells[13,i+1] := SearchList.list[i].receiptDT;               // 접수시산
+               stringgrid1.Cells[14,i+1] := SearchList.list[i].sendDT;                  // 발송시간
+               stringgrid1.Cells[15,i+1] := SearchList.list[i].resultDT;                // 전송결과 수신시간
                fileNameList := '';
 
-               for j:= 0 to length(SearchList.list[i].fileNames) -1 do begin
+               for j:= 0 to length(SearchList.list[i].fileNames) -1 do begin            // 전송 파일명 리스트
                         if j = length(SearchList.list[i].fileNames) -1 then
                                 fileNameList := fileNameList +SearchList.list[i].fileNames[j]
                         else
                                 fileNameList := fileNameList +SearchList.list[i].fileNames[j] + ', '
                end ;
                stringgrid1.Cells[16,i+1] := fileNameList;
-               stringgrid1.Cells[17,i+1] := SearchList.list[i].receiptNum;
-               stringgrid1.Cells[18,i+1] := SearchList.list[i].requestNum;
-               stringgrid1.Cells[19,i+1] := IntToStr(SearchList.list[i].chargePageCnt);
-               stringgrid1.Cells[20,i+1] := SearchList.list[i].tiffFileSize + 'byte';
+               stringgrid1.Cells[17,i+1] := SearchList.list[i].receiptNum;              // 접수번호
+               stringgrid1.Cells[18,i+1] := SearchList.list[i].requestNum;              // 요청번호
+               stringgrid1.Cells[19,i+1] := IntToStr(SearchList.list[i].chargePageCnt); // 과금 페이지수
+               stringgrid1.Cells[20,i+1] := SearchList.list[i].tiffFileSize + 'byte';   // 변환파일용량 (단위: byte)
         end;
         SearchList.Free;
 end;
@@ -1275,7 +1272,7 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('ResultURL is ' + #13 + resultURL);
+        ShowMessage('URL :  ' + #13 + resultURL);
 end;
 
 procedure TfrmExample.btnGetPartnerURL_CHRGClick(Sender: TObject);
@@ -1295,7 +1292,7 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('ResultURL is ' + #13 + resultURL);
+        ShowMessage('URL :  ' + #13 + resultURL);
 end;
 
 procedure TfrmExample.btnGetMessageRNClick(Sender: TObject);
@@ -1551,7 +1548,7 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('ResultURL is ' + #13 + resultURL);
+        ShowMessage('URL :  ' + #13 + resultURL);
 end;
 
 end.
