@@ -147,7 +147,7 @@ begin
         faxService.IsTest := true;
 
         //Exception 처리 설정값, true(기본값)
-        faxService.IsThrowException := true;
+        faxService.IsThrowException := false;
         
         //그리드 초기화
         stringgrid1.Cells[0,0] := 'state';
@@ -311,7 +311,16 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('FAX 전송단가 : '+ FloatToStr(unitcost));
+
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                ShowMessage('FAX 전송단가 : '+ FloatToStr(unitcost));
+        end;
+
 end;
 
 procedure TfrmExample.btnGetPartnerBalanceClick(Sender: TObject);
@@ -393,8 +402,16 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
+
 end;
 
 procedure TfrmExample.btnCancelReserveClick(Sender: TObject);
@@ -478,8 +495,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnGetMessageClick(Sender: TObject);
@@ -505,6 +529,13 @@ begin
                 end;
         end;
 
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);                
+        end
+        else
+        begin
+        
         stringgrid1.RowCount := Length(FaxDetails) + 1;                                          
 
         for i:= 0 to Length(FaxDetails) -1 do begin
@@ -580,6 +611,9 @@ begin
                //변환파일용량(단위:byte)
                stringgrid1.Cells[20,i+1] := FaxDetails[i].tiffFileSize + 'byte';
         end;
+
+        end;
+
 end;
 
 procedure TfrmExample.btnMultiFileClick(Sender: TObject);
@@ -653,8 +687,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnMultiFileSingleClick(Sender: TObject);
@@ -727,8 +768,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnGetSentListURLClick(Sender: TObject);
@@ -748,7 +796,16 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('URL :  ' + #13 + resultURL);
+
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                ShowMessage('URL :  ' + #13 + resultURL);
+        end;
+
 end;
 
 procedure TfrmExample.btnCheckIDClick(Sender: TObject);
@@ -1022,10 +1079,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20190101';
+        SDate := '20190301';
 
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20190115';
+        EDate := '20190331';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소
         SetLength(State, 4);
@@ -1124,10 +1181,17 @@ begin
                 end;
         end;
 
-        tmp := 'unitCost (단가) : ' + chargeInfo.unitCost + #13;
-        tmp := tmp + 'chargeMethod (과금유형) : ' + chargeInfo.chargeMethod + #13;
-        tmp := tmp + 'rateSystem (과금제도) : ' + chargeInfo.rateSystem + #13;
-        ShowMessage(tmp);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                tmp := 'unitCost (단가) : ' + chargeInfo.unitCost + #13;
+                tmp := tmp + 'chargeMethod (과금유형) : ' + chargeInfo.chargeMethod + #13;
+                tmp := tmp + 'rateSystem (과금제도) : ' + chargeInfo.rateSystem + #13;
+                ShowMessage(tmp);
+        end;
 end;
 
 procedure TfrmExample.btnResendFaxClick(Sender: TObject);
@@ -1181,8 +1245,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnResendFaxSameClick(Sender: TObject);
@@ -1242,8 +1313,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnGetSenderNumberListClick(Sender: TObject);
@@ -1266,14 +1344,21 @@ begin
                 end;
         end;
 
-        for i := 0 to Length(SenderNumberList) -1 do
+        if faxService.LastErrCode <> 0 then
         begin
-                tmp := tmp + '******** 팩스 발신번호 목록 ['+ IntToStr(i+1) + '] ********' + #13;
-                tmp := tmp + 'number(발신번호) : ' + SenderNumberList[i].number + #13;
-                tmp := tmp + 'state(등록상태) : ' + IntToStr(SenderNumberList[i].state) + #13;
-                tmp := tmp + 'representYN(대표번호 지정여부) : ' + BoolToStr(SenderNumberList[i].representYN) + #13 + #13;
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                for i := 0 to Length(SenderNumberList) -1 do
+                begin
+                        tmp := tmp + '******** 팩스 발신번호 목록 ['+ IntToStr(i+1) + '] ********' + #13;
+                        tmp := tmp + 'number(발신번호) : ' + SenderNumberList[i].number + #13;
+                        tmp := tmp + 'state(등록상태) : ' + IntToStr(SenderNumberList[i].state) + #13;
+                        tmp := tmp + 'representYN(대표번호 지정여부) : ' + BoolToStr(SenderNumberList[i].representYN) + #13 + #13;
+                end;
+                ShowMessage(tmp);
         end;
-        ShowMessage(tmp);
 end;
 
 procedure TfrmExample.btnGetSenderNumberMgtURLClick(Sender: TObject);
@@ -1293,7 +1378,15 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('URL :  ' + #13 + resultURL);
+
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                ShowMessage('URL :  ' + #13 + resultURL);
+        end;        
 end;
 
 procedure TfrmExample.btnGetPartnerURL_CHRGClick(Sender: TObject);
@@ -1340,6 +1433,13 @@ begin
                 end;
         end;
 
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+        
         stringgrid1.RowCount := Length(FaxDetails) + 1;
 
         for i:= 0 to Length(FaxDetails) -1 do begin
@@ -1415,6 +1515,7 @@ begin
                //변환파일용량(단위:byte)
                stringgrid1.Cells[20,i+1] := FaxDetails[i].tiffFileSize + 'byte';
         end;
+        end;
 end;
 
 procedure TfrmExample.btnCancelReserveRNClick(Sender: TObject);
@@ -1489,8 +1590,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnResendFaxSameRNClick(Sender: TObject);
@@ -1554,8 +1662,15 @@ begin
                 end;
         end;
 
-        txtReceiptNum.Text := receiptNum;
-        ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                txtReceiptNum.Text := receiptNum;
+                ShowMessage('접수번호(receiptNum) :' + receiptNum);
+        end;
 end;
 
 procedure TfrmExample.btnGetPreviewURLClick(Sender: TObject);
@@ -1575,7 +1690,17 @@ begin
                         Exit;
                 end;
         end;
-        ShowMessage('URL :  ' + #13 + resultURL);
+
+
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                ShowMessage('URL :  ' + #13 + resultURL);
+        end;
+
 end;
 
 end.
