@@ -33,7 +33,7 @@ object frmExample: TfrmExample
     Left = 24
     Top = 56
     Width = 1153
-    Height = 162
+    Height = 185
     Caption = '팝빌 기본 API'
     TabOrder = 1
     object GroupBox9: TGroupBox
@@ -118,12 +118,12 @@ object frmExample: TfrmExample
       Left = 821
       Top = 24
       Width = 153
-      Height = 124
+      Height = 153
       Caption = '담당자 관련'
       TabOrder = 3
       object btnLitContact: TButton
         Left = 8
-        Top = 56
+        Top = 88
         Width = 137
         Height = 25
         Caption = '담당자 목록 조회'
@@ -132,7 +132,7 @@ object frmExample: TfrmExample
       end
       object btnUpdateContact: TButton
         Left = 8
-        Top = 88
+        Top = 120
         Width = 137
         Height = 25
         Caption = '담당자 정보 수정'
@@ -147,6 +147,15 @@ object frmExample: TfrmExample
         Caption = '담당자 추가'
         TabOrder = 2
         OnClick = btnRegistContactClick
+      end
+      object btnGetContactInfo: TButton
+        Left = 8
+        Top = 56
+        Width = 137
+        Height = 25
+        Caption = '담당자 정보 확인'
+        TabOrder = 3
+        OnClick = btnGetContactInfoClick
       end
     end
     object GroupBox1: TGroupBox
@@ -179,7 +188,7 @@ object frmExample: TfrmExample
       Left = 500
       Top = 24
       Width = 153
-      Height = 126
+      Height = 153
       Caption = '파트너과금 포인트'
       TabOrder = 5
       object btnGetPartnerBalance: TButton
@@ -199,6 +208,24 @@ object frmExample: TfrmExample
         Caption = '포인트 충전 URL'
         TabOrder = 1
         OnClick = btnGetPartnerURL_CHRGClick
+      end
+      object btnGetPaymentURL: TButton
+        Left = 8
+        Top = 88
+        Width = 137
+        Height = 25
+        Caption = '포인트 결제내역 URL'
+        TabOrder = 2
+        OnClick = btnGetPaymentURLClick
+      end
+      object btnGetUseHistoryURL: TButton
+        Left = 8
+        Top = 120
+        Width = 137
+        Height = 25
+        Caption = '포인트 사용내역 URL'
+        TabOrder = 3
+        OnClick = btnGetUseHistoryURLClick
       end
     end
     object GroupBox6: TGroupBox
@@ -248,9 +275,9 @@ object frmExample: TfrmExample
   end
   object GroupBox5: TGroupBox
     Left = 24
-    Top = 232
+    Top = 248
     Width = 1153
-    Height = 561
+    Height = 545
     Caption = '팝빌 FAX 관련 기능'
     TabOrder = 3
     object Label2: TLabel

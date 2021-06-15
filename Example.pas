@@ -93,6 +93,9 @@ type
     btnResendFaxRN: TButton;
     btnResendFaxSameRN: TButton;
     btnGetPreviewURL: TButton;
+    btnGetPaymentURL: TButton;
+    btnGetUseHistoryURL: TButton;
+    btnGetContactInfo: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetAccessURLClick(Sender: TObject);
@@ -127,6 +130,9 @@ type
     procedure btnResendFaxRNClick(Sender: TObject);
     procedure btnResendFaxSameRNClick(Sender: TObject);
     procedure btnGetPreviewURLClick(Sender: TObject);
+    procedure btnGetPaymentURLClick(Sender: TObject);
+    procedure btnGetUseHistoryURLClick(Sender: TObject);
+    procedure btnGetContactInfoClick(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -250,8 +256,8 @@ begin
         // 아이디, 6자이상 50자 미만
         joinInfo.ID     := 'userid';
 
-        // 비밀번호, 6자이상 20자 미만
-        joinInfo.PWD    := 'pwd_must_be_long_enough';
+        // 비밀번호 (8자 이상 20자 미만) 영문, 숫자 ,특수문자 조합
+        joinInfo.Password := 'asdf123!@';
 
         // 담당자명, 최대 100자
         joinInfo.ContactName := '담당자명';
@@ -841,8 +847,8 @@ begin
         // [필수] 담당자 아이디 (6자 이상 50자 미만)
         joinInfo.id := 'testkorea';
 
-        // [필수] 비밀번호 (6자 이상 20자 미만)
-        joinInfo.pwd := 'thisispassword';
+        // 비밀번호 (8자 이상 20자 미만) 영문, 숫자 ,특수문자 조합
+        joinInfo.Password := 'asdf123!@';
 
         // [필수] 담당자명(한글이나 영문 100자 이내)
         joinInfo.personName := '담당자성명';
@@ -859,11 +865,8 @@ begin
         // [필수] 이메일 (최대 100자)
         joinInfo.email := 'test@test.com';
 
-        // 회사조회 권한여부, true-회사조회 / false-개인조회
-        joinInfo.searchAllAllowYN := false;
-
-        // 관리자 권한여부, true-관리자 / false-사용자
-        joinInfo.mgrYN := false;
+        // 담당자 조회권한, 1-개인권한 / 2-읽기권한 / 3-회사권한
+        joinInfo.searchRole := '3';
 
         try
                 response := faxService.RegistContact(txtCorpNum.text, joinInfo);
@@ -895,7 +898,7 @@ begin
                         Exit;
                 end;
         end;
-        tmp := 'id(아이디) | email(이메일) | hp(휴대폰) | personName(성명) | searchAllAllowYN(회사조회 권한) | ';
+        tmp := 'id(아이디) | email(이메일) | hp(휴대폰) | personName(성명) | searchRole(담당자 조회 권한) | ';
         tmp := tmp + 'tel(연락처) | fax(팩스) | mgrYN(관리자 여부) | regDT(등록일시) | state(상태)' + #13;
 
         for i := 0 to Length(InfoList) - 1 do
@@ -904,7 +907,7 @@ begin
             tmp := tmp + InfoList[i].email + ' | ';
             tmp := tmp + InfoList[i].hp + ' | ';
             tmp := tmp + InfoList[i].personName + ' | ';
-            tmp := tmp + BoolToStr(InfoList[i].searchAllAllowYN) + ' | ';
+            tmp := tmp + InfoList[i].searchRole + ' | ';
             tmp := tmp + InfoList[i].tel + ' | ';
             tmp := tmp + InfoList[i].fax + ' | ';
             tmp := tmp + BoolToStr(InfoList[i].mgrYN) + ' | ';
@@ -944,11 +947,8 @@ begin
         // 팩스번호 (최대 20자)
         contactInfo.fax := '02-6442-9799';
 
-        // 조회권한, true(회사조회), false(개인조회)
-        contactInfo.searchAllAllowYN := true;
-
-        // 관리자권한 설정여부, true-관리자 / false-사용자
-        contactInfo.mgrYN := false;
+        // 담당자 조회권한, 1-개인권한 / 2-읽기권한 / 3-회사권한
+        contactInfo.searchRole := '3';
 
 
         try
@@ -1689,6 +1689,90 @@ begin
                 ShowMessage('URL :  ' + #13 + resultURL);
         end;
 
+end;
+
+procedure TfrmExample.btnGetPaymentURLClick(Sender: TObject);
+var
+        resultURL : String;
+begin
+        {**********************************************************************}
+        { 연동회원 포인트 결제내역 팝업 URL을 반환한다.
+        { - 보안정책으로 인해 반환된 URL의 유효시간은 30초이다.
+        { - https://docs.popbill.com/fax/delphi/api#GetPaymentURL
+        {**********************************************************************}
+        
+        try
+                resultURL := faxService.getPaymentURL(txtCorpNum.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        ShowMessage('URL :  ' + #13 + resultURL);
+end;
+
+procedure TfrmExample.btnGetUseHistoryURLClick(Sender: TObject);
+var
+        resultURL : String;
+begin
+        {**********************************************************************}
+        { 연동회원 포인트 사용내역 팝업 URL을 반환한다.
+        { - 보안정책으로 인해 반환된 URL의 유효시간은 30초이다.
+        { - https://docs.popbill.com/fax/delphi/api#GetUseHistoryURL
+        {**********************************************************************}
+
+        try
+                resultURL := faxService.getUseHistoryURL(txtCorpNum.Text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        ShowMessage('URL :  ' + #13 + resultURL);
+
+end;
+
+procedure TfrmExample.btnGetContactInfoClick(Sender: TObject);
+var
+        contactInfo : TContactInfo;
+        contactID : string;
+        tmp : string;
+begin
+        {**********************************************************************}
+        { 연동회원 사업자번호에 등록된 담당자 정보를 확인한다.
+        { - https://docs.popbill.com/fax/delphi/api#GetContactInfo
+        {**********************************************************************}
+
+        contactID := 'testkorea';
+        
+        try
+                contactInfo := faxService.getContactInfo(txtCorpNum.Text, contactID);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                tmp := 'id (아이디) : ' + contactInfo.id + #13;
+                tmp := tmp + 'personName (담당자 성명) : ' + contactInfo.personName + #13;
+                tmp := tmp + 'tel (담당자 연락처(전화번호)) : ' + contactInfo.tel + #13;
+                tmp := tmp + 'hp (담당자 휴대폰번호) : ' + contactInfo.hp + #13;
+                tmp := tmp + 'fax (담당자 팩스번호) : ' + contactInfo.fax + #13;
+                tmp := tmp + 'email (담당자 이메일) : ' + contactInfo.email + #13;
+                tmp := tmp + 'regDT (등록 일시) : ' + contactInfo.regDT + #13;
+                tmp := tmp + 'searchRole (담당자 조회권한) : ' + contactInfo.searchRole + #13;
+                tmp := tmp + 'mgrYN (관리자 여부) : ' + booltostr(contactInfo.mgrYN) + #13;
+                tmp := tmp + 'state (계정상태) : ' + inttostr(contactInfo.state) + #13;
+                ShowMessage(tmp);
+        end
 end;
 
 end.
