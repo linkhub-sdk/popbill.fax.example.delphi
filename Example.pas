@@ -606,6 +606,9 @@ begin
                //수신번호
                stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNum;
 
+               //수신번호 유형
+               stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNumType;
+
                //수신자명
                stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveName;
 
@@ -1191,10 +1194,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20210601';
+        SDate := '20220101';
 
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20210615';
+        EDate := '20220130';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소
         SetLength(State, 4);
@@ -1252,6 +1255,7 @@ begin
                        stringgrid1.Cells[2,i+1] := SearchList.list[i].sendNum;                  // 발신번호
                        stringgrid1.Cells[3,i+1] := SearchList.list[i].senderName;               // 발신자명
                        stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNum;               // 수신번호
+                       stringgrid1.Cells[4,i+1] := SearchList.list[i].receiveNumType;               // 수신번호 유형
                        stringgrid1.Cells[5,i+1] := SearchList.list[i].receiveName;              // 수신자명
                        stringgrid1.Cells[6,i+1] := SearchList.list[i].title;                    // 팩스제목
                        stringgrid1.Cells[7,i+1] := IntToStr(SearchList.list[i].sendPageCnt);    // 전체 페이지수
@@ -1574,6 +1578,9 @@ begin
 
                //수신번호
                stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNum;
+
+               //수신번호 유형
+               stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNumType;
 
                //수신자명
                stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveName;
@@ -1916,4 +1923,3 @@ begin
 end;
 
 end.
-
