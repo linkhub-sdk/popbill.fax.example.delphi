@@ -40,7 +40,7 @@ object frmExample: TfrmExample
       Left = 16
       Top = 24
       Width = 153
-      Height = 125
+      Height = 153
       Caption = '회원 정보'
       TabOrder = 0
       object btnJoinMember: TButton
@@ -75,15 +75,15 @@ object frmExample: TfrmExample
       Left = 177
       Top = 24
       Width = 153
-      Height = 125
+      Height = 153
       Caption = '포인트 관련'
       TabOrder = 1
       object btnGetUnitCost: TButton
         Left = 8
-        Top = 56
+        Top = 88
         Width = 137
         Height = 25
-        Caption = '전송 단가 확인'
+        Caption = '일반망 전송 단가 확인'
         TabOrder = 0
         OnClick = btnGetUnitCostClick
       end
@@ -92,16 +92,34 @@ object frmExample: TfrmExample
         Top = 24
         Width = 137
         Height = 25
-        Caption = '과금정보 확인'
+        Caption = '일반망 과금정보 확인'
         TabOrder = 1
         OnClick = btnGetChargeInfoClick
+      end
+      object btnGetChargeInfo2: TButton
+        Left = 8
+        Top = 56
+        Width = 137
+        Height = 25
+        Caption = '지능망 과금정보 확인'
+        TabOrder = 2
+        OnClick = btnGetChargeInfo2Click
+      end
+      object btnGetUnitCost2: TButton
+        Left = 8
+        Top = 120
+        Width = 137
+        Height = 25
+        Caption = '지능망 전송 단가 확인'
+        TabOrder = 3
+        OnClick = btnGetUnitCost2Click
       end
     end
     object GroupBox12: TGroupBox
       Left = 659
       Top = 24
       Width = 153
-      Height = 125
+      Height = 153
       Caption = '팝빌 기본 URL'
       TabOrder = 2
       object btnGetAccessURL: TButton
@@ -162,7 +180,7 @@ object frmExample: TfrmExample
       Left = 982
       Top = 24
       Width = 153
-      Height = 124
+      Height = 153
       Caption = '회사정보 관련'
       TabOrder = 4
       object btnGetCorpInfo: TButton
@@ -232,7 +250,7 @@ object frmExample: TfrmExample
       Left = 338
       Top = 24
       Width = 153
-      Height = 126
+      Height = 153
       Caption = '연동과금 포인트'
       TabOrder = 6
       object btnGetBalance: TButton

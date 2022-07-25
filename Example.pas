@@ -96,6 +96,8 @@ type
     btnGetUseHistoryURL: TButton;
     btnGetContactInfo: TButton;
     Button1: TButton;
+    btnGetChargeInfo2: TButton;
+    btnGetUnitCost2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action:TCloseAction);
     procedure btnGetAccessURLClick(Sender: TObject);
@@ -120,6 +122,7 @@ type
     procedure btnGetChargeURLClick(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure btnGetChargeInfoClick(Sender: TObject);
+    procedure btnGetChargeInfo2Click(Sender: TObject);
     procedure btnResendFaxClick(Sender: TObject);
     procedure btnResendFaxSameClick(Sender: TObject);
     procedure btnGetSenderNumberListClick(Sender: TObject);
@@ -134,6 +137,7 @@ type
     procedure btnGetUseHistoryURLClick(Sender: TObject);
     procedure btnGetContactInfoClick(Sender: TObject);
     procedure btnCheckSenderNumberClick(Sender: TObject);
+    procedure btnGetUnitCost2Click(Sender: TObject);
   private
     faxService : TFaxService;
   public
@@ -329,15 +333,48 @@ end;
 
 procedure TfrmExample.btnGetUnitCostClick(Sender: TObject);
 var
+        receiveNumType : String;
         unitcost : Single;
 begin
         {**********************************************************************}
-        { 팩스 전송시 과금되는 포인트 단가를 확인합니다.
+        { 팩스 일반망 전송시 과금되는 포인트 단가를 확인합니다.
         { - https://docs.popbill.com/fax/delphi/api#GetUnitCost
         {**********************************************************************}
-        
+
         try
-                unitcost := faxService.GetUnitCost(txtCorpNum.text);
+                receiveNumType := '일반';
+                unitcost := faxService.GetUnitCost(txtCorpNum.text, receiveNumType, txtUserID.text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                ShowMessage('FAX 전송단가 : '+ FloatToStr(unitcost));
+        end;
+
+end;
+
+procedure TfrmExample.btnGetUnitCost2Click(Sender: TObject);
+var
+        receiveNumType : String;
+        unitcost : Single;
+begin
+        {**********************************************************************}
+        { 팩스 지능망 전송시 과금되는 포인트 단가를 확인합니다.
+        { - https://docs.popbill.com/fax/delphi/api#GetUnitCost
+        {**********************************************************************}
+
+        try
+                receiveNumType := '지능';
+                unitcost := faxService.GetUnitCost(txtCorpNum.text, receiveNumType, txtUserID.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1262,15 +1299,51 @@ end;
 procedure TfrmExample.btnGetChargeInfoClick(Sender: TObject);
 var
         chargeInfo : TFaxChargeInfo;
+        receiveNumType : String;
         tmp : String;
 begin
         {**********************************************************************}
-        { 팝빌 팩스 API 서비스 과금정보를 확인합니다.
+        { 팝빌 팩스 API 서비스 일반망 과금정보를 확인합니다.
         { - https://docs.popbill.com/fax/delphi/api#GetChargeInfo
         {**********************************************************************}
 
         try
-                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text);
+                receiveNumType := '일반';
+                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text, receiveNumType, txtUserID.text);
+        except
+                on le : EPopbillException do begin
+                        ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
+                        Exit;
+                end;
+        end;
+
+        if faxService.LastErrCode <> 0 then
+        begin
+                ShowMessage('응답코드 : ' + IntToStr(faxService.LastErrCode) + #10#13 +'응답메시지 : '+ faxService.LastErrMessage);
+        end
+        else
+        begin
+                tmp := 'unitCost (단가) : ' + chargeInfo.unitCost + #13;
+                tmp := tmp + 'chargeMethod (과금유형) : ' + chargeInfo.chargeMethod + #13;
+                tmp := tmp + 'rateSystem (과금제도) : ' + chargeInfo.rateSystem + #13;
+                ShowMessage(tmp);
+        end;
+end;
+
+procedure TfrmExample.btnGetChargeInfo2Click(Sender: TObject);
+var
+        chargeInfo : TFaxChargeInfo;
+        receiveNumType : String;
+        tmp : String;
+begin
+        {**********************************************************************}
+        { 팝빌 팩스 API 서비스 지능망 과금정보를 확인합니다.
+        { - https://docs.popbill.com/fax/delphi/api#GetChargeInfo
+        {**********************************************************************}
+
+        try
+                receiveNumType := '지능';
+                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text, receiveNumType, txtUserID.text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1936,5 +2009,6 @@ begin
                 ShowMessage(tmp);
         end
 end;
+
 
 end.
