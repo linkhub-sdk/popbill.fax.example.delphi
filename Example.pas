@@ -185,6 +185,7 @@ begin
         stringgrid1.Cells[19,0] := 'requestNum';
         stringgrid1.Cells[20,0] := 'chargePageCnt';
         stringgrid1.Cells[21,0] := 'tiffFileSize';
+        stringgrid1.Cells[22,0] := 'interOPRefKey';
 end;
 
 procedure TfrmExample.FormClose(Sender:TObject; var Action:TCloseAction);
@@ -518,6 +519,7 @@ begin
                 receivers[i] := TReceiver.create;
                 receivers[i].receiveNum := '070111222';                    //수신번호
                 receivers[i].receiveName := IntToStr(i) + '번째 수신자';   //수신자명
+                receivers[i].interOPRefKey := 'TEST' + IntToStr(i);   //파트너 지정키 
         end;
 
         try
@@ -593,40 +595,40 @@ begin
                stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNum;
 
                //수신번호 유형
-               stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNumType;
+               stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveNumType;
 
                //수신자명
-               stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveName;
+               stringgrid1.Cells[6,i+1]  := FaxDetails[i].receiveName;
 
                //팩스제목
-               stringgrid1.Cells[6,i+1]  := FaxDetails[i].title;
+               stringgrid1.Cells[7,i+1]  := FaxDetails[i].title;
 
                //전체 페이지수
-               stringgrid1.Cells[7,i+1]  := IntToStr(FaxDetails[i].sendPageCnt);
+               stringgrid1.Cells[8,i+1]  := IntToStr(FaxDetails[i].sendPageCnt);
 
                //성공 페이지수
-               stringgrid1.Cells[8,i+1]  := IntToStr(FaxDetails[i].successPageCnt);
+               stringgrid1.Cells[9,i+1]  := IntToStr(FaxDetails[i].successPageCnt);
 
                //실패 페이지수
-               stringgrid1.Cells[9,i+1]  := IntToStr(FaxDetails[i].failPageCnt);
+               stringgrid1.Cells[10,i+1]  := IntToStr(FaxDetails[i].failPageCnt);
 
                //환불 페이지수
-               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
+               stringgrid1.Cells[11,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
 
                //취소 페이지수
-               stringgrid1.Cells[11,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
+               stringgrid1.Cells[12,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
 
                //에약시간
-               stringgrid1.Cells[12,i+1] := FaxDetails[i].reserveDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].reserveDT;
 
                //접수시간
-               stringgrid1.Cells[13,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[14,i+1] := FaxDetails[i].receiptDT;
 
                //발송시간
-               stringgrid1.Cells[14,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[15,i+1] := FaxDetails[i].sendDT;
 
                //전송결과 수신시간
-               stringgrid1.Cells[15,i+1] := FaxDetails[i].resultDT;
+               stringgrid1.Cells[16,i+1] := FaxDetails[i].resultDT;
 
                //전송 파일명 리스트
                fileNameList := '';
@@ -637,19 +639,22 @@ begin
                         else
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
-               stringgrid1.Cells[16,i+1] := fileNameList;
+               stringgrid1.Cells[17,i+1] := fileNameList;
 
                //접수번호
-               stringgrid1.Cells[17,i+1] := FaxDetails[i].receiptNum;
+               stringgrid1.Cells[18,i+1] := FaxDetails[i].receiptNum;
 
                //요청번호
-               stringgrid1.Cells[18,i+1] := FaxDetails[i].requestNum;
+               stringgrid1.Cells[19,i+1] := FaxDetails[i].requestNum;
 
                //과금 페이지수
-               stringgrid1.Cells[19,i+1] := IntToStr(FaxDetails[i].chargePageCnt);
+               stringgrid1.Cells[20,i+1] := IntToStr(FaxDetails[i].chargePageCnt);
 
                //변환파일용량(단위:byte)
-               stringgrid1.Cells[20,i+1] := FaxDetails[i].tiffFileSize + 'byte';
+               stringgrid1.Cells[21,i+1] := FaxDetails[i].tiffFileSize + 'byte';
+
+               //파트너 지정 키
+               stringgrid1.Cells[22,i+1] := FaxDetails[i].interOPRefKey;
         end;
 
         end;
@@ -1162,10 +1167,10 @@ begin
         {**********************************************************************}
 
         // [필수] 검색기간 시작일자, 작성형태(yyyyMMdd)
-        SDate := '20220101';
+        SDate := '20220701';
 
         // [필수] 검색기간 종료일자, 작성형태(yyyyMMdd)
-        EDate := '20220130';
+        EDate := '20220730';
 
         // 팩스전송 상태값 배열, 1:대기, 2:성공, 3:실패, 4:취소
         SetLength(State, 4);
@@ -1243,11 +1248,12 @@ begin
                                 else
                                         fileNameList := fileNameList +SearchList.list[i].fileNames[j] + ', '
                        end ;
-                       stringgrid1.Cells[16,i+1] := fileNameList;
-                       stringgrid1.Cells[17,i+1] := SearchList.list[i].receiptNum;              // 접수번호
-                       stringgrid1.Cells[18,i+1] := SearchList.list[i].requestNum;              // 요청번호
-                       stringgrid1.Cells[19,i+1] := IntToStr(SearchList.list[i].chargePageCnt); // 과금 페이지수
-                       stringgrid1.Cells[20,i+1] := SearchList.list[i].tiffFileSize + 'byte';   // 변환파일용량 (단위: byte)
+                       stringgrid1.Cells[17,i+1] := fileNameList;
+                       stringgrid1.Cells[18,i+1] := SearchList.list[i].receiptNum;              // 접수번호
+                       stringgrid1.Cells[19,i+1] := SearchList.list[i].requestNum;              // 요청번호
+                       stringgrid1.Cells[20,i+1] := IntToStr(SearchList.list[i].chargePageCnt); // 과금 페이지수
+                       stringgrid1.Cells[21,i+1] := SearchList.list[i].tiffFileSize + 'byte';   // 변환파일용량 (단위: byte)
+                       stringgrid1.Cells[22,i+1] := SearchList.list[i].interOPRefKey;                //파트너 지정 키
                 end;
                 SearchList.Free;
         end;
@@ -1383,6 +1389,7 @@ begin
                 receivers[i] := TReceiver.create;
                 receivers[i].receiveNum := '01000011'+IntToStr(i);       //수신팩스번호
                 receivers[i].receiveName := IntToStr(i)+ ' 번째 사용자'; //수신자명
+                receivers[i].interOPRefKey := 'ResendTEST' + IntToStr(i); //파트너 지정 키 
         end;
 
         try
@@ -1586,40 +1593,40 @@ begin
                stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNum;
 
                //수신번호 유형
-               stringgrid1.Cells[4,i+1]  := FaxDetails[i].receiveNumType;
+               stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveNumType;
 
                //수신자명
-               stringgrid1.Cells[5,i+1]  := FaxDetails[i].receiveName;
+               stringgrid1.Cells[6,i+1]  := FaxDetails[i].receiveName;
 
                //팩스제목
-               stringgrid1.Cells[6,i+1]  := FaxDetails[i].title;
+               stringgrid1.Cells[7,i+1]  := FaxDetails[i].title;
 
                //전체 페이지수
-               stringgrid1.Cells[7,i+1]  := IntToStr(FaxDetails[i].sendPageCnt);
+               stringgrid1.Cells[8,i+1]  := IntToStr(FaxDetails[i].sendPageCnt);
 
                //성공 페이지수
-               stringgrid1.Cells[8,i+1]  := IntToStr(FaxDetails[i].successPageCnt);
+               stringgrid1.Cells[9,i+1]  := IntToStr(FaxDetails[i].successPageCnt);
 
                //실패 페이지수
-               stringgrid1.Cells[9,i+1]  := IntToStr(FaxDetails[i].failPageCnt);
+               stringgrid1.Cells[10,i+1]  := IntToStr(FaxDetails[i].failPageCnt);
 
                //환불 페이지수
-               stringgrid1.Cells[10,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
+               stringgrid1.Cells[11,i+1] := IntToStr(FaxDetails[i].refundPageCnt);
 
                //취소 페이지수
-               stringgrid1.Cells[11,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
+               stringgrid1.Cells[12,i+1] := IntToStr(FaxDetails[i].cancelPageCnt);
 
                //에약시간
-               stringgrid1.Cells[12,i+1] := FaxDetails[i].reserveDT;
+               stringgrid1.Cells[13,i+1] := FaxDetails[i].reserveDT;
 
                //접수시간
-               stringgrid1.Cells[13,i+1] := FaxDetails[i].receiptDT;
+               stringgrid1.Cells[14,i+1] := FaxDetails[i].receiptDT;
 
                //발송시간
-               stringgrid1.Cells[14,i+1] := FaxDetails[i].sendDT;
+               stringgrid1.Cells[15,i+1] := FaxDetails[i].sendDT;
 
                //전송결과 수신시간
-               stringgrid1.Cells[15,i+1] := FaxDetails[i].resultDT;
+               stringgrid1.Cells[16,i+1] := FaxDetails[i].resultDT;
 
                //전송 파일명 리스트
                fileNameList := '';
@@ -1630,19 +1637,22 @@ begin
                         else
                                 fileNameList := fileNameList +FaxDetails[i].fileNames[j] + ', '
                end ;
-               stringgrid1.Cells[16,i+1] := fileNameList;
+               stringgrid1.Cells[17,i+1] := fileNameList;
 
                //접수번호
-               stringgrid1.Cells[17,i+1] := FaxDetails[i].receiptNum;
+               stringgrid1.Cells[18,i+1] := FaxDetails[i].receiptNum;
 
                //요청번호
-               stringgrid1.Cells[18,i+1] := FaxDetails[i].requestNum;
+               stringgrid1.Cells[19,i+1] := FaxDetails[i].requestNum;
 
                //과금 페이지수
-               stringgrid1.Cells[19,i+1] := IntToStr(FaxDetails[i].chargePageCnt);
+               stringgrid1.Cells[20,i+1] := IntToStr(FaxDetails[i].chargePageCnt);
 
                //변환파일용량(단위:byte)
-               stringgrid1.Cells[20,i+1] := FaxDetails[i].tiffFileSize + 'byte';
+               stringgrid1.Cells[21,i+1] := FaxDetails[i].tiffFileSize + 'byte';
+
+               //파트너 지정 키
+               stringgrid1.Cells[22,i+1] := FaxDetails[i].interOPRefKey;
         end;
         end;
 end;

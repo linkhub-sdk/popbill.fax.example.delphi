@@ -18,14 +18,14 @@ object frmExample: TfrmExample
   object Label3: TLabel
     Left = 32
     Top = 20
-    Width = 120
+    Width = 111
     Height = 13
     Caption = '팝빌회원 사업자번호 : '
   end
   object Label4: TLabel
     Left = 336
     Top = 20
-    Width = 96
+    Width = 89
     Height = 13
     Caption = '팝빌회원 아이디 : '
   end
@@ -283,7 +283,7 @@ object frmExample: TfrmExample
     object Label2: TLabel
       Left = 24
       Top = 32
-      Width = 155
+      Width = 151
       Height = 13
       Caption = '예약시간(yyyyMMddHHmmss) : '
     end
@@ -292,7 +292,7 @@ object frmExample: TfrmExample
       Top = 272
       Width = 1119
       Height = 273
-      ColCount = 21
+      ColCount = 23
       DefaultRowHeight = 18
       FixedCols = 0
       RowCount = 2
@@ -315,6 +315,8 @@ object frmExample: TfrmExample
         76
         74
         74
+        64
+        64
         64
         64
         64
@@ -445,7 +447,7 @@ object frmExample: TfrmExample
       object Label1: TLabel
         Left = 16
         Top = 28
-        Width = 57
+        Width = 53
         Height = 13
         Caption = '접수번호 : '
       end
@@ -504,7 +506,7 @@ object frmExample: TfrmExample
       object Label5: TLabel
         Left = 16
         Top = 28
-        Width = 57
+        Width = 53
         Height = 13
         Caption = '요청번호 : '
       end
