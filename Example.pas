@@ -343,7 +343,7 @@ begin
 
         try
                 receiveNumType := '일반';
-                unitcost := faxService.GetUnitCost(txtCorpNum.text, receiveNumType, txtUserID.text);
+                unitcost := faxService.GetUnitCost(txtCorpNum.text, receiveNumType);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -374,7 +374,7 @@ begin
 
         try
                 receiveNumType := '지능';
-                unitcost := faxService.GetUnitCost(txtCorpNum.text, receiveNumType, txtUserID.text);
+                unitcost := faxService.GetUnitCost(txtCorpNum.text, receiveNumType);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1236,7 +1236,7 @@ begin
 
         try
                 SearchList := faxService.search(txtCorpNum.text, SDate, EDate, State,
-                                        ReserveYN, SenderYN, Page, PerPage, Order, QString, txtUserID.text);
+                                        ReserveYN, SenderYN, Page, PerPage, Order, QString);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1309,7 +1309,7 @@ begin
 
         try
                 receiveNumType := '일반';
-                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text, receiveNumType, txtUserID.text);
+                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text, receiveNumType);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1343,7 +1343,7 @@ begin
 
         try
                 receiveNumType := '지능';
-                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text, receiveNumType, txtUserID.text);
+                chargeInfo := faxService.GetChargeInfo(txtCorpNum.text, receiveNumType);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1540,7 +1540,7 @@ begin
         senderNumber := '070-4304-2981';
 
         try
-                response := faxService.CheckSenderNumber(txtCorpNum.Text, senderNumber, txtUserID.Text);
+                response := faxService.CheckSenderNumber(txtCorpNum.Text, senderNumber);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1630,8 +1630,7 @@ begin
 
         try
                 FaxDetails := faxService.getSendDetailRN(txtCorpNum.Text,
-                                                         txtRequestNum.Text,
-                                                         txtUserID.Text);
+                                                         txtRequestNum.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1926,7 +1925,7 @@ begin
         {**********************************************************************}
         
         try
-                resultURL := faxService.getPaymentURL(txtCorpNum.Text);
+                resultURL := faxService.getPaymentURL(txtCorpNum.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
@@ -1954,7 +1953,7 @@ begin
         {**********************************************************************}
 
         try
-                resultURL := faxService.getUseHistoryURL(txtCorpNum.Text);
+                resultURL := faxService.getUseHistoryURL(txtCorpNum.Text, txtUserID.Text);
         except
                 on le : EPopbillException do begin
                         ShowMessage('응답코드 : ' + IntToStr(le.code) + #10#13 +'응답메시지 : '+ le.Message);
