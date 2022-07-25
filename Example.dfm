@@ -29,6 +29,13 @@ object frmExample: TfrmExample
     Height = 13
     Caption = 'ÆËºôÈ¸¿ø ¾ÆÀÌµð : '
   end
+  object Label6: TLabel
+    Left = 840
+    Top = 21
+    Width = 31
+    Height = 13
+    Caption = 'URL : '
+  end
   object GroupBox8: TGroupBox
     Left = 24
     Top = 56
@@ -573,6 +580,14 @@ object frmExample: TfrmExample
         OnClick = btnResendFaxSameRNClick
       end
     end
+  end
+  object txtURL: TEdit
+    Left = 880
+    Top = 16
+    Width = 297
+    Height = 21
+    ImeName = 'Microsoft IME 2010'
+    TabOrder = 4
   end
   object OpenDialog1: TOpenDialog
     Left = 600
